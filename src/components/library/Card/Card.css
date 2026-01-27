@@ -1,0 +1,120 @@
+.card {
+  font-family: var(--font-family);
+  background-color: var(--color-background);
+  border-radius: var(--radius-surface);
+  overflow: hidden;
+  box-shadow: var(--shadow-control);
+}
+
+.card-default {
+  background-color: var(--color-surface);
+}
+
+.card-outlined {
+  border: var(--card-border-width) solid var(--color-border);
+}
+
+.card-elevated {
+  box-shadow: var(--shadow-surface);
+  border: var(--card-elevated-border-width, 0px) solid var(--color-border);
+}
+
+/* Padding variants */
+.card-padding-none {
+  padding: 0;
+}
+
+.card-padding-sm {
+  padding: var(--spacing-sm);
+}
+
+.card-padding-md {
+  padding: var(--spacing-md);
+}
+
+.card-padding-lg {
+  padding: var(--spacing-lg);
+}
+
+/* Card sections */
+.card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  border-bottom: var(--card-header-border-width) solid var(--color-border);
+}
+
+.card-padding-none > .card-header {
+  padding: var(--spacing-md);
+}
+
+.card-padding-sm > .card-header,
+.card-padding-md > .card-header,
+.card-padding-lg > .card-header {
+  padding: 0;
+  padding-bottom: var(--spacing-md);
+  border-bottom: none;
+}
+
+.card-header-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.card-title {
+  margin: 0;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  line-height: var(--line-height-tight);
+}
+
+.card-subtitle {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  line-height: var(--line-height-normal);
+}
+
+.card-header-action {
+  flex-shrink: 0;
+}
+
+.card-body {
+  padding: var(--spacing-md);
+  color: var(--color-text);
+  line-height: var(--line-height-normal);
+}
+
+.card-padding-none > .card-body {
+  padding: var(--spacing-md);
+}
+
+.card-padding-sm > .card-body,
+.card-padding-md > .card-body,
+.card-padding-lg > .card-body {
+  padding: 0;
+}
+
+.card-footer {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+  border-top: var(--card-header-border-width) solid var(--color-border);
+}
+
+.card-padding-none > .card-footer {
+  padding: var(--spacing-md);
+}
+
+.card-padding-sm > .card-footer,
+.card-padding-md > .card-footer,
+.card-padding-lg > .card-footer {
+  padding: 0;
+  padding-top: var(--spacing-md);
+  border-top: none;
+}

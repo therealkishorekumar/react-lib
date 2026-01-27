@@ -1,0 +1,33 @@
+.preview-toggle {
+  display: inline-flex;
+  padding: 4px;
+  background: var(--platform-surface);
+  border-radius: 10px;
+  border: 1px solid var(--platform-border);
+  box-shadow: var(--platform-shadow-sm);
+}
+
+.preview-toggle-btn {
+  padding: 8px 18px;
+  font-family: var(--font-family);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--platform-text-secondary);
+  background: transparent;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: var(--platform-transition);
+}
+
+.preview-toggle-btn:hover:not(.active) {
+  color: var(--platform-text);
+  background: var(--platform-surface-hover);
+}
+
+.preview-toggle-btn.active {
+  color: var(--platform-text);
+  background: var(--platform-background);
+  box-shadow: var(--platform-shadow-sm);
+}

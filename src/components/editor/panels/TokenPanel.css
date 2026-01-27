@@ -1,0 +1,134 @@
+.token-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow-y: auto;
+  background: var(--platform-surface);
+}
+
+.panel-section {
+  border-bottom: 1px solid var(--platform-border-light);
+}
+
+.panel-section-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 14px 20px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--platform-text);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: var(--platform-transition);
+}
+
+.panel-section-header:hover {
+  background: linear-gradient(90deg, var(--platform-surface-hover) 0%, transparent 100%);
+}
+
+.panel-section-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  color: var(--platform-text-secondary);
+}
+
+.panel-section-title {
+  flex: 1;
+}
+
+.panel-section-chevron {
+  color: var(--platform-text-muted);
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.panel-section-open .panel-section-chevron {
+  transform: rotate(180deg);
+}
+
+.panel-section-content {
+  padding: 4px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  animation: slideDown 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Modern checkbox styling in control labels */
+.control-label input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--platform-primary-solid);
+  cursor: pointer;
+}
+
+.panel-subsection {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.panel-subsection-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--platform-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 0;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--platform-border-light);
+}
+
+.theme-mode-toggle {
+  display: flex;
+  gap: 6px;
+  padding: 4px;
+  background: var(--platform-background);
+  border-radius: 10px;
+  margin-bottom: 4px;
+  border: 1px solid var(--platform-border-light);
+}
+
+.theme-toggle-btn {
+  flex: 1;
+  padding: 8px 14px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--platform-text-secondary);
+  background-color: transparent;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: var(--platform-transition);
+}
+
+.theme-toggle-btn:hover {
+  background: var(--platform-surface-hover);
+  color: var(--platform-text);
+}
+
+.theme-toggle-btn.active {
+  background: var(--platform-primary);
+  color: var(--platform-text-on-primary);
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}

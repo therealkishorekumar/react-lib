@@ -1,0 +1,122 @@
+.toggle-wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  cursor: pointer;
+  font-family: var(--font-family);
+  color: var(--color-text);
+}
+
+.toggle-wrapper:has(.toggle-input:disabled) {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.toggle-input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-track {
+  position: relative;
+  background-color: var(--color-border);
+  border-radius: var(--radius-full);
+  transition: background-color var(--transition-fast);
+  border: var(--toggle-border-width) solid transparent;
+  box-shadow: var(--toggle-track-shadow);
+}
+
+.toggle-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: var(--toggle-thumb-size);
+  height: var(--toggle-thumb-size);
+  background-color: var(--color-text-on-accent);
+  border-radius: var(--radius-full);
+  border: var(--toggle-thumb-border-width) solid var(--color-border);
+  box-shadow: var(--toggle-thumb-shadow);
+  transition: transform var(--transition-fast);
+}
+
+/* Sizes */
+.toggle-sm {
+  --toggle-track-height: 18px;
+  --toggle-thumb-size: 14px;
+}
+
+.toggle-md {
+  --toggle-track-height: var(--toggle-track-height);
+  --toggle-thumb-size: var(--toggle-thumb-size);
+}
+
+.toggle-lg {
+  --toggle-track-height: 28px;
+  --toggle-thumb-size: 24px;
+}
+
+.toggle-sm .toggle-track {
+  width: calc(var(--toggle-track-height) * 1.8);
+  height: var(--toggle-track-height);
+}
+
+.toggle-sm .toggle-thumb {
+  width: var(--toggle-thumb-size);
+  height: var(--toggle-thumb-size);
+}
+
+.toggle-sm .toggle-input:checked + .toggle-track .toggle-thumb {
+  transform: translateX(calc(var(--toggle-track-height) * 1.8 - var(--toggle-thumb-size) - 4px));
+}
+
+.toggle-sm .toggle-label {
+  font-size: var(--font-size-sm);
+}
+
+.toggle-md .toggle-track {
+  width: calc(var(--toggle-track-height) * 1.8);
+  height: var(--toggle-track-height);
+}
+
+.toggle-md .toggle-input:checked + .toggle-track .toggle-thumb {
+  transform: translateX(calc(var(--toggle-track-height) * 1.8 - var(--toggle-thumb-size) - 4px));
+}
+
+.toggle-md .toggle-label {
+  font-size: var(--font-size-md);
+}
+
+.toggle-lg .toggle-track {
+  width: calc(var(--toggle-track-height) * 2);
+  height: var(--toggle-track-height);
+}
+
+.toggle-lg .toggle-thumb {
+  width: var(--toggle-thumb-size);
+  height: var(--toggle-thumb-size);
+}
+
+.toggle-lg .toggle-input:checked + .toggle-track .toggle-thumb {
+  transform: translateX(calc(var(--toggle-track-height) * 2 - var(--toggle-thumb-size) - 4px));
+}
+
+.toggle-lg .toggle-label {
+  font-size: var(--font-size-lg);
+}
+
+/* Checked state */
+.toggle-input:checked + .toggle-track {
+  background-color: var(--color-primary);
+}
+
+/* Focus state */
+.toggle-input:focus-visible + .toggle-track {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.toggle-label {
+  user-select: none;
+}

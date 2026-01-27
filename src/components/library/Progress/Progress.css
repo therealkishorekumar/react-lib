@@ -1,0 +1,121 @@
+.progress {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-family: var(--font-family);
+}
+
+.progress-track {
+  flex: 1;
+  background-color: var(--color-surface);
+  border-radius: var(--progress-border-radius);
+  overflow: hidden;
+}
+
+.progress-sm .progress-track {
+  height: calc(var(--progress-track-height) / 2);
+}
+
+.progress-md .progress-track {
+  height: var(--progress-track-height);
+}
+
+.progress-lg .progress-track {
+  height: calc(var(--progress-track-height) * 1.5);
+}
+
+.progress-bar {
+  height: 100%;
+  border-radius: var(--progress-border-radius);
+  transition: width var(--transition-normal);
+}
+
+.progress-default {
+  background-color: var(--color-primary);
+}
+
+.progress-success {
+  background-color: var(--color-success);
+}
+
+.progress-warning {
+  background-color: var(--color-warning);
+}
+
+.progress-error {
+  background-color: var(--color-error);
+}
+
+.progress-animated {
+  background-image: linear-gradient(
+    45deg,
+    color-mix(in srgb, var(--color-text-on-accent) 20%, transparent) 25%,
+    transparent 25%,
+    transparent 50%,
+    color-mix(in srgb, var(--color-text-on-accent) 20%, transparent) 50%,
+    color-mix(in srgb, var(--color-text-on-accent) 20%, transparent) 75%,
+    transparent 75%,
+    transparent
+  );
+  background-size: 1rem 1rem;
+  animation: progress-stripes 1s linear infinite;
+}
+
+@keyframes progress-stripes {
+  from {
+    background-position: 1rem 0;
+  }
+  to {
+    background-position: 0 0;
+  }
+}
+
+.progress-value {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-muted);
+  min-width: 36px;
+  text-align: right;
+}
+
+/* Circular Progress */
+.circular-progress {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.circular-progress-track {
+  fill: none;
+  stroke: var(--color-surface);
+}
+
+.circular-progress-bar {
+  fill: none;
+  stroke-linecap: round;
+  transition: stroke-dashoffset var(--transition-normal);
+}
+
+.circular-progress-default .circular-progress-bar {
+  stroke: var(--color-primary);
+}
+
+.circular-progress-success .circular-progress-bar {
+  stroke: var(--color-success);
+}
+
+.circular-progress-warning .circular-progress-bar {
+  stroke: var(--color-warning);
+}
+
+.circular-progress-error .circular-progress-bar {
+  stroke: var(--color-error);
+}
+
+.circular-progress-value {
+  position: absolute;
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+}

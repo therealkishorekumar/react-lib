@@ -1,0 +1,100 @@
+.color-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.color-picker-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--platform-text-secondary);
+  letter-spacing: -0.01em;
+}
+
+.color-picker-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.color-picker-swatch {
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border: 2px solid var(--platform-border);
+  border-radius: 10px;
+  cursor: pointer;
+  background: none;
+  box-shadow: var(--platform-shadow-sm);
+  transition: var(--platform-transition);
+}
+
+.color-picker-swatch:hover {
+  border-color: var(--platform-border-hover);
+  transform: scale(1.05);
+  box-shadow: var(--platform-shadow-md);
+}
+
+.color-picker-swatch::-webkit-color-swatch-wrapper {
+  padding: 3px;
+}
+
+.color-picker-swatch::-webkit-color-swatch {
+  border: none;
+  border-radius: 6px;
+}
+
+.color-picker-input {
+  flex: 1;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 500;
+  color: var(--platform-text);
+  background: var(--platform-surface);
+  border: 1px solid var(--platform-border);
+  border-radius: 8px;
+  transition: var(--platform-transition);
+}
+
+.color-picker-input:hover {
+  border-color: var(--platform-border-hover);
+}
+
+.color-picker-input:focus {
+  outline: none;
+  border-color: var(--platform-primary-solid);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.color-picker-sync {
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--platform-text-secondary);
+  background: var(--platform-surface);
+  border: 1px solid var(--platform-border);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: var(--platform-transition-fast);
+}
+
+.color-picker-sync svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  fill: none;
+}
+
+.color-picker-sync:hover {
+  background: var(--platform-surface-hover);
+  border-color: var(--platform-border-hover);
+  color: var(--platform-text);
+}
+
+.color-picker-sync:active {
+  transform: translateY(1px);
+}

@@ -1,0 +1,69 @@
+.shadow-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.shadow-editor-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--platform-text-secondary);
+  letter-spacing: -0.01em;
+}
+
+.shadow-editor-presets {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.shadow-editor-preset {
+  width: 52px;
+  height: 52px;
+  padding: 10px;
+  background: var(--platform-surface);
+  border: 2px solid var(--platform-border);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: var(--platform-transition);
+}
+
+.shadow-editor-preset:hover {
+  border-color: var(--platform-border-hover);
+  transform: translateY(-2px);
+}
+
+.shadow-editor-preset-active {
+  border-color: var(--platform-primary-solid);
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.08) 100%);
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+}
+
+.shadow-editor-preview {
+  width: 100%;
+  height: 100%;
+  background: var(--platform-background);
+  border-radius: 6px;
+}
+
+.shadow-editor-input {
+  width: 100%;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-family: var(--font-family-mono);
+  color: var(--platform-text);
+  background: var(--platform-surface);
+  border: 1px solid var(--platform-border);
+  border-radius: 8px;
+  transition: var(--platform-transition-fast);
+}
+
+.shadow-editor-input:hover {
+  border-color: var(--platform-border-hover);
+}
+
+.shadow-editor-input:focus {
+  outline: none;
+  border-color: var(--platform-primary-solid);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
