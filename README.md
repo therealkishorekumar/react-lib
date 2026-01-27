@@ -2,10 +2,12 @@
 
 > Visual design tool for customizing React component libraries with real-time preview and one-click export.
 
+**🚀 [Live Demo](https://therealkishorekumar.github.io/react-lib/)**
+
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-19.2-61dafb)](https://react.dev/)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
-[![Build](https://img.shields.io/badge/build-passing-brightgreen)](https://github.com/therealkishorekumar/component-library-customizer)
+[![Build](https://img.shields.io/badge/build-passing-brightgreen)](https://github.com/therealkishorekumar/react-lib)
 
 A powerful visual tool that lets UX designers and developers customize comprehensive React component libraries without writing code. Adjust colors, typography, spacing, shadows, and more with real-time preview, then export a production-ready npm package.
 
@@ -60,12 +62,15 @@ A powerful visual tool that lets UX designers and developers customize comprehen
 
 ## 🚀 Quick Start
 
-### Installation
+### Try Online
+Visit the [live demo](https://therealkishorekumar.github.io/react-lib/) to start customizing components immediately - no installation required!
+
+### Local Development
 
 ```bash
 # Clone the repository
-git clone https://github.com/therealkishorekumar/component-library-customizer.git
-cd component-library-customizer
+git clone https://github.com/therealkishorekumar/react-lib.git
+cd react-lib
 
 # Install dependencies
 npm install
@@ -85,6 +90,21 @@ npm run build
 # Preview production build
 npm run preview
 ```
+
+### Deploy to GitHub Pages
+
+The site automatically deploys to GitHub Pages on every push to `main` branch via GitHub Actions.
+
+**Manual deployment:**
+```bash
+npm run deploy
+```
+
+**Setup GitHub Pages:**
+1. Go to your repo Settings → Pages
+2. Source: "GitHub Actions"
+3. Push to `main` branch - automatic deployment starts
+4. Site live at: `https://therealkishorekumar.github.io/react-lib/`
 
 ## 📖 Usage Guide
 
@@ -334,7 +354,7 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 ## 📧 Contact
 
-- **GitHub Issues** - [Report bugs or request features](https://github.com/therealkishorekumar/component-library-customizer/issues)
+- **GitHub Issues** - [Report bugs or request features](https://github.com/therealkishorekumar/react-lib/issues)
 - **Twitter** - [@therealkishorekumar](https://twitter.com/therealkishorekumar)
 - **Email** - ksihorenkumar+github@gmail.com
 

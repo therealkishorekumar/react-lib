@@ -26,3 +26,6 @@ dist-ssr
 # Documentation (local only, except README)
 *.md
 !README.md
+
+# GitHub Pages
+.gh-pages
