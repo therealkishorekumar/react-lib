@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Documentation (local only, except README)
+*.md
+!README.md

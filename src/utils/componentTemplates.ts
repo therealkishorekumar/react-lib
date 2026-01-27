@@ -35,10 +35,10 @@ export function generatePackageJson(): string {
     },
     repository: {
       type: 'git',
-      url: 'https://github.com/yourusername/custom-component-library'
+      url: 'https://github.com/therealkishorekumar/custom-component-library'
     },
     bugs: {
-      url: 'https://github.com/yourusername/custom-component-library/issues'
+      url: 'https://github.com/therealkishorekumar/custom-component-library/issues'
     }
   }, null, 2);
 }
