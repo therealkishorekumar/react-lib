@@ -50,13 +50,13 @@ A powerful visual tool that lets UX designers and developers customize comprehen
 ## 🖼️ Screenshots
 
 ### Main Interface
-![Component Library Customizer](docs/screenshot-main.png)
+! Coming soon...
 
 ### Theme Presets
-![Theme Presets](docs/screenshot-themes.png)
+! Coming soon...
 
 ### Real-Time Preview
-![Real-Time Preview](docs/screenshot-preview.png)
+! Coming soon...
 
 ## 🚀 Quick Start
 
@@ -331,13 +331,12 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 - Built with [React](https://react.dev/) and [Vite](https://vitejs.dev/)
 - Icons by [Lucide](https://lucide.dev/)
-- Inspired by design systems from Tailwind, Material UI, and Chakra UI
 
 ## 📧 Contact
 
 - **GitHub Issues** - [Report bugs or request features](https://github.com/therealkishorekumar/component-library-customizer/issues)
 - **Twitter** - [@therealkishorekumar](https://twitter.com/therealkishorekumar)
-- **Email** - your.email@example.com
+- **Email** - ksihorenkumar+github@gmail.com
 
 ---
 
