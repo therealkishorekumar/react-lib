@@ -285,7 +285,44 @@ const presets: Record<string, DesignTokens> = {
       gradientSecondary: 'linear-gradient(145deg, #818cf8, #6366f1)',
       gradientTertiary: 'linear-gradient(145deg, #a78bfa, #8b5cf6)',
     },
-    componentColors: defaultTokens.componentColors,
+    componentColors: {
+      ...defaultTokens.componentColors,
+      // Override button colors for neumorphic effect - same color as background, dark text
+      button: {
+        primary: {
+          background: 'surfacePrimary',
+          backgroundHover: 'surfaceSecondary',
+          text: 'contentPrimary',
+          border: 'border',
+        },
+        secondary: {
+          background: 'surfacePrimary',
+          backgroundHover: 'surfaceSecondary',
+          text: 'contentPrimary',
+          border: 'border',
+        },
+        outline: {
+          background: 'surfacePrimary',
+          backgroundHover: 'surfaceSecondary',
+          text: 'contentPrimary',
+          textHover: 'contentPrimary',
+          border: 'border',
+          borderHover: 'border',
+        },
+        ghost: {
+          background: 'surfacePrimary',
+          backgroundHover: 'surfaceSecondary',
+          text: 'contentPrimary',
+          textHover: 'contentPrimary',
+        },
+        danger: {
+          background: 'surfacePrimary',
+          backgroundHover: 'surfaceSecondary',
+          text: 'fail',
+          border: 'fail',
+        },
+      },
+    },
     borderRadius: {
       none: '0',
       control: '12px',
@@ -295,16 +332,18 @@ const presets: Record<string, DesignTokens> = {
     },
     shadows: {
       none: 'none',
-      control: '4px 4px 8px rgba(163, 177, 198, 0.6), -4px -4px 8px rgba(255, 255, 255, 0.5)',
-      surface: '6px 6px 12px rgba(163, 177, 198, 0.6), -6px -6px 12px rgba(255, 255, 255, 0.5)',
-      overlay: '8px 8px 16px rgba(163, 177, 198, 0.6), -8px -8px 16px rgba(255, 255, 255, 0.5)',
-      float: '10px 10px 20px rgba(163, 177, 198, 0.6), -10px -10px 20px rgba(255, 255, 255, 0.5)',
-      inner: 'inset 3px 3px 6px rgba(163, 177, 198, 0.4), inset -3px -3px 6px rgba(255, 255, 255, 0.4)',
+      // Dual shadows for neumorphic effect (works in both light and dark modes)
+      // Dark shadow + subtle light shadow (using gray instead of pure white for dark mode compatibility)
+      control: '4px 4px 8px rgba(0, 0, 0, 0.25), -4px -4px 8px rgba(255, 255, 255, 0.1)',
+      surface: '6px 6px 12px rgba(0, 0, 0, 0.25), -6px -6px 12px rgba(255, 255, 255, 0.1)',
+      overlay: '8px 8px 16px rgba(0, 0, 0, 0.3), -8px -8px 16px rgba(255, 255, 255, 0.1)',
+      float: '10px 10px 20px rgba(0, 0, 0, 0.3), -10px -10px 20px rgba(255, 255, 255, 0.1)',
+      inner: 'inset 3px 3px 6px rgba(0, 0, 0, 0.2), inset -3px -3px 6px rgba(255, 255, 255, 0.1)',
       glow: 'none',
     },
     effects: {
       ...defaultTokens.effects,
-      shadowColor: 'rgba(163, 177, 198, 0.6)',
+      shadowColor: 'rgba(0, 0, 0, 0.25)',
       backdropBlur: '0px',
       backdropSaturation: '100%',
       textGlow: 'none',
@@ -320,16 +359,16 @@ const presets: Record<string, DesignTokens> = {
       button: {
         ...defaultTokens.components.button,
         borderWidth: '0px',
-        innerShadow: 'inset 2px 2px 4px rgba(163, 177, 198, 0.3)',
+        innerShadow: 'none', // No inner shadow - buttons should look raised, not recessed
         glowEffect: 'none',
-        gradient: 'linear-gradient(145deg, #e6ebf2, #d9dfe8)',
+        gradient: 'none', // No gradient - let the button use semantic colors
       },
       input: {
         ...defaultTokens.components.input,
         borderWidth: '0px',
         focusRingWidth: '0px',
         focusRingAlpha: 0,
-        innerShadow: 'inset 3px 3px 6px rgba(163, 177, 198, 0.4), inset -3px -3px 6px rgba(255, 255, 255, 0.4)',
+        innerShadow: 'inset 3px 3px 6px rgba(0, 0, 0, 0.2), inset -3px -3px 6px rgba(255, 255, 255, 0.05)',
         glowOnFocus: 'none',
       },
       card: {
@@ -343,8 +382,8 @@ const presets: Record<string, DesignTokens> = {
       },
       toggle: {
         ...defaultTokens.components.toggle,
-        trackShadow: 'inset 2px 2px 4px rgba(163, 177, 198, 0.4), inset -2px -2px 4px rgba(255, 255, 255, 0.4)',
-        thumbShadow: '2px 2px 4px rgba(163, 177, 198, 0.5), -2px -2px 4px rgba(255, 255, 255, 0.5)',
+        trackShadow: 'inset 2px 2px 4px rgba(0, 0, 0, 0.2), inset -2px -2px 4px rgba(255, 255, 255, 0.05)',
+        thumbShadow: '2px 2px 4px rgba(0, 0, 0, 0.25), -2px -2px 4px rgba(255, 255, 255, 0.1)',
       },
     },
   },

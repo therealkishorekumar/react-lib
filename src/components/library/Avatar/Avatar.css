@@ -9,6 +9,7 @@
   overflow: hidden;
   background-color: var(--avatar-background);
   border: var(--avatar-border-width) solid transparent;
+  box-shadow: var(--shadow-control);
 }
 
 /* Sizes */

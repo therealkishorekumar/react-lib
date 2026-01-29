@@ -10,6 +10,7 @@
   text-transform: var(--badge-text-transform);
   letter-spacing: var(--badge-letter-spacing);
   border: var(--badge-border-width) solid transparent;
+  box-shadow: var(--shadow-control);
 }
 
 /* Sizes */
