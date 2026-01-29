@@ -35,8 +35,10 @@
 
 .shadow-editor-preset-active {
   border-color: var(--platform-primary-solid);
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.08) 100%);
-  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--platform-primary) 8%, transparent) 0%,
+    color-mix(in srgb, var(--platform-primary) 8%, transparent) 100%);
+  box-shadow: var(--platform-shadow-md);
 }
 
 .shadow-editor-preview {
@@ -65,5 +67,5 @@
 .shadow-editor-input:focus {
   outline: none;
   border-color: var(--platform-primary-solid);
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--platform-primary) 10%, transparent);
 }

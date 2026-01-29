@@ -1,22 +1,26 @@
 .card {
   font-family: var(--font-family);
-  background-color: var(--color-background);
+  background-color: var(--card-background);
   border-radius: var(--radius-surface);
   overflow: hidden;
-  box-shadow: var(--shadow-control);
+  box-shadow: var(--shadow-control), var(--card-inner-shadow);
+  backdrop-filter: blur(var(--card-backdrop-blur)) saturate(var(--backdrop-saturation));
+  -webkit-backdrop-filter: blur(var(--card-backdrop-blur)) saturate(var(--backdrop-saturation));
 }
 
 .card-default {
-  background-color: var(--color-surface);
+  background-color: var(--card-background-default);
 }
 
 .card-outlined {
-  border: var(--card-border-width) solid var(--color-border);
+  border: var(--card-border-width) solid var(--card-border-color);
+  background-color: var(--card-background-outlined);
 }
 
 .card-elevated {
-  box-shadow: var(--shadow-surface);
-  border: var(--card-elevated-border-width, 0px) solid var(--color-border);
+  box-shadow: var(--shadow-surface), var(--card-inner-shadow);
+  border: var(--card-elevated-border-width, 0px) solid var(--card-border-color);
+  background-color: var(--card-background-elevated);
 }
 
 /* Padding variants */
@@ -43,7 +47,7 @@
   justify-content: space-between;
   gap: var(--spacing-md);
   padding: var(--spacing-md);
-  border-bottom: var(--card-header-border-width) solid var(--color-border);
+  border-bottom: var(--card-header-border-width) solid var(--card-header-border-color);
 }
 
 .card-padding-none > .card-header {
@@ -68,14 +72,14 @@
   margin: 0;
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-semibold);
-  color: var(--color-text);
+  color: var(--card-title-color);
   line-height: var(--line-height-tight);
 }
 
 .card-subtitle {
   margin: 0;
   font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
+  color: var(--card-subtitle-color);
   line-height: var(--line-height-normal);
 }
 
@@ -85,7 +89,7 @@
 
 .card-body {
   padding: var(--spacing-md);
-  color: var(--color-text);
+  color: var(--card-text-color);
   line-height: var(--line-height-normal);
 }
 
@@ -104,7 +108,7 @@
   align-items: center;
   gap: var(--spacing-sm);
   padding: var(--spacing-md);
-  border-top: var(--card-header-border-width) solid var(--color-border);
+  border-top: var(--card-header-border-width) solid var(--card-header-border-color);
 }
 
 .card-padding-none > .card-footer {

@@ -7,18 +7,18 @@
   border-collapse: collapse;
   font-family: var(--font-family);
   font-size: var(--font-size-md);
-  color: var(--color-text);
+  color: var(--table-text-color);
 }
 
 .table-header {
-  background-color: var(--color-surface);
+  background-color: var(--table-header-background);
 }
 
 .table-head {
   padding: var(--spacing-sm) var(--spacing-md);
   font-weight: var(--font-weight-semibold);
   text-align: left;
-  border-bottom: 2px solid var(--color-border);
+  border-bottom: var(--table-header-border-width) solid var(--table-border-color);
 }
 
 .table-head-sortable {
@@ -27,7 +27,7 @@
 }
 
 .table-head-sortable:hover {
-  background-color: var(--color-border);
+  background-color: var(--table-header-background-hover);
 }
 
 .table-head-content {
@@ -39,7 +39,7 @@
 .table-sort-icon {
   display: flex;
   align-items: center;
-  color: var(--color-primary);
+  color: var(--table-sort-icon-color);
 }
 
 .table-sort-icon-inactive {
@@ -47,11 +47,11 @@
 }
 
 .table-row {
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: var(--table-border-width) solid var(--table-border-color);
 }
 
 .table-row-selected {
-  background-color: color-mix(in srgb, var(--color-primary) 10%, transparent);
+  background-color: var(--table-row-selected-background);
 }
 
 .table-cell {
@@ -61,22 +61,22 @@
 
 /* Striped */
 .table-striped .table-body .table-row:nth-child(even) {
-  background-color: var(--color-surface);
+  background-color: var(--table-row-striped-background);
 }
 
 /* Hoverable */
 .table-hoverable .table-body .table-row:hover {
-  background-color: color-mix(in srgb, var(--color-primary) 5%, transparent);
+  background-color: var(--table-row-hover-background);
 }
 
 /* Bordered */
 .table-bordered {
-  border: 1px solid var(--color-border);
+  border: var(--table-border-width) solid var(--table-border-color);
 }
 
 .table-bordered .table-head,
 .table-bordered .table-cell {
-  border: 1px solid var(--color-border);
+  border: var(--table-border-width) solid var(--table-border-color);
 }
 
 /* Compact */

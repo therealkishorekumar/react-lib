@@ -24,13 +24,13 @@
   align-items: center;
   gap: var(--spacing-xs);
   font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
+  color: var(--breadcrumb-text-color);
   text-decoration: none;
   transition: color var(--transition-fast);
 }
 
 .breadcrumb-link:hover {
-  color: var(--color-primary);
+  color: var(--breadcrumb-link-hover);
 }
 
 .breadcrumb-link:focus-visible {
@@ -40,7 +40,7 @@
 }
 
 .breadcrumb-current {
-  color: var(--color-text);
+  color: var(--breadcrumb-current-color);
   font-weight: var(--font-weight-medium);
 }
 
@@ -52,10 +52,10 @@
 .breadcrumb-separator {
   display: flex;
   align-items: center;
-  color: var(--color-border);
+  color: var(--breadcrumb-separator-color);
 }
 
 .breadcrumb-ellipsis {
   font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
+  color: var(--breadcrumb-text-color);
 }

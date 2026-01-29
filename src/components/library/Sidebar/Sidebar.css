@@ -2,8 +2,8 @@
   display: flex;
   flex-direction: column;
   width: 240px;
-  background-color: var(--color-surface);
-  border-right: 1px solid var(--color-border);
+  background-color: var(--sidebar-background);
+  border-right: var(--sidebar-border-width) solid var(--sidebar-border-color);
   font-family: var(--font-family);
   transition: width var(--transition-normal);
 }
@@ -23,14 +23,14 @@
 }
 
 .sidebar-section + .sidebar-section {
-  border-top: 1px solid var(--color-border);
+  border-top: var(--sidebar-border-width) solid var(--sidebar-section-border-color);
 }
 
 .sidebar-section-title {
   padding: var(--spacing-sm) var(--spacing-md);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
-  color: var(--color-text-muted);
+  color: var(--sidebar-section-title-color);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -50,7 +50,7 @@
   font-family: var(--font-family);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
-  color: var(--color-text-muted);
+  color: var(--sidebar-item-text);
   background: transparent;
   border: none;
   border-radius: var(--radius-surface);
@@ -60,8 +60,8 @@
 }
 
 .sidebar-item:hover {
-  color: var(--color-text);
-  background-color: var(--color-background);
+  color: var(--sidebar-item-text-hover);
+  background-color: var(--sidebar-item-background-hover);
 }
 
 .sidebar-item:focus-visible {
@@ -70,8 +70,8 @@
 }
 
 .sidebar-item-active {
-  color: var(--color-primary);
-  background-color: color-mix(in srgb, var(--color-primary) 10%, transparent);
+  color: var(--sidebar-item-text-active);
+  background-color: var(--sidebar-item-background-active);
 }
 
 .sidebar-item-icon {
@@ -92,8 +92,8 @@
   padding: 2px var(--spacing-xs);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
-  color: var(--color-text-on-accent);
-  background-color: var(--color-primary);
+  color: var(--sidebar-badge-text);
+  background-color: var(--sidebar-badge-background);
   border-radius: var(--radius-full);
   min-width: 18px;
   text-align: center;

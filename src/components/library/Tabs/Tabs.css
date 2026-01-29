@@ -5,7 +5,7 @@
 .tab-list {
   display: flex;
   gap: var(--spacing-xs);
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: var(--tabs-border-width) solid var(--tabs-border-color);
 }
 
 .tab {
@@ -14,7 +14,7 @@
   font-family: var(--font-family);
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-medium);
-  color: var(--color-text-muted);
+  color: var(--tabs-tab-text);
   background: transparent;
   border: none;
   cursor: pointer;
@@ -33,7 +33,7 @@
 }
 
 .tab:hover:not(:disabled) {
-  color: var(--color-text);
+  color: var(--tabs-tab-text-hover);
 }
 
 .tab:focus-visible {
@@ -48,15 +48,15 @@
 }
 
 .tab-active {
-  color: var(--color-primary);
+  color: var(--tabs-tab-text-active);
 }
 
 .tab-active::after {
-  background-color: var(--color-primary);
+  background-color: var(--tabs-indicator-color);
 }
 
 .tab-panel {
   padding: var(--spacing-md) 0;
-  color: var(--color-text);
+  color: var(--tabs-panel-text);
   line-height: var(--line-height-normal);
 }

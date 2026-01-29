@@ -1,6 +1,6 @@
 .navbar {
-  background-color: var(--color-background);
-  border-bottom: 1px solid var(--color-border);
+  background-color: var(--navbar-background);
+  border-bottom: var(--navbar-border-width) solid var(--navbar-border-color);
   font-family: var(--font-family);
 }
 
@@ -25,7 +25,7 @@
   align-items: center;
   gap: var(--spacing-sm);
   text-decoration: none;
-  color: var(--color-text);
+  color: var(--navbar-brand-text);
 }
 
 .navbar-logo {
@@ -48,15 +48,15 @@
   padding: var(--spacing-sm) var(--spacing-md);
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-medium);
-  color: var(--color-text-muted);
+  color: var(--navbar-link-text);
   text-decoration: none;
   border-radius: var(--radius-surface);
   transition: all var(--transition-fast);
 }
 
 .navbar-link:hover {
-  color: var(--color-text);
-  background-color: var(--color-surface);
+  color: var(--navbar-link-text-hover);
+  background-color: var(--navbar-link-background-hover);
 }
 
 .navbar-link:focus-visible {
@@ -65,8 +65,8 @@
 }
 
 .navbar-link-active {
-  color: var(--color-primary);
-  background-color: color-mix(in srgb, var(--color-primary) 10%, transparent);
+  color: var(--navbar-link-text-active);
+  background-color: var(--navbar-link-background-active);
 }
 
 .navbar-actions {

@@ -9,6 +9,8 @@ export function generateTokensCSS(tokens: DesignTokens): string {
   const fontUrl = buildGoogleFontsUrl([
     tokens.typography.fontFamily,
     tokens.typography.fontFamilyMono,
+    tokens.typography.fontFamilySerif,
+    tokens.typography.fontFamilyDisplay,
   ]);
 
   if (fontUrl) {
@@ -27,11 +29,299 @@ export function generateTokensCSS(tokens: DesignTokens): string {
     lines.push(`  --color-${cssKey}: ${value};`);
   });
 
+  // Semantic Colors - Light Theme
+  lines.push('');
+  lines.push('  /* Semantic Colors */');
+  Object.entries(tokens.semanticLight).forEach(([key, value]) => {
+    const cssKey = key.replace(/([A-Z])/g, '-$1').toLowerCase();
+    lines.push(`  --semantic-${cssKey}: ${value};`);
+  });
+
+  // Helper function to resolve semantic color key to actual value (for light theme)
+  const resolveSemanticColor = (key: string): string => {
+    return (tokens.semanticLight as any)[key] || key;
+  };
+
+  // Component Colors - Layer 2: Generate component-specific variables
+  lines.push('');
+  lines.push('  /* Component Color Variables */');
+
+  // Button
+  lines.push(`  --button-primary-background: ${resolveSemanticColor(tokens.componentColors.button.primary.background)};`);
+  lines.push(`  --button-primary-background-hover: ${resolveSemanticColor(tokens.componentColors.button.primary.backgroundHover)};`);
+  lines.push(`  --button-primary-text: ${resolveSemanticColor(tokens.componentColors.button.primary.text)};`);
+  lines.push(`  --button-primary-border: ${resolveSemanticColor(tokens.componentColors.button.primary.border)};`);
+
+  lines.push(`  --button-secondary-background: ${resolveSemanticColor(tokens.componentColors.button.secondary.background)};`);
+  lines.push(`  --button-secondary-background-hover: ${resolveSemanticColor(tokens.componentColors.button.secondary.backgroundHover)};`);
+  lines.push(`  --button-secondary-text: ${resolveSemanticColor(tokens.componentColors.button.secondary.text)};`);
+  lines.push(`  --button-secondary-border: ${resolveSemanticColor(tokens.componentColors.button.secondary.border)};`);
+
+  lines.push(`  --button-outline-background: ${resolveSemanticColor(tokens.componentColors.button.outline.background)};`);
+  lines.push(`  --button-outline-background-hover: ${resolveSemanticColor(tokens.componentColors.button.outline.backgroundHover)};`);
+  lines.push(`  --button-outline-text: ${resolveSemanticColor(tokens.componentColors.button.outline.text)};`);
+  lines.push(`  --button-outline-text-hover: ${resolveSemanticColor(tokens.componentColors.button.outline.textHover)};`);
+  lines.push(`  --button-outline-border: ${resolveSemanticColor(tokens.componentColors.button.outline.border)};`);
+  lines.push(`  --button-outline-border-hover: ${resolveSemanticColor(tokens.componentColors.button.outline.borderHover)};`);
+
+  lines.push(`  --button-ghost-background: ${resolveSemanticColor(tokens.componentColors.button.ghost.background)};`);
+  lines.push(`  --button-ghost-background-hover: ${resolveSemanticColor(tokens.componentColors.button.ghost.backgroundHover)};`);
+  lines.push(`  --button-ghost-text: ${resolveSemanticColor(tokens.componentColors.button.ghost.text)};`);
+  lines.push(`  --button-ghost-text-hover: ${resolveSemanticColor(tokens.componentColors.button.ghost.textHover)};`);
+
+  lines.push(`  --button-danger-background: ${resolveSemanticColor(tokens.componentColors.button.danger.background)};`);
+  lines.push(`  --button-danger-background-hover: ${resolveSemanticColor(tokens.componentColors.button.danger.backgroundHover)};`);
+  lines.push(`  --button-danger-text: ${resolveSemanticColor(tokens.componentColors.button.danger.text)};`);
+  lines.push(`  --button-danger-border: ${resolveSemanticColor(tokens.componentColors.button.danger.border)};`);
+
+  // Input - expanded variables
+  const inputBg = resolveSemanticColor(tokens.componentColors.input.background);
+  const inputText = resolveSemanticColor(tokens.componentColors.input.text);
+  const inputPlaceholder = resolveSemanticColor(tokens.componentColors.input.placeholder);
+  const inputBorder = resolveSemanticColor(tokens.componentColors.input.border);
+  const inputBorderHover = resolveSemanticColor(tokens.componentColors.input.borderHover);
+  const inputBorderFocus = resolveSemanticColor(tokens.componentColors.input.borderFocus);
+  const inputBorderError = resolveSemanticColor(tokens.componentColors.input.borderError);
+
+  lines.push(`  --input-label-color: ${inputText};`);
+  lines.push(`  --input-text-color: ${inputText};`);
+  lines.push(`  --input-background: ${inputBg};`);
+  lines.push(`  --input-border-color: ${inputBorder};`);
+  lines.push(`  --input-placeholder-color: ${inputPlaceholder};`);
+  lines.push(`  --input-border-color-hover: ${inputBorderHover};`);
+  lines.push(`  --input-border-color-focus: ${inputBorderFocus};`);
+  lines.push(`  --input-background-disabled: ${resolveSemanticColor('surfaceSecondary')};`);
+  lines.push(`  --input-error-border-color: ${inputBorderError};`);
+  lines.push(`  --input-error-text-color: ${inputBorderError};`);
+  lines.push(`  --input-helper-text-color: ${resolveSemanticColor('contentSecondary')};`);
+  lines.push(`  --input-error-focus-ring-color: color-mix(in srgb, ${inputBorderError} 20%, transparent);`);
+
+  // Card - expanded variables
+  const cardBg = resolveSemanticColor(tokens.componentColors.card.background);
+  const cardBgEl = resolveSemanticColor(tokens.componentColors.card.backgroundElevated);
+  const cardText = resolveSemanticColor(tokens.componentColors.card.text);
+  const cardTextMuted = resolveSemanticColor(tokens.componentColors.card.textMuted);
+  const cardBorder = resolveSemanticColor(tokens.componentColors.card.border);
+
+  lines.push(`  --card-background: ${cardBg};`);
+  lines.push(`  --card-background-default: ${cardBg};`);
+  lines.push(`  --card-background-outlined: ${resolveSemanticColor('surfacePrimary')};`);
+  lines.push(`  --card-background-elevated: ${cardBgEl};`);
+  lines.push(`  --card-border-color: ${cardBorder};`);
+  lines.push(`  --card-header-border-color: ${cardBorder};`);
+  lines.push(`  --card-title-color: ${cardText};`);
+  lines.push(`  --card-subtitle-color: ${cardTextMuted};`);
+  lines.push(`  --card-text-color: ${cardText};`);
+
+  // Alert - with icon colors
+  const alertInfoBg = resolveSemanticColor(tokens.componentColors.alert.info.background);
+  const alertInfoText = resolveSemanticColor(tokens.componentColors.alert.info.text);
+  const alertInfoBorder = resolveSemanticColor(tokens.componentColors.alert.info.border);
+
+  lines.push(`  --alert-info-background: ${alertInfoBg};`);
+  lines.push(`  --alert-info-text: ${alertInfoText};`);
+  lines.push(`  --alert-info-border: ${alertInfoBorder};`);
+  lines.push(`  --alert-info-icon-color: ${alertInfoText};`);
+
+  const alertSuccessBg = resolveSemanticColor(tokens.componentColors.alert.success.background);
+  const alertSuccessText = resolveSemanticColor(tokens.componentColors.alert.success.text);
+  const alertSuccessBorder = resolveSemanticColor(tokens.componentColors.alert.success.border);
+
+  lines.push(`  --alert-success-background: ${alertSuccessBg};`);
+  lines.push(`  --alert-success-text: ${alertSuccessText};`);
+  lines.push(`  --alert-success-border: ${alertSuccessBorder};`);
+  lines.push(`  --alert-success-icon-color: ${alertSuccessText};`);
+
+  const alertWarningBg = resolveSemanticColor(tokens.componentColors.alert.warning.background);
+  const alertWarningText = resolveSemanticColor(tokens.componentColors.alert.warning.text);
+  const alertWarningBorder = resolveSemanticColor(tokens.componentColors.alert.warning.border);
+
+  lines.push(`  --alert-warning-background: ${alertWarningBg};`);
+  lines.push(`  --alert-warning-text: ${alertWarningText};`);
+  lines.push(`  --alert-warning-border: ${alertWarningBorder};`);
+  lines.push(`  --alert-warning-icon-color: ${alertWarningText};`);
+
+  const alertErrorBg = resolveSemanticColor(tokens.componentColors.alert.error.background);
+  const alertErrorText = resolveSemanticColor(tokens.componentColors.alert.error.text);
+  const alertErrorBorder = resolveSemanticColor(tokens.componentColors.alert.error.border);
+
+  lines.push(`  --alert-error-background: ${alertErrorBg};`);
+  lines.push(`  --alert-error-text: ${alertErrorText};`);
+  lines.push(`  --alert-error-border: ${alertErrorBorder};`);
+  lines.push(`  --alert-error-icon-color: ${alertErrorText};`);
+
+  // Badge - with default variant
+  lines.push(`  --badge-default-background: ${resolveSemanticColor('surfaceSecondary')};`);
+  lines.push(`  --badge-default-text: ${resolveSemanticColor('contentPrimary')};`);
+  lines.push(`  --badge-default-border: ${resolveSemanticColor('border')};`);
+
+  lines.push(`  --badge-primary-background: ${resolveSemanticColor(tokens.componentColors.badge.primary.background)};`);
+  lines.push(`  --badge-primary-text: ${resolveSemanticColor(tokens.componentColors.badge.primary.text)};`);
+
+  lines.push(`  --badge-secondary-background: ${resolveSemanticColor(tokens.componentColors.badge.secondary.background)};`);
+  lines.push(`  --badge-secondary-text: ${resolveSemanticColor(tokens.componentColors.badge.secondary.text)};`);
+
+  lines.push(`  --badge-success-background: ${resolveSemanticColor(tokens.componentColors.badge.success.background)};`);
+  lines.push(`  --badge-success-text: ${resolveSemanticColor(tokens.componentColors.badge.success.text)};`);
+
+  lines.push(`  --badge-warning-background: ${resolveSemanticColor(tokens.componentColors.badge.warning.background)};`);
+  lines.push(`  --badge-warning-text: ${resolveSemanticColor(tokens.componentColors.badge.warning.text)};`);
+
+  lines.push(`  --badge-error-background: ${resolveSemanticColor(tokens.componentColors.badge.error.background)};`);
+  lines.push(`  --badge-error-text: ${resolveSemanticColor(tokens.componentColors.badge.error.text)};`);
+
+  lines.push(`  --badge-info-background: ${resolveSemanticColor('info')};`);
+  lines.push(`  --badge-info-text: ${resolveSemanticColor('onAccentPrimary')};`);
+
+  // Checkbox - expanded
+  lines.push(`  --checkbox-label-color: ${resolveSemanticColor('contentPrimary')};`);
+  lines.push(`  --checkbox-background: ${resolveSemanticColor(tokens.componentColors.checkbox.background)};`);
+  lines.push(`  --checkbox-background-checked: ${resolveSemanticColor(tokens.componentColors.checkbox.backgroundChecked)};`);
+  lines.push(`  --checkbox-border-color: ${resolveSemanticColor(tokens.componentColors.checkbox.border)};`);
+  lines.push(`  --checkbox-border-color-checked: ${resolveSemanticColor(tokens.componentColors.checkbox.borderChecked)};`);
+  lines.push(`  --checkbox-border-color-hover: ${resolveSemanticColor('action')};`);
+  lines.push(`  --checkbox-check-color: ${resolveSemanticColor(tokens.componentColors.checkbox.checkmark)};`);
+
+  // Radio - expanded
+  lines.push(`  --radio-label-color: ${resolveSemanticColor('contentPrimary')};`);
+  lines.push(`  --radio-background: ${resolveSemanticColor(tokens.componentColors.radio.background)};`);
+  lines.push(`  --radio-background-checked: ${resolveSemanticColor(tokens.componentColors.radio.backgroundChecked)};`);
+  lines.push(`  --radio-border-color: ${resolveSemanticColor(tokens.componentColors.radio.border)};`);
+  lines.push(`  --radio-border-color-checked: ${resolveSemanticColor(tokens.componentColors.radio.borderChecked)};`);
+  lines.push(`  --radio-border-color-hover: ${resolveSemanticColor('action')};`);
+  lines.push(`  --radio-dot-color: ${resolveSemanticColor(tokens.componentColors.radio.dot)};`);
+
+  // Toggle - expanded
+  lines.push(`  --toggle-label-color: ${resolveSemanticColor('contentPrimary')};`);
+  lines.push(`  --toggle-track-background: ${resolveSemanticColor(tokens.componentColors.toggle.trackBackground)};`);
+  lines.push(`  --toggle-track-background-checked: ${resolveSemanticColor(tokens.componentColors.toggle.trackBackgroundActive)};`);
+  lines.push(`  --toggle-thumb-color: ${resolveSemanticColor(tokens.componentColors.toggle.thumb)};`);
+  lines.push(`  --toggle-thumb-border-color: ${resolveSemanticColor(tokens.componentColors.toggle.thumbBorder)};`);
+
+  // Select - expanded
+  lines.push(`  --select-label-color: ${resolveSemanticColor('contentPrimary')};`);
+  lines.push(`  --select-text-color: ${resolveSemanticColor(tokens.componentColors.select.text)};`);
+  lines.push(`  --select-background: ${resolveSemanticColor(tokens.componentColors.select.background)};`);
+  lines.push(`  --select-border-color: ${resolveSemanticColor(tokens.componentColors.select.border)};`);
+  lines.push(`  --select-border-color-hover: ${resolveSemanticColor(tokens.componentColors.select.borderHover)};`);
+  lines.push(`  --select-border-color-focus: ${resolveSemanticColor(tokens.componentColors.select.borderFocus)};`);
+  lines.push(`  --select-focus-ring-color: color-mix(in srgb, ${resolveSemanticColor(tokens.componentColors.select.borderFocus)} 20%, transparent);`);
+  lines.push(`  --select-background-disabled: ${resolveSemanticColor('surfaceSecondary')};`);
+  lines.push(`  --select-icon-color: ${resolveSemanticColor('contentSecondary')};`);
+  lines.push(`  --select-error-border-color: ${resolveSemanticColor('fail')};`);
+  lines.push(`  --select-error-text-color: ${resolveSemanticColor('fail')};`);
+
+  // Dropdown - expanded
+  lines.push(`  --dropdown-trigger-text: ${resolveSemanticColor(tokens.componentColors.dropdown.text)};`);
+  lines.push(`  --dropdown-trigger-background: ${resolveSemanticColor(tokens.componentColors.dropdown.background)};`);
+  lines.push(`  --dropdown-trigger-border: ${resolveSemanticColor(tokens.componentColors.dropdown.border)};`);
+  lines.push(`  --dropdown-trigger-border-hover: ${resolveSemanticColor('action')};`);
+  lines.push(`  --dropdown-menu-background: ${resolveSemanticColor(tokens.componentColors.dropdown.background)};`);
+  lines.push(`  --dropdown-menu-border: ${resolveSemanticColor(tokens.componentColors.dropdown.border)};`);
+  lines.push(`  --dropdown-item-text: ${resolveSemanticColor(tokens.componentColors.dropdown.text)};`);
+  lines.push(`  --dropdown-item-background-hover: ${resolveSemanticColor(tokens.componentColors.dropdown.itemHover)};`);
+  lines.push(`  --dropdown-item-icon-color: ${resolveSemanticColor('contentSecondary')};`);
+  lines.push(`  --dropdown-divider-color: ${resolveSemanticColor('border')};`);
+
+  // Tabs - expanded
+  lines.push(`  --tabs-border-color: ${resolveSemanticColor(tokens.componentColors.tabs.border)};`);
+  lines.push(`  --tabs-tab-text: ${resolveSemanticColor(tokens.componentColors.tabs.text)};`);
+  lines.push(`  --tabs-tab-text-hover: ${resolveSemanticColor('contentPrimary')};`);
+  lines.push(`  --tabs-tab-text-active: ${resolveSemanticColor(tokens.componentColors.tabs.textActive)};`);
+  lines.push(`  --tabs-indicator-color: ${resolveSemanticColor(tokens.componentColors.tabs.indicator)};`);
+  lines.push(`  --tabs-panel-text: ${resolveSemanticColor('contentPrimary')};`);
+
+  // Accordion - expanded
+  lines.push(`  --accordion-border-color: ${resolveSemanticColor(tokens.componentColors.accordion.border)};`);
+  lines.push(`  --accordion-trigger-text: ${resolveSemanticColor(tokens.componentColors.accordion.text)};`);
+  lines.push(`  --accordion-trigger-background: ${resolveSemanticColor(tokens.componentColors.accordion.background)};`);
+  lines.push(`  --accordion-trigger-background-hover: ${resolveSemanticColor(tokens.componentColors.accordion.backgroundHover)};`);
+  lines.push(`  --accordion-icon-color: ${resolveSemanticColor('contentSecondary')};`);
+  lines.push(`  --accordion-content-background: ${resolveSemanticColor(tokens.componentColors.accordion.background)};`);
+  lines.push(`  --accordion-content-text: ${resolveSemanticColor(tokens.componentColors.accordion.text)};`);
+
+  // Modal - expanded
+  lines.push(`  --modal-overlay-background: ${resolveSemanticColor(tokens.componentColors.modal.backdrop)};`);
+  lines.push(`  --modal-background: ${resolveSemanticColor(tokens.componentColors.modal.background)};`);
+  lines.push(`  --modal-border-color: ${resolveSemanticColor(tokens.componentColors.modal.border)};`);
+  lines.push(`  --modal-header-border-color: ${resolveSemanticColor(tokens.componentColors.modal.border)};`);
+  lines.push(`  --modal-title-color: ${resolveSemanticColor(tokens.componentColors.modal.text)};`);
+  lines.push(`  --modal-close-color: ${resolveSemanticColor('contentSecondary')};`);
+  lines.push(`  --modal-close-background-hover: ${resolveSemanticColor('surfaceSecondary')};`);
+  lines.push(`  --modal-close-color-hover: ${resolveSemanticColor('contentPrimary')};`);
+  lines.push(`  --modal-body-text: ${resolveSemanticColor(tokens.componentColors.modal.text)};`);
+  lines.push(`  --modal-footer-border-color: ${resolveSemanticColor(tokens.componentColors.modal.border)};`);
+
+  // Tooltip - expanded
+  lines.push(`  --tooltip-text-color: ${resolveSemanticColor(tokens.componentColors.tooltip.text)};`);
+  lines.push(`  --tooltip-background: ${resolveSemanticColor(tokens.componentColors.tooltip.background)};`);
+  lines.push(`  --tooltip-arrow-color: ${resolveSemanticColor(tokens.componentColors.tooltip.background)};`);
+
+  // Progress - expanded
+  lines.push(`  --progress-track-background: ${resolveSemanticColor(tokens.componentColors.progress.track)};`);
+  lines.push(`  --progress-bar-background: ${resolveSemanticColor(tokens.componentColors.progress.fill)};`);
+  lines.push(`  --progress-bar-background-success: ${resolveSemanticColor('success')};`);
+  lines.push(`  --progress-bar-background-warning: ${resolveSemanticColor('warning')};`);
+  lines.push(`  --progress-bar-background-error: ${resolveSemanticColor('fail')};`);
+  lines.push(`  --progress-value-text: ${resolveSemanticColor(tokens.componentColors.progress.text)};`);
+
+  // Avatar - expanded
+  lines.push(`  --avatar-background: ${resolveSemanticColor(tokens.componentColors.avatar.background)};`);
+  lines.push(`  --avatar-initials-text: ${resolveSemanticColor(tokens.componentColors.avatar.text)};`);
+  lines.push(`  --avatar-initials-background: ${resolveSemanticColor(tokens.componentColors.avatar.background)};`);
+  lines.push(`  --avatar-status-border: ${resolveSemanticColor('surfacePrimary')};`);
+  lines.push(`  --avatar-status-online: ${resolveSemanticColor('success')};`);
+  lines.push(`  --avatar-status-offline: ${resolveSemanticColor('contentTertiary')};`);
+  lines.push(`  --avatar-status-away: ${resolveSemanticColor('warning')};`);
+  lines.push(`  --avatar-status-busy: ${resolveSemanticColor('fail')};`);
+  lines.push(`  --avatar-group-border: ${resolveSemanticColor('surfacePrimary')};`);
+
+  // Table - expanded
+  lines.push(`  --table-text-color: ${resolveSemanticColor(tokens.componentColors.table.text)};`);
+  lines.push(`  --table-header-background: ${resolveSemanticColor(tokens.componentColors.table.headerBackground)};`);
+  lines.push(`  --table-border-color: ${resolveSemanticColor(tokens.componentColors.table.border)};`);
+  lines.push(`  --table-header-background-hover: color-mix(in srgb, ${resolveSemanticColor(tokens.componentColors.table.headerBackground)} 90%, ${resolveSemanticColor('contentPrimary')});`);
+  lines.push(`  --table-sort-icon-color: ${resolveSemanticColor('contentSecondary')};`);
+  lines.push(`  --table-row-selected-background: color-mix(in srgb, ${resolveSemanticColor('accentPrimary')} 15%, transparent);`);
+  lines.push(`  --table-row-striped-background: ${resolveSemanticColor('surfaceSecondary')};`);
+  lines.push(`  --table-row-hover-background: ${resolveSemanticColor(tokens.componentColors.table.rowHover)};`);
+
+  // Navbar - expanded
+  lines.push(`  --navbar-background: ${resolveSemanticColor(tokens.componentColors.navbar.background)};`);
+  lines.push(`  --navbar-border-color: ${resolveSemanticColor(tokens.componentColors.navbar.border)};`);
+  lines.push(`  --navbar-brand-text: ${resolveSemanticColor(tokens.componentColors.navbar.text)};`);
+  lines.push(`  --navbar-link-text: ${resolveSemanticColor(tokens.componentColors.navbar.text)};`);
+  lines.push(`  --navbar-link-text-hover: ${resolveSemanticColor(tokens.componentColors.navbar.textHover)};`);
+  lines.push(`  --navbar-link-background-hover: ${resolveSemanticColor('surfaceSecondary')};`);
+  lines.push(`  --navbar-link-text-active: ${resolveSemanticColor(tokens.componentColors.navbar.textHover)};`);
+  lines.push(`  --navbar-link-background-active: ${resolveSemanticColor('surfaceSecondary')};`);
+
+  // Sidebar - expanded
+  lines.push(`  --sidebar-background: ${resolveSemanticColor(tokens.componentColors.sidebar.background)};`);
+  lines.push(`  --sidebar-border-color: ${resolveSemanticColor(tokens.componentColors.sidebar.border)};`);
+  lines.push(`  --sidebar-section-border-color: ${resolveSemanticColor(tokens.componentColors.sidebar.border)};`);
+  lines.push(`  --sidebar-section-title-color: ${resolveSemanticColor('contentSecondary')};`);
+  lines.push(`  --sidebar-item-text: ${resolveSemanticColor(tokens.componentColors.sidebar.text)};`);
+  lines.push(`  --sidebar-item-text-hover: ${resolveSemanticColor(tokens.componentColors.sidebar.textActive)};`);
+  lines.push(`  --sidebar-item-background-hover: ${resolveSemanticColor(tokens.componentColors.sidebar.itemHover)};`);
+  lines.push(`  --sidebar-item-text-active: ${resolveSemanticColor(tokens.componentColors.sidebar.textActive)};`);
+  lines.push(`  --sidebar-item-background-active: ${resolveSemanticColor(tokens.componentColors.sidebar.itemHover)};`);
+  lines.push(`  --sidebar-badge-text: ${resolveSemanticColor('onAccentPrimary')};`);
+  lines.push(`  --sidebar-badge-background: ${resolveSemanticColor('accentPrimary')};`);
+
+  // Breadcrumb - expanded
+  lines.push(`  --breadcrumb-text-color: ${resolveSemanticColor(tokens.componentColors.breadcrumb.text)};`);
+  lines.push(`  --breadcrumb-link-hover: ${resolveSemanticColor(tokens.componentColors.breadcrumb.textActive)};`);
+  lines.push(`  --breadcrumb-current-color: ${resolveSemanticColor(tokens.componentColors.breadcrumb.textActive)};`);
+  lines.push(`  --breadcrumb-separator-color: ${resolveSemanticColor(tokens.componentColors.breadcrumb.separator)};`);
+
   // Typography
   lines.push('');
   lines.push('  /* Typography */');
   lines.push(`  --font-family: ${tokens.typography.fontFamily};`);
   lines.push(`  --font-family-mono: ${tokens.typography.fontFamilyMono};`);
+  lines.push(`  --font-family-serif: ${tokens.typography.fontFamilySerif};`);
+  lines.push(`  --font-family-display: ${tokens.typography.fontFamilyDisplay};`);
   lines.push(`  --font-size-xs: ${tokens.typography.fontSizeXs};`);
   lines.push(`  --font-size-sm: ${tokens.typography.fontSizeSm};`);
   lines.push(`  --font-size-md: ${tokens.typography.fontSizeMd};`);
@@ -80,11 +370,15 @@ export function generateTokensCSS(tokens: DesignTokens): string {
   lines.push(`  --focus-ring-offset: ${tokens.effects.focusRingOffset};`);
   lines.push(`  --focus-ring-color: ${tokens.effects.focusRingColor};`);
   lines.push(`  --shadow-color: ${tokens.effects.shadowColor};`);
+  lines.push(`  --backdrop-blur: ${tokens.effects.backdropBlur};`);
+  lines.push(`  --backdrop-saturation: ${tokens.effects.backdropSaturation};`);
+  lines.push(`  --text-glow: ${tokens.effects.textGlow};`);
+  lines.push(`  --surface-opacity: ${tokens.effects.surfaceOpacity};`);
 
   // Patterns
   const patternColor = `color-mix(in srgb, var(--color-text) ${Math.round(tokens.patterns.background.opacity * 100)}%, transparent)`;
   const surfacePatternColor = `color-mix(in srgb, var(--color-text) ${Math.round(tokens.patterns.surface.opacity * 100)}%, transparent)`;
-  const patternImage = (type: 'none' | 'dots' | 'grid' | 'plus', color: string) => {
+  const patternImage = (type: 'none' | 'dots' | 'grid' | 'plus' | 'noise', color: string) => {
     if (type === 'dots') {
       return `radial-gradient(circle, ${color} 1px, transparent 1px)`;
     }
@@ -94,6 +388,10 @@ export function generateTokensCSS(tokens: DesignTokens): string {
     if (type === 'plus') {
       return `linear-gradient(${color} 1px, transparent 1px), linear-gradient(90deg, ${color} 1px, transparent 1px), radial-gradient(circle, ${color} 1px, transparent 1px)`;
     }
+    if (type === 'noise') {
+      // Simple noise pattern using multiple gradients
+      return `repeating-linear-gradient(45deg, ${color} 0px, transparent 1px, transparent 2px, ${color} 3px), repeating-linear-gradient(-45deg, ${color} 0px, transparent 1px, transparent 2px, ${color} 3px)`;
+    }
     return 'none';
   };
   lines.push('');
@@ -102,6 +400,13 @@ export function generateTokensCSS(tokens: DesignTokens): string {
   lines.push(`  --pattern-background-size: ${tokens.patterns.background.size}px ${tokens.patterns.background.size}px;`);
   lines.push(`  --pattern-surface-image: ${patternImage(tokens.patterns.surface.type, surfacePatternColor)};`);
   lines.push(`  --pattern-surface-size: ${tokens.patterns.surface.size}px ${tokens.patterns.surface.size}px;`);
+
+  // Gradients
+  lines.push('');
+  lines.push('  /* Gradients */');
+  lines.push(`  --gradient-surface: ${tokens.gradients.surface};`);
+  lines.push(`  --gradient-accent: ${tokens.gradients.accent};`);
+  lines.push(`  --gradient-primary: ${tokens.gradients.primary};`);
 
   // Components
   lines.push('');
@@ -141,6 +446,293 @@ export function generateTokensCSS(tokens: DesignTokens): string {
     const cssKey = key.replace(/([A-Z])/g, '-$1').toLowerCase();
     lines.push(`  --color-${cssKey}: ${value};`);
   });
+
+  // Semantic Colors - Dark Theme
+  lines.push('');
+  lines.push('  /* Semantic Colors */');
+  Object.entries(tokens.semanticDark).forEach(([key, value]) => {
+    const cssKey = key.replace(/([A-Z])/g, '-$1').toLowerCase();
+    lines.push(`  --semantic-${cssKey}: ${value};`);
+  });
+
+  // Helper function to resolve semantic color key to actual value (for dark theme)
+  const resolveSemanticColorDark = (key: string): string => {
+    return (tokens.semanticDark as any)[key] || key;
+  };
+
+  // Component Colors for Dark Theme - Layer 2: Generate component-specific variables
+  lines.push('');
+  lines.push('  /* Component Color Variables */');
+
+  // Button
+  lines.push(`  --button-primary-background: ${resolveSemanticColorDark(tokens.componentColors.button.primary.background)};`);
+  lines.push(`  --button-primary-background-hover: ${resolveSemanticColorDark(tokens.componentColors.button.primary.backgroundHover)};`);
+  lines.push(`  --button-primary-text: ${resolveSemanticColorDark(tokens.componentColors.button.primary.text)};`);
+  lines.push(`  --button-primary-border: ${resolveSemanticColorDark(tokens.componentColors.button.primary.border)};`);
+
+  lines.push(`  --button-secondary-background: ${resolveSemanticColorDark(tokens.componentColors.button.secondary.background)};`);
+  lines.push(`  --button-secondary-background-hover: ${resolveSemanticColorDark(tokens.componentColors.button.secondary.backgroundHover)};`);
+  lines.push(`  --button-secondary-text: ${resolveSemanticColorDark(tokens.componentColors.button.secondary.text)};`);
+  lines.push(`  --button-secondary-border: ${resolveSemanticColorDark(tokens.componentColors.button.secondary.border)};`);
+
+  lines.push(`  --button-outline-background: ${resolveSemanticColorDark(tokens.componentColors.button.outline.background)};`);
+  lines.push(`  --button-outline-background-hover: ${resolveSemanticColorDark(tokens.componentColors.button.outline.backgroundHover)};`);
+  lines.push(`  --button-outline-text: ${resolveSemanticColorDark(tokens.componentColors.button.outline.text)};`);
+  lines.push(`  --button-outline-text-hover: ${resolveSemanticColorDark(tokens.componentColors.button.outline.textHover)};`);
+  lines.push(`  --button-outline-border: ${resolveSemanticColorDark(tokens.componentColors.button.outline.border)};`);
+  lines.push(`  --button-outline-border-hover: ${resolveSemanticColorDark(tokens.componentColors.button.outline.borderHover)};`);
+
+  lines.push(`  --button-ghost-background: ${resolveSemanticColorDark(tokens.componentColors.button.ghost.background)};`);
+  lines.push(`  --button-ghost-background-hover: ${resolveSemanticColorDark(tokens.componentColors.button.ghost.backgroundHover)};`);
+  lines.push(`  --button-ghost-text: ${resolveSemanticColorDark(tokens.componentColors.button.ghost.text)};`);
+  lines.push(`  --button-ghost-text-hover: ${resolveSemanticColorDark(tokens.componentColors.button.ghost.textHover)};`);
+
+  lines.push(`  --button-danger-background: ${resolveSemanticColorDark(tokens.componentColors.button.danger.background)};`);
+  lines.push(`  --button-danger-background-hover: ${resolveSemanticColorDark(tokens.componentColors.button.danger.backgroundHover)};`);
+  lines.push(`  --button-danger-text: ${resolveSemanticColorDark(tokens.componentColors.button.danger.text)};`);
+  lines.push(`  --button-danger-border: ${resolveSemanticColorDark(tokens.componentColors.button.danger.border)};`);
+
+  // Input - expanded variables
+  const inputBgDark = resolveSemanticColorDark(tokens.componentColors.input.background);
+  const inputTextDark = resolveSemanticColorDark(tokens.componentColors.input.text);
+  const inputPlaceholderDark = resolveSemanticColorDark(tokens.componentColors.input.placeholder);
+  const inputBorderDark = resolveSemanticColorDark(tokens.componentColors.input.border);
+  const inputBorderHoverDark = resolveSemanticColorDark(tokens.componentColors.input.borderHover);
+  const inputBorderFocusDark = resolveSemanticColorDark(tokens.componentColors.input.borderFocus);
+  const inputBorderErrorDark = resolveSemanticColorDark(tokens.componentColors.input.borderError);
+
+  lines.push(`  --input-label-color: ${inputTextDark};`);
+  lines.push(`  --input-text-color: ${inputTextDark};`);
+  lines.push(`  --input-background: ${inputBgDark};`);
+  lines.push(`  --input-border-color: ${inputBorderDark};`);
+  lines.push(`  --input-placeholder-color: ${inputPlaceholderDark};`);
+  lines.push(`  --input-border-color-hover: ${inputBorderHoverDark};`);
+  lines.push(`  --input-border-color-focus: ${inputBorderFocusDark};`);
+  lines.push(`  --input-background-disabled: ${resolveSemanticColorDark('surfaceSecondary')};`);
+  lines.push(`  --input-error-border-color: ${inputBorderErrorDark};`);
+  lines.push(`  --input-error-text-color: ${inputBorderErrorDark};`);
+  lines.push(`  --input-helper-text-color: ${resolveSemanticColorDark('contentSecondary')};`);
+  lines.push(`  --input-error-focus-ring-color: color-mix(in srgb, ${inputBorderErrorDark} 20%, transparent);`);
+
+  // Card - expanded variables
+  const cardBgDark = resolveSemanticColorDark(tokens.componentColors.card.background);
+  const cardBgElDark = resolveSemanticColorDark(tokens.componentColors.card.backgroundElevated);
+  const cardTextDark = resolveSemanticColorDark(tokens.componentColors.card.text);
+  const cardTextMutedDark = resolveSemanticColorDark(tokens.componentColors.card.textMuted);
+  const cardBorderDark = resolveSemanticColorDark(tokens.componentColors.card.border);
+
+  lines.push(`  --card-background: ${cardBgDark};`);
+  lines.push(`  --card-background-default: ${cardBgDark};`);
+  lines.push(`  --card-background-outlined: ${resolveSemanticColorDark('surfacePrimary')};`);
+  lines.push(`  --card-background-elevated: ${cardBgElDark};`);
+  lines.push(`  --card-border-color: ${cardBorderDark};`);
+  lines.push(`  --card-header-border-color: ${cardBorderDark};`);
+  lines.push(`  --card-title-color: ${cardTextDark};`);
+  lines.push(`  --card-subtitle-color: ${cardTextMutedDark};`);
+  lines.push(`  --card-text-color: ${cardTextDark};`);
+
+  // Alert - with icon colors
+  const alertInfoBgDark = resolveSemanticColorDark(tokens.componentColors.alert.info.background);
+  const alertInfoTextDark = resolveSemanticColorDark(tokens.componentColors.alert.info.text);
+  const alertInfoBorderDark = resolveSemanticColorDark(tokens.componentColors.alert.info.border);
+
+  lines.push(`  --alert-info-background: ${alertInfoBgDark};`);
+  lines.push(`  --alert-info-text: ${alertInfoTextDark};`);
+  lines.push(`  --alert-info-border: ${alertInfoBorderDark};`);
+  lines.push(`  --alert-info-icon-color: ${alertInfoTextDark};`);
+
+  const alertSuccessBgDark = resolveSemanticColorDark(tokens.componentColors.alert.success.background);
+  const alertSuccessTextDark = resolveSemanticColorDark(tokens.componentColors.alert.success.text);
+  const alertSuccessBorderDark = resolveSemanticColorDark(tokens.componentColors.alert.success.border);
+
+  lines.push(`  --alert-success-background: ${alertSuccessBgDark};`);
+  lines.push(`  --alert-success-text: ${alertSuccessTextDark};`);
+  lines.push(`  --alert-success-border: ${alertSuccessBorderDark};`);
+  lines.push(`  --alert-success-icon-color: ${alertSuccessTextDark};`);
+
+  const alertWarningBgDark = resolveSemanticColorDark(tokens.componentColors.alert.warning.background);
+  const alertWarningTextDark = resolveSemanticColorDark(tokens.componentColors.alert.warning.text);
+  const alertWarningBorderDark = resolveSemanticColorDark(tokens.componentColors.alert.warning.border);
+
+  lines.push(`  --alert-warning-background: ${alertWarningBgDark};`);
+  lines.push(`  --alert-warning-text: ${alertWarningTextDark};`);
+  lines.push(`  --alert-warning-border: ${alertWarningBorderDark};`);
+  lines.push(`  --alert-warning-icon-color: ${alertWarningTextDark};`);
+
+  const alertErrorBgDark = resolveSemanticColorDark(tokens.componentColors.alert.error.background);
+  const alertErrorTextDark = resolveSemanticColorDark(tokens.componentColors.alert.error.text);
+  const alertErrorBorderDark = resolveSemanticColorDark(tokens.componentColors.alert.error.border);
+
+  lines.push(`  --alert-error-background: ${alertErrorBgDark};`);
+  lines.push(`  --alert-error-text: ${alertErrorTextDark};`);
+  lines.push(`  --alert-error-border: ${alertErrorBorderDark};`);
+  lines.push(`  --alert-error-icon-color: ${alertErrorTextDark};`);
+
+  // Badge - with default variant
+  lines.push(`  --badge-default-background: ${resolveSemanticColorDark('surfaceSecondary')};`);
+  lines.push(`  --badge-default-text: ${resolveSemanticColorDark('contentPrimary')};`);
+  lines.push(`  --badge-default-border: ${resolveSemanticColorDark('border')};`);
+
+  lines.push(`  --badge-primary-background: ${resolveSemanticColorDark(tokens.componentColors.badge.primary.background)};`);
+  lines.push(`  --badge-primary-text: ${resolveSemanticColorDark(tokens.componentColors.badge.primary.text)};`);
+
+  lines.push(`  --badge-secondary-background: ${resolveSemanticColorDark(tokens.componentColors.badge.secondary.background)};`);
+  lines.push(`  --badge-secondary-text: ${resolveSemanticColorDark(tokens.componentColors.badge.secondary.text)};`);
+
+  lines.push(`  --badge-success-background: ${resolveSemanticColorDark(tokens.componentColors.badge.success.background)};`);
+  lines.push(`  --badge-success-text: ${resolveSemanticColorDark(tokens.componentColors.badge.success.text)};`);
+
+  lines.push(`  --badge-warning-background: ${resolveSemanticColorDark(tokens.componentColors.badge.warning.background)};`);
+  lines.push(`  --badge-warning-text: ${resolveSemanticColorDark(tokens.componentColors.badge.warning.text)};`);
+
+  lines.push(`  --badge-error-background: ${resolveSemanticColorDark(tokens.componentColors.badge.error.background)};`);
+  lines.push(`  --badge-error-text: ${resolveSemanticColorDark(tokens.componentColors.badge.error.text)};`);
+
+  lines.push(`  --badge-info-background: ${resolveSemanticColorDark('info')};`);
+  lines.push(`  --badge-info-text: ${resolveSemanticColorDark('onAccentPrimary')};`);
+
+  // Checkbox - expanded
+  lines.push(`  --checkbox-label-color: ${resolveSemanticColorDark('contentPrimary')};`);
+  lines.push(`  --checkbox-background: ${resolveSemanticColorDark(tokens.componentColors.checkbox.background)};`);
+  lines.push(`  --checkbox-background-checked: ${resolveSemanticColorDark(tokens.componentColors.checkbox.backgroundChecked)};`);
+  lines.push(`  --checkbox-border-color: ${resolveSemanticColorDark(tokens.componentColors.checkbox.border)};`);
+  lines.push(`  --checkbox-border-color-checked: ${resolveSemanticColorDark(tokens.componentColors.checkbox.borderChecked)};`);
+  lines.push(`  --checkbox-border-color-hover: ${resolveSemanticColorDark('action')};`);
+  lines.push(`  --checkbox-check-color: ${resolveSemanticColorDark(tokens.componentColors.checkbox.checkmark)};`);
+
+  // Radio - expanded
+  lines.push(`  --radio-label-color: ${resolveSemanticColorDark('contentPrimary')};`);
+  lines.push(`  --radio-background: ${resolveSemanticColorDark(tokens.componentColors.radio.background)};`);
+  lines.push(`  --radio-background-checked: ${resolveSemanticColorDark(tokens.componentColors.radio.backgroundChecked)};`);
+  lines.push(`  --radio-border-color: ${resolveSemanticColorDark(tokens.componentColors.radio.border)};`);
+  lines.push(`  --radio-border-color-checked: ${resolveSemanticColorDark(tokens.componentColors.radio.borderChecked)};`);
+  lines.push(`  --radio-border-color-hover: ${resolveSemanticColorDark('action')};`);
+  lines.push(`  --radio-dot-color: ${resolveSemanticColorDark(tokens.componentColors.radio.dot)};`);
+
+  // Toggle - expanded
+  lines.push(`  --toggle-label-color: ${resolveSemanticColorDark('contentPrimary')};`);
+  lines.push(`  --toggle-track-background: ${resolveSemanticColorDark(tokens.componentColors.toggle.trackBackground)};`);
+  lines.push(`  --toggle-track-background-checked: ${resolveSemanticColorDark(tokens.componentColors.toggle.trackBackgroundActive)};`);
+  lines.push(`  --toggle-thumb-color: ${resolveSemanticColorDark(tokens.componentColors.toggle.thumb)};`);
+  lines.push(`  --toggle-thumb-border-color: ${resolveSemanticColorDark(tokens.componentColors.toggle.thumbBorder)};`);
+
+  // Select - expanded
+  lines.push(`  --select-label-color: ${resolveSemanticColorDark('contentPrimary')};`);
+  lines.push(`  --select-text-color: ${resolveSemanticColorDark(tokens.componentColors.select.text)};`);
+  lines.push(`  --select-background: ${resolveSemanticColorDark(tokens.componentColors.select.background)};`);
+  lines.push(`  --select-border-color: ${resolveSemanticColorDark(tokens.componentColors.select.border)};`);
+  lines.push(`  --select-border-color-hover: ${resolveSemanticColorDark(tokens.componentColors.select.borderHover)};`);
+  lines.push(`  --select-border-color-focus: ${resolveSemanticColorDark(tokens.componentColors.select.borderFocus)};`);
+  lines.push(`  --select-focus-ring-color: color-mix(in srgb, ${resolveSemanticColorDark(tokens.componentColors.select.borderFocus)} 20%, transparent);`);
+  lines.push(`  --select-background-disabled: ${resolveSemanticColorDark('surfaceSecondary')};`);
+  lines.push(`  --select-icon-color: ${resolveSemanticColorDark('contentSecondary')};`);
+  lines.push(`  --select-error-border-color: ${resolveSemanticColorDark('fail')};`);
+  lines.push(`  --select-error-text-color: ${resolveSemanticColorDark('fail')};`);
+
+  // Dropdown - expanded
+  lines.push(`  --dropdown-trigger-text: ${resolveSemanticColorDark(tokens.componentColors.dropdown.text)};`);
+  lines.push(`  --dropdown-trigger-background: ${resolveSemanticColorDark(tokens.componentColors.dropdown.background)};`);
+  lines.push(`  --dropdown-trigger-border: ${resolveSemanticColorDark(tokens.componentColors.dropdown.border)};`);
+  lines.push(`  --dropdown-trigger-border-hover: ${resolveSemanticColorDark('action')};`);
+  lines.push(`  --dropdown-menu-background: ${resolveSemanticColorDark(tokens.componentColors.dropdown.background)};`);
+  lines.push(`  --dropdown-menu-border: ${resolveSemanticColorDark(tokens.componentColors.dropdown.border)};`);
+  lines.push(`  --dropdown-item-text: ${resolveSemanticColorDark(tokens.componentColors.dropdown.text)};`);
+  lines.push(`  --dropdown-item-background-hover: ${resolveSemanticColorDark(tokens.componentColors.dropdown.itemHover)};`);
+  lines.push(`  --dropdown-item-icon-color: ${resolveSemanticColorDark('contentSecondary')};`);
+  lines.push(`  --dropdown-divider-color: ${resolveSemanticColorDark('border')};`);
+
+  // Tabs - expanded
+  lines.push(`  --tabs-border-color: ${resolveSemanticColorDark(tokens.componentColors.tabs.border)};`);
+  lines.push(`  --tabs-tab-text: ${resolveSemanticColorDark(tokens.componentColors.tabs.text)};`);
+  lines.push(`  --tabs-tab-text-hover: ${resolveSemanticColorDark('contentPrimary')};`);
+  lines.push(`  --tabs-tab-text-active: ${resolveSemanticColorDark(tokens.componentColors.tabs.textActive)};`);
+  lines.push(`  --tabs-indicator-color: ${resolveSemanticColorDark(tokens.componentColors.tabs.indicator)};`);
+  lines.push(`  --tabs-panel-text: ${resolveSemanticColorDark('contentPrimary')};`);
+
+  // Accordion - expanded
+  lines.push(`  --accordion-border-color: ${resolveSemanticColorDark(tokens.componentColors.accordion.border)};`);
+  lines.push(`  --accordion-trigger-text: ${resolveSemanticColorDark(tokens.componentColors.accordion.text)};`);
+  lines.push(`  --accordion-trigger-background: ${resolveSemanticColorDark(tokens.componentColors.accordion.background)};`);
+  lines.push(`  --accordion-trigger-background-hover: ${resolveSemanticColorDark(tokens.componentColors.accordion.backgroundHover)};`);
+  lines.push(`  --accordion-icon-color: ${resolveSemanticColorDark('contentSecondary')};`);
+  lines.push(`  --accordion-content-background: ${resolveSemanticColorDark(tokens.componentColors.accordion.background)};`);
+  lines.push(`  --accordion-content-text: ${resolveSemanticColorDark(tokens.componentColors.accordion.text)};`);
+
+  // Modal - expanded
+  lines.push(`  --modal-overlay-background: ${resolveSemanticColorDark(tokens.componentColors.modal.backdrop)};`);
+  lines.push(`  --modal-background: ${resolveSemanticColorDark(tokens.componentColors.modal.background)};`);
+  lines.push(`  --modal-border-color: ${resolveSemanticColorDark(tokens.componentColors.modal.border)};`);
+  lines.push(`  --modal-header-border-color: ${resolveSemanticColorDark(tokens.componentColors.modal.border)};`);
+  lines.push(`  --modal-title-color: ${resolveSemanticColorDark(tokens.componentColors.modal.text)};`);
+  lines.push(`  --modal-close-color: ${resolveSemanticColorDark('contentSecondary')};`);
+  lines.push(`  --modal-close-background-hover: ${resolveSemanticColorDark('surfaceSecondary')};`);
+  lines.push(`  --modal-close-color-hover: ${resolveSemanticColorDark('contentPrimary')};`);
+  lines.push(`  --modal-body-text: ${resolveSemanticColorDark(tokens.componentColors.modal.text)};`);
+  lines.push(`  --modal-footer-border-color: ${resolveSemanticColorDark(tokens.componentColors.modal.border)};`);
+
+  // Tooltip - expanded
+  lines.push(`  --tooltip-text-color: ${resolveSemanticColorDark(tokens.componentColors.tooltip.text)};`);
+  lines.push(`  --tooltip-background: ${resolveSemanticColorDark(tokens.componentColors.tooltip.background)};`);
+  lines.push(`  --tooltip-arrow-color: ${resolveSemanticColorDark(tokens.componentColors.tooltip.background)};`);
+
+  // Progress - expanded
+  lines.push(`  --progress-track-background: ${resolveSemanticColorDark(tokens.componentColors.progress.track)};`);
+  lines.push(`  --progress-bar-background: ${resolveSemanticColorDark(tokens.componentColors.progress.fill)};`);
+  lines.push(`  --progress-bar-background-success: ${resolveSemanticColorDark('success')};`);
+  lines.push(`  --progress-bar-background-warning: ${resolveSemanticColorDark('warning')};`);
+  lines.push(`  --progress-bar-background-error: ${resolveSemanticColorDark('fail')};`);
+  lines.push(`  --progress-value-text: ${resolveSemanticColorDark(tokens.componentColors.progress.text)};`);
+
+  // Avatar - expanded
+  lines.push(`  --avatar-background: ${resolveSemanticColorDark(tokens.componentColors.avatar.background)};`);
+  lines.push(`  --avatar-initials-text: ${resolveSemanticColorDark(tokens.componentColors.avatar.text)};`);
+  lines.push(`  --avatar-initials-background: ${resolveSemanticColorDark(tokens.componentColors.avatar.background)};`);
+  lines.push(`  --avatar-status-border: ${resolveSemanticColorDark('surfacePrimary')};`);
+  lines.push(`  --avatar-status-online: ${resolveSemanticColorDark('success')};`);
+  lines.push(`  --avatar-status-offline: ${resolveSemanticColorDark('contentTertiary')};`);
+  lines.push(`  --avatar-status-away: ${resolveSemanticColorDark('warning')};`);
+  lines.push(`  --avatar-status-busy: ${resolveSemanticColorDark('fail')};`);
+  lines.push(`  --avatar-group-border: ${resolveSemanticColorDark('surfacePrimary')};`);
+
+  // Table - expanded
+  lines.push(`  --table-text-color: ${resolveSemanticColorDark(tokens.componentColors.table.text)};`);
+  lines.push(`  --table-header-background: ${resolveSemanticColorDark(tokens.componentColors.table.headerBackground)};`);
+  lines.push(`  --table-border-color: ${resolveSemanticColorDark(tokens.componentColors.table.border)};`);
+  lines.push(`  --table-header-background-hover: color-mix(in srgb, ${resolveSemanticColorDark(tokens.componentColors.table.headerBackground)} 90%, ${resolveSemanticColorDark('contentPrimary')});`);
+  lines.push(`  --table-sort-icon-color: ${resolveSemanticColorDark('contentSecondary')};`);
+  lines.push(`  --table-row-selected-background: color-mix(in srgb, ${resolveSemanticColorDark('accentPrimary')} 15%, transparent);`);
+  lines.push(`  --table-row-striped-background: ${resolveSemanticColorDark('surfaceSecondary')};`);
+  lines.push(`  --table-row-hover-background: ${resolveSemanticColorDark(tokens.componentColors.table.rowHover)};`);
+
+  // Navbar - expanded
+  lines.push(`  --navbar-background: ${resolveSemanticColorDark(tokens.componentColors.navbar.background)};`);
+  lines.push(`  --navbar-border-color: ${resolveSemanticColorDark(tokens.componentColors.navbar.border)};`);
+  lines.push(`  --navbar-brand-text: ${resolveSemanticColorDark(tokens.componentColors.navbar.text)};`);
+  lines.push(`  --navbar-link-text: ${resolveSemanticColorDark(tokens.componentColors.navbar.text)};`);
+  lines.push(`  --navbar-link-text-hover: ${resolveSemanticColorDark(tokens.componentColors.navbar.textHover)};`);
+  lines.push(`  --navbar-link-background-hover: ${resolveSemanticColorDark('surfaceSecondary')};`);
+  lines.push(`  --navbar-link-text-active: ${resolveSemanticColorDark(tokens.componentColors.navbar.textHover)};`);
+  lines.push(`  --navbar-link-background-active: ${resolveSemanticColorDark('surfaceSecondary')};`);
+
+  // Sidebar - expanded
+  lines.push(`  --sidebar-background: ${resolveSemanticColorDark(tokens.componentColors.sidebar.background)};`);
+  lines.push(`  --sidebar-border-color: ${resolveSemanticColorDark(tokens.componentColors.sidebar.border)};`);
+  lines.push(`  --sidebar-section-border-color: ${resolveSemanticColorDark(tokens.componentColors.sidebar.border)};`);
+  lines.push(`  --sidebar-section-title-color: ${resolveSemanticColorDark('contentSecondary')};`);
+  lines.push(`  --sidebar-item-text: ${resolveSemanticColorDark(tokens.componentColors.sidebar.text)};`);
+  lines.push(`  --sidebar-item-text-hover: ${resolveSemanticColorDark(tokens.componentColors.sidebar.textActive)};`);
+  lines.push(`  --sidebar-item-background-hover: ${resolveSemanticColorDark(tokens.componentColors.sidebar.itemHover)};`);
+  lines.push(`  --sidebar-item-text-active: ${resolveSemanticColorDark(tokens.componentColors.sidebar.textActive)};`);
+  lines.push(`  --sidebar-item-background-active: ${resolveSemanticColorDark(tokens.componentColors.sidebar.itemHover)};`);
+  lines.push(`  --sidebar-badge-text: ${resolveSemanticColorDark('onAccentPrimary')};`);
+  lines.push(`  --sidebar-badge-background: ${resolveSemanticColorDark('accentPrimary')};`);
+
+  // Breadcrumb - expanded
+  lines.push(`  --breadcrumb-text-color: ${resolveSemanticColorDark(tokens.componentColors.breadcrumb.text)};`);
+  lines.push(`  --breadcrumb-link-hover: ${resolveSemanticColorDark(tokens.componentColors.breadcrumb.textActive)};`);
+  lines.push(`  --breadcrumb-current-color: ${resolveSemanticColorDark(tokens.componentColors.breadcrumb.textActive)};`);
+  lines.push(`  --breadcrumb-separator-color: ${resolveSemanticColorDark(tokens.componentColors.breadcrumb.separator)};`);
+
   lines.push('}');
 
   return lines.join('\n');

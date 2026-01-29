@@ -159,10 +159,10 @@
   transform: translate(-50%, -50%);
   width: 16px;
   height: 16px;
-  border: 2px solid white;
+  border: 2px solid var(--platform-surface);
   border-radius: 50%;
   cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--platform-shadow-md);
   transition: all 0.15s ease;
 }
 

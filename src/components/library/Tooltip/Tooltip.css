@@ -22,8 +22,8 @@
   padding: var(--spacing-xs) var(--spacing-sm);
   font-family: var(--font-family);
   font-size: var(--font-size-sm);
-  color: var(--color-text-on-accent);
-  background-color: var(--color-text);
+  color: var(--tooltip-text-color);
+  background-color: var(--tooltip-background);
   border-radius: var(--radius-overlay);
   white-space: nowrap;
   box-shadow: var(--shadow-overlay);
@@ -33,7 +33,7 @@
   position: absolute;
   width: 8px;
   height: 8px;
-  background-color: var(--color-text);
+  background-color: var(--tooltip-arrow-color);
   transform: rotate(45deg);
 }
 

@@ -7,7 +7,7 @@
 
 .progress-track {
   flex: 1;
-  background-color: var(--color-surface);
+  background-color: var(--progress-track-background);
   border-radius: var(--progress-border-radius);
   overflow: hidden;
 }
@@ -31,29 +31,29 @@
 }
 
 .progress-default {
-  background-color: var(--color-primary);
+  background-color: var(--progress-bar-background);
 }
 
 .progress-success {
-  background-color: var(--color-success);
+  background-color: var(--progress-bar-background-success);
 }
 
 .progress-warning {
-  background-color: var(--color-warning);
+  background-color: var(--progress-bar-background-warning);
 }
 
 .progress-error {
-  background-color: var(--color-error);
+  background-color: var(--progress-bar-background-error);
 }
 
 .progress-animated {
   background-image: linear-gradient(
     45deg,
-    color-mix(in srgb, var(--color-text-on-accent) 20%, transparent) 25%,
+    color-mix(in srgb, var(--semantic-on-accent-primary) 20%, transparent) 25%,
     transparent 25%,
     transparent 50%,
-    color-mix(in srgb, var(--color-text-on-accent) 20%, transparent) 50%,
-    color-mix(in srgb, var(--color-text-on-accent) 20%, transparent) 75%,
+    color-mix(in srgb, var(--semantic-on-accent-primary) 20%, transparent) 50%,
+    color-mix(in srgb, var(--semantic-on-accent-primary) 20%, transparent) 75%,
     transparent 75%,
     transparent
   );
@@ -73,7 +73,7 @@
 .progress-value {
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
-  color: var(--color-text-muted);
+  color: var(--progress-value-text);
   min-width: 36px;
   text-align: right;
 }
@@ -88,7 +88,7 @@
 
 .circular-progress-track {
   fill: none;
-  stroke: var(--color-surface);
+  stroke: var(--progress-track-background);
 }
 
 .circular-progress-bar {
@@ -98,24 +98,24 @@
 }
 
 .circular-progress-default .circular-progress-bar {
-  stroke: var(--color-primary);
+  stroke: var(--progress-bar-background);
 }
 
 .circular-progress-success .circular-progress-bar {
-  stroke: var(--color-success);
+  stroke: var(--progress-bar-background-success);
 }
 
 .circular-progress-warning .circular-progress-bar {
-  stroke: var(--color-warning);
+  stroke: var(--progress-bar-background-warning);
 }
 
 .circular-progress-error .circular-progress-bar {
-  stroke: var(--color-error);
+  stroke: var(--progress-bar-background-error);
 }
 
 .circular-progress-value {
   position: absolute;
   font-family: var(--font-family);
   font-weight: var(--font-weight-semibold);
-  color: var(--color-text);
+  color: var(--progress-value-text);
 }

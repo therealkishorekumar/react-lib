@@ -1,12 +1,12 @@
 .accordion {
   font-family: var(--font-family);
-  border: 1px solid var(--color-border);
+  border: var(--accordion-border-width) solid var(--accordion-border-color);
   border-radius: var(--radius-surface);
   overflow: hidden;
 }
 
 .accordion-item {
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: var(--accordion-border-width) solid var(--accordion-border-color);
 }
 
 .accordion-item:last-child {
@@ -22,8 +22,8 @@
   font-family: var(--font-family);
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-medium);
-  color: var(--color-text);
-  background-color: var(--color-background);
+  color: var(--accordion-trigger-text);
+  background-color: var(--accordion-trigger-background);
   border: none;
   cursor: pointer;
   text-align: left;
@@ -31,7 +31,7 @@
 }
 
 .accordion-trigger:hover:not(:disabled) {
-  background-color: var(--color-surface);
+  background-color: var(--accordion-trigger-background-hover);
 }
 
 .accordion-trigger:focus-visible {
@@ -50,7 +50,7 @@
 
 .accordion-icon {
   flex-shrink: 0;
-  color: var(--color-text-muted);
+  color: var(--accordion-icon-color);
   transition: transform var(--transition-fast);
 }
 
@@ -60,7 +60,7 @@
 
 .accordion-content {
   overflow: hidden;
-  background-color: var(--color-background);
+  background-color: var(--accordion-content-background);
   max-height: 0;
   transition: max-height var(--transition-normal);
 }
@@ -75,6 +75,6 @@
 
 .accordion-content-inner {
   padding: 0 var(--spacing-md) var(--spacing-md);
-  color: var(--color-text);
+  color: var(--accordion-content-text);
   line-height: var(--line-height-normal);
 }

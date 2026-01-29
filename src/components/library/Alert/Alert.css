@@ -70,45 +70,45 @@
 
 /* Variants */
 .alert-info {
-  background-color: color-mix(in srgb, var(--color-info) 10%, var(--color-background));
-  border-color: color-mix(in srgb, var(--color-info) 30%, transparent);
-  color: var(--color-info);
+  background-color: var(--alert-info-background);
+  border-color: var(--alert-info-border);
+  color: var(--alert-info-icon-color);
 }
 
 .alert-info .alert-title,
 .alert-info .alert-message {
-  color: color-mix(in srgb, var(--color-info) 80%, var(--color-text));
+  color: var(--alert-info-text);
 }
 
 .alert-success {
-  background-color: color-mix(in srgb, var(--color-success) 10%, var(--color-background));
-  border-color: color-mix(in srgb, var(--color-success) 30%, transparent);
-  color: var(--color-success);
+  background-color: var(--alert-success-background);
+  border-color: var(--alert-success-border);
+  color: var(--alert-success-icon-color);
 }
 
 .alert-success .alert-title,
 .alert-success .alert-message {
-  color: color-mix(in srgb, var(--color-success) 80%, var(--color-text));
+  color: var(--alert-success-text);
 }
 
 .alert-warning {
-  background-color: color-mix(in srgb, var(--color-warning) 10%, var(--color-background));
-  border-color: color-mix(in srgb, var(--color-warning) 30%, transparent);
-  color: var(--color-warning);
+  background-color: var(--alert-warning-background);
+  border-color: var(--alert-warning-border);
+  color: var(--alert-warning-icon-color);
 }
 
 .alert-warning .alert-title,
 .alert-warning .alert-message {
-  color: color-mix(in srgb, var(--color-warning) 80%, var(--color-text));
+  color: var(--alert-warning-text);
 }
 
 .alert-error {
-  background-color: color-mix(in srgb, var(--color-error) 10%, var(--color-background));
-  border-color: color-mix(in srgb, var(--color-error) 30%, transparent);
-  color: var(--color-error);
+  background-color: var(--alert-error-background);
+  border-color: var(--alert-error-border);
+  color: var(--alert-error-icon-color);
 }
 
 .alert-error .alert-title,
 .alert-error .alert-message {
-  color: color-mix(in srgb, var(--color-error) 80%, var(--color-text));
+  color: var(--alert-error-text);
 }

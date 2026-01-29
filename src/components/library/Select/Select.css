@@ -8,7 +8,7 @@
   font-family: var(--font-family);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
-  color: var(--color-text);
+  color: var(--select-label-color);
 }
 
 .select-container {
@@ -21,9 +21,9 @@
   padding-right: calc(var(--spacing-md) + 20px);
   font-family: var(--font-family);
   font-size: var(--font-size-md);
-  color: var(--color-text);
-  background-color: var(--color-background);
-  border: 1px solid var(--color-border);
+  color: var(--select-text-color);
+  background-color: var(--select-background);
+  border: var(--select-border-width) solid var(--select-border-color);
   border-radius: var(--radius-control);
   box-shadow: var(--shadow-control);
   cursor: pointer;
@@ -32,17 +32,17 @@
 }
 
 .select-field:hover:not(:disabled) {
-  border-color: var(--color-secondary);
+  border-color: var(--select-border-color-hover);
 }
 
 .select-field:focus {
   outline: none;
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 20%, transparent);
+  border-color: var(--select-border-color-focus);
+  box-shadow: 0 0 0 3px var(--select-focus-ring-color);
 }
 
 .select-field:disabled {
-  background-color: var(--color-surface);
+  background-color: var(--select-background-disabled);
   cursor: not-allowed;
   opacity: 0.6;
 }
@@ -53,14 +53,14 @@
   top: 50%;
   transform: translateY(-50%);
   pointer-events: none;
-  color: var(--color-text-muted);
+  color: var(--select-icon-color);
 }
 
 .select-error .select-field {
-  border-color: var(--color-error);
+  border-color: var(--select-error-border-color);
 }
 
 .select-error-text {
   font-size: var(--font-size-sm);
-  color: var(--color-error);
+  color: var(--select-error-text-color);
 }

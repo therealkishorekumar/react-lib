@@ -6,7 +6,7 @@ import { SliderControl } from '../SliderControl';
 import { FontSelector } from '../FontSelector';
 import { ShadowEditor } from '../ShadowEditor';
 import { useDesignTokens } from '../../../hooks/useDesignTokens';
-import type { ThemeColors } from '../../../types/tokens';
+import type { ThemeColors, SemanticColors } from '../../../types/tokens';
 import './TokenPanel.css';
 
 interface PanelSectionProps {
@@ -40,6 +40,7 @@ type ThemeKey = keyof ThemeColors;
 export function TokenPanel() {
   const { tokens, setToken, setCategory } = useDesignTokens();
   const [colorTheme, setColorTheme] = useState<'light' | 'dark'>('light');
+  const [semanticTheme, setSemanticTheme] = useState<'light' | 'dark'>('light');
 
   const parseValue = (value: string): number => {
     return parseFloat(value.replace(/[^0-9.]/g, '')) || 0;
@@ -62,143 +63,284 @@ export function TokenPanel() {
     ? 'Sync this token to dark theme'
     : 'Sync this token to light theme';
 
+  const currentSemanticTheme: SemanticColors = semanticTheme === 'light' ? tokens.semanticLight : tokens.semanticDark;
+  const semanticThemeCategory = semanticTheme === 'light' ? 'semanticLight' : 'semanticDark';
+  const otherSemanticThemeCategory = semanticThemeCategory === 'semanticLight' ? 'semanticDark' : 'semanticLight';
+  const otherSemanticTheme: SemanticColors = tokens[otherSemanticThemeCategory];
+
+  const shouldShowSemanticSync = (key: keyof SemanticColors) => currentSemanticTheme[key] !== otherSemanticTheme[key];
+  const syncSemanticToken = (key: keyof SemanticColors) => {
+    setCategory(otherSemanticThemeCategory as any, { [key]: currentSemanticTheme[key] } as any);
+  };
+  const semanticSyncTitle = semanticTheme === 'light'
+    ? 'Sync this token to dark theme'
+    : 'Sync this token to light theme';
+
   return (
     <div className="token-panel">
       <PanelSection title="Colors" icon={<Palette size={16} />} defaultOpen>
         <div className="theme-mode-toggle">
           <button
-            className={`theme-toggle-btn ${colorTheme === 'light' ? 'active' : ''}`}
-            onClick={() => setColorTheme('light')}
+            className={`theme-toggle-btn ${semanticTheme === 'light' ? 'active' : ''}`}
+            onClick={() => setSemanticTheme('light')}
           >
             Light Theme
           </button>
           <button
-            className={`theme-toggle-btn ${colorTheme === 'dark' ? 'active' : ''}`}
-            onClick={() => setColorTheme('dark')}
+            className={`theme-toggle-btn ${semanticTheme === 'dark' ? 'active' : ''}`}
+            onClick={() => setSemanticTheme('dark')}
           >
             Dark Theme
           </button>
         </div>
         <div className="panel-subsection">
-          <h4 className="panel-subsection-title">Brand Colors</h4>
+          <h4 className="panel-subsection-title">Surface</h4>
           <ColorPicker
-            label="Primary"
-            value={currentTheme.primary}
-            onChange={(v) => setCategory(themeCategory, { ...tokens[themeCategory], primary: v })}
-            showSync={shouldShowSync('primary')}
-            syncTitle={syncTitle}
-            onSync={() => syncThemeToken('primary')}
+            label="Surface Primary"
+            value={currentSemanticTheme.surfacePrimary}
+            onChange={(v) => setCategory(semanticThemeCategory as any, { ...tokens[semanticThemeCategory], surfacePrimary: v } as any)}
+            showSync={shouldShowSemanticSync('surfacePrimary')}
+            syncTitle={semanticSyncTitle}
+            onSync={() => syncSemanticToken('surfacePrimary')}
           />
           <ColorPicker
-            label="Primary Hover"
-            value={currentTheme.primaryHover}
-            onChange={(v) => setCategory(themeCategory, { ...tokens[themeCategory], primaryHover: v })}
-            showSync={shouldShowSync('primaryHover')}
-            syncTitle={syncTitle}
-            onSync={() => syncThemeToken('primaryHover')}
+            label="Surface Secondary"
+            value={currentSemanticTheme.surfaceSecondary}
+            onChange={(v) => setCategory(semanticThemeCategory as any, { ...tokens[semanticThemeCategory], surfaceSecondary: v } as any)}
+            showSync={shouldShowSemanticSync('surfaceSecondary')}
+            syncTitle={semanticSyncTitle}
+            onSync={() => syncSemanticToken('surfaceSecondary')}
           />
           <ColorPicker
-            label="Secondary"
-            value={currentTheme.secondary}
-            onChange={(v) => setCategory(themeCategory, { ...tokens[themeCategory], secondary: v })}
-            showSync={shouldShowSync('secondary')}
-            syncTitle={syncTitle}
-            onSync={() => syncThemeToken('secondary')}
+            label="Surface Tertiary"
+            value={currentSemanticTheme.surfaceTertiary}
+            onChange={(v) => setCategory(semanticThemeCategory as any, { ...tokens[semanticThemeCategory], surfaceTertiary: v } as any)}
+            showSync={shouldShowSemanticSync('surfaceTertiary')}
+            syncTitle={semanticSyncTitle}
+            onSync={() => syncSemanticToken('surfaceTertiary')}
           />
           <ColorPicker
-            label="Secondary Hover"
-            value={currentTheme.secondaryHover}
-            onChange={(v) => setCategory(themeCategory, { ...tokens[themeCategory], secondaryHover: v })}
-            showSync={shouldShowSync('secondaryHover')}
-            syncTitle={syncTitle}
-            onSync={() => syncThemeToken('secondaryHover')}
+            label="Surface Quaternary"
+            value={currentSemanticTheme.surfaceQuaternary}
+            onChange={(v) => setCategory(semanticThemeCategory as any, { ...tokens[semanticThemeCategory], surfaceQuaternary: v } as any)}
+            showSync={shouldShowSemanticSync('surfaceQuaternary')}
+            syncTitle={semanticSyncTitle}
+            onSync={() => syncSemanticToken('surfaceQuaternary')}
           />
         </div>
         <div className="panel-subsection">
-          <h4 className="panel-subsection-title">Semantic Colors</h4>
+          <h4 className="panel-subsection-title">Content</h4>
+          <ColorPicker
+            label="Content Primary"
+            value={currentSemanticTheme.contentPrimary}
+            onChange={(v) => setCategory(semanticThemeCategory as any, { ...tokens[semanticThemeCategory], contentPrimary: v } as any)}
+            showSync={shouldShowSemanticSync('contentPrimary')}
+            syncTitle={semanticSyncTitle}
+            onSync={() => syncSemanticToken('contentPrimary')}
+          />
+          <ColorPicker
+            label="Content Secondary"
+            value={currentSemanticTheme.contentSecondary}
+            onChange={(v) => setCategory(semanticThemeCategory as any, { ...tokens[semanticThemeCategory], contentSecondary: v } as any)}
+            showSync={shouldShowSemanticSync('contentSecondary')}
+            syncTitle={semanticSyncTitle}
+            onSync={() => syncSemanticToken('contentSecondary')}
+          />
+          <ColorPicker
+            label="Content Tertiary"
+            value={currentSemanticTheme.contentTertiary}
+            onChange={(v) => setCategory(semanticThemeCategory as any, { ...tokens[semanticThemeCategory], contentTertiary: v } as any)}
+            showSync={shouldShowSemanticSync('contentTertiary')}
+            syncTitle={semanticSyncTitle}
+            onSync={() => syncSemanticToken('contentTertiary')}
+          />
+        </div>
+        <div className="panel-subsection">
+          <h4 className="panel-subsection-title">Accent</h4>
+          <ColorPicker
+            label="Accent Primary"
+            value={currentSemanticTheme.accentPrimary}
+            onChange={(v) => setCategory(semanticThemeCategory as any, { ...tokens[semanticThemeCategory], accentPrimary: v } as any)}
+            showSync={shouldShowSemanticSync('accentPrimary')}
+            syncTitle={semanticSyncTitle}
+            onSync={() => syncSemanticToken('accentPrimary')}
+          />
+          <ColorPicker
+            label="Accent Secondary"
+            value={currentSemanticTheme.accentSecondary}
+            onChange={(v) => setCategory(semanticThemeCategory as any, { ...tokens[semanticThemeCategory], accentSecondary: v } as any)}
+            showSync={shouldShowSemanticSync('accentSecondary')}
+            syncTitle={semanticSyncTitle}
+            onSync={() => syncSemanticToken('accentSecondary')}
+          />
+          <ColorPicker
+            label="Accent Tertiary"
+            value={currentSemanticTheme.accentTertiary}
+            onChange={(v) => setCategory(semanticThemeCategory as any, { ...tokens[semanticThemeCategory], accentTertiary: v } as any)}
+            showSync={shouldShowSemanticSync('accentTertiary')}
+            syncTitle={semanticSyncTitle}
+            onSync={() => syncSemanticToken('accentTertiary')}
+          />
+        </div>
+        <div className="panel-subsection">
+          <h4 className="panel-subsection-title">On Accent</h4>
+          <ColorPicker
+            label="On Accent Primary"
+            value={currentSemanticTheme.onAccentPrimary}
+            onChange={(v) => setCategory(semanticThemeCategory as any, { ...tokens[semanticThemeCategory], onAccentPrimary: v } as any)}
+            showSync={shouldShowSemanticSync('onAccentPrimary')}
+            syncTitle={semanticSyncTitle}
+            onSync={() => syncSemanticToken('onAccentPrimary')}
+          />
+          <ColorPicker
+            label="On Accent Secondary"
+            value={currentSemanticTheme.onAccentSecondary}
+            onChange={(v) => setCategory(semanticThemeCategory as any, { ...tokens[semanticThemeCategory], onAccentSecondary: v } as any)}
+            showSync={shouldShowSemanticSync('onAccentSecondary')}
+            syncTitle={semanticSyncTitle}
+            onSync={() => syncSemanticToken('onAccentSecondary')}
+          />
+          <ColorPicker
+            label="On Accent Tertiary"
+            value={currentSemanticTheme.onAccentTertiary}
+            onChange={(v) => setCategory(semanticThemeCategory as any, { ...tokens[semanticThemeCategory], onAccentTertiary: v } as any)}
+            showSync={shouldShowSemanticSync('onAccentTertiary')}
+            syncTitle={semanticSyncTitle}
+            onSync={() => syncSemanticToken('onAccentTertiary')}
+          />
+        </div>
+        <div className="panel-subsection">
+          <h4 className="panel-subsection-title">Status</h4>
           <ColorPicker
             label="Success"
-            value={currentTheme.success}
-            onChange={(v) => setCategory(themeCategory, { ...tokens[themeCategory], success: v })}
-            showSync={shouldShowSync('success')}
-            syncTitle={syncTitle}
-            onSync={() => syncThemeToken('success')}
+            value={currentSemanticTheme.success}
+            onChange={(v) => setCategory(semanticThemeCategory as any, { ...tokens[semanticThemeCategory], success: v } as any)}
+            showSync={shouldShowSemanticSync('success')}
+            syncTitle={semanticSyncTitle}
+            onSync={() => syncSemanticToken('success')}
+          />
+          <ColorPicker
+            label="Fail"
+            value={currentSemanticTheme.fail}
+            onChange={(v) => setCategory(semanticThemeCategory as any, { ...tokens[semanticThemeCategory], fail: v } as any)}
+            showSync={shouldShowSemanticSync('fail')}
+            syncTitle={semanticSyncTitle}
+            onSync={() => syncSemanticToken('fail')}
           />
           <ColorPicker
             label="Warning"
-            value={currentTheme.warning}
-            onChange={(v) => setCategory(themeCategory, { ...tokens[themeCategory], warning: v })}
-            showSync={shouldShowSync('warning')}
-            syncTitle={syncTitle}
-            onSync={() => syncThemeToken('warning')}
-          />
-          <ColorPicker
-            label="Error"
-            value={currentTheme.error}
-            onChange={(v) => setCategory(themeCategory, { ...tokens[themeCategory], error: v })}
-            showSync={shouldShowSync('error')}
-            syncTitle={syncTitle}
-            onSync={() => syncThemeToken('error')}
+            value={currentSemanticTheme.warning}
+            onChange={(v) => setCategory(semanticThemeCategory as any, { ...tokens[semanticThemeCategory], warning: v } as any)}
+            showSync={shouldShowSemanticSync('warning')}
+            syncTitle={semanticSyncTitle}
+            onSync={() => syncSemanticToken('warning')}
           />
           <ColorPicker
             label="Info"
-            value={currentTheme.info}
-            onChange={(v) => setCategory(themeCategory, { ...tokens[themeCategory], info: v })}
-            showSync={shouldShowSync('info')}
-            syncTitle={syncTitle}
-            onSync={() => syncThemeToken('info')}
+            value={currentSemanticTheme.info}
+            onChange={(v) => setCategory(semanticThemeCategory as any, { ...tokens[semanticThemeCategory], info: v } as any)}
+            showSync={shouldShowSemanticSync('info')}
+            syncTitle={semanticSyncTitle}
+            onSync={() => syncSemanticToken('info')}
           />
         </div>
         <div className="panel-subsection">
-          <h4 className="panel-subsection-title">Base Colors</h4>
+          <h4 className="panel-subsection-title">Action</h4>
           <ColorPicker
-            label="Background"
-            value={currentTheme.background}
-            onChange={(v) => setCategory(themeCategory, { ...tokens[themeCategory], background: v })}
-            showSync={shouldShowSync('background')}
-            syncTitle={syncTitle}
-            onSync={() => syncThemeToken('background')}
+            label="Action"
+            value={currentSemanticTheme.action}
+            onChange={(v) => setCategory(semanticThemeCategory as any, { ...tokens[semanticThemeCategory], action: v } as any)}
+            showSync={shouldShowSemanticSync('action')}
+            syncTitle={semanticSyncTitle}
+            onSync={() => syncSemanticToken('action')}
           />
           <ColorPicker
-            label="Surface"
-            value={currentTheme.surface}
-            onChange={(v) => setCategory(themeCategory, { ...tokens[themeCategory], surface: v })}
-            showSync={shouldShowSync('surface')}
-            syncTitle={syncTitle}
-            onSync={() => syncThemeToken('surface')}
+            label="Action Secondary"
+            value={currentSemanticTheme.actionSecondary}
+            onChange={(v) => setCategory(semanticThemeCategory as any, { ...tokens[semanticThemeCategory], actionSecondary: v } as any)}
+            showSync={shouldShowSemanticSync('actionSecondary')}
+            syncTitle={semanticSyncTitle}
+            onSync={() => syncSemanticToken('actionSecondary')}
           />
           <ColorPicker
-            label="Primary Text"
-            value={currentTheme.text}
-            onChange={(v) => setCategory(themeCategory, { ...tokens[themeCategory], text: v })}
-            showSync={shouldShowSync('text')}
-            syncTitle={syncTitle}
-            onSync={() => syncThemeToken('text')}
+            label="Action Tertiary"
+            value={currentSemanticTheme.actionTertiary}
+            onChange={(v) => setCategory(semanticThemeCategory as any, { ...tokens[semanticThemeCategory], actionTertiary: v } as any)}
+            showSync={shouldShowSemanticSync('actionTertiary')}
+            syncTitle={semanticSyncTitle}
+            onSync={() => syncSemanticToken('actionTertiary')}
           />
+        </div>
+        <div className="panel-subsection">
+          <h4 className="panel-subsection-title">Utility</h4>
           <ColorPicker
-            label="Text Muted"
-            value={currentTheme.textMuted}
-            onChange={(v) => setCategory(themeCategory, { ...tokens[themeCategory], textMuted: v })}
-            showSync={shouldShowSync('textMuted')}
-            syncTitle={syncTitle}
-            onSync={() => syncThemeToken('textMuted')}
-          />
-          <ColorPicker
-            label="On Accent Text"
-            value={currentTheme.textOnAccent}
-            onChange={(v) => setCategory(themeCategory, { ...tokens[themeCategory], textOnAccent: v })}
-            showSync={shouldShowSync('textOnAccent')}
-            syncTitle={syncTitle}
-            onSync={() => syncThemeToken('textOnAccent')}
+            label="Shadow"
+            value={currentSemanticTheme.shadow}
+            onChange={(v) => setCategory(semanticThemeCategory as any, { ...tokens[semanticThemeCategory], shadow: v } as any)}
+            showSync={shouldShowSemanticSync('shadow')}
+            syncTitle={semanticSyncTitle}
+            onSync={() => syncSemanticToken('shadow')}
           />
           <ColorPicker
             label="Border"
-            value={currentTheme.border}
-            onChange={(v) => setCategory(themeCategory, { ...tokens[themeCategory], border: v })}
-            showSync={shouldShowSync('border')}
-            syncTitle={syncTitle}
-            onSync={() => syncThemeToken('border')}
+            value={currentSemanticTheme.border}
+            onChange={(v) => setCategory(semanticThemeCategory as any, { ...tokens[semanticThemeCategory], border: v } as any)}
+            showSync={shouldShowSemanticSync('border')}
+            syncTitle={semanticSyncTitle}
+            onSync={() => syncSemanticToken('border')}
           />
+        </div>
+        <div className="panel-subsection">
+          <h4 className="panel-subsection-title">Brand</h4>
+          <ColorPicker
+            label="Brand Primary"
+            value={currentSemanticTheme.brandPrimary}
+            onChange={(v) => setCategory(semanticThemeCategory as any, { ...tokens[semanticThemeCategory], brandPrimary: v } as any)}
+            showSync={shouldShowSemanticSync('brandPrimary')}
+            syncTitle={semanticSyncTitle}
+            onSync={() => syncSemanticToken('brandPrimary')}
+          />
+          <ColorPicker
+            label="Brand Secondary"
+            value={currentSemanticTheme.brandSecondary}
+            onChange={(v) => setCategory(semanticThemeCategory as any, { ...tokens[semanticThemeCategory], brandSecondary: v } as any)}
+            showSync={shouldShowSemanticSync('brandSecondary')}
+            syncTitle={semanticSyncTitle}
+            onSync={() => syncSemanticToken('brandSecondary')}
+          />
+        </div>
+        <div className="panel-subsection">
+          <h4 className="panel-subsection-title">Gradients</h4>
+          <div className="control-group">
+            <label className="control-label">Gradient Primary</label>
+            <input
+              type="text"
+              value={currentSemanticTheme.gradientPrimary}
+              onChange={(e) => setCategory(semanticThemeCategory as any, { ...tokens[semanticThemeCategory], gradientPrimary: e.target.value } as any)}
+              className="control-input"
+              placeholder="e.g., linear-gradient(...) or none"
+            />
+          </div>
+          <div className="control-group">
+            <label className="control-label">Gradient Secondary</label>
+            <input
+              type="text"
+              value={currentSemanticTheme.gradientSecondary}
+              onChange={(e) => setCategory(semanticThemeCategory as any, { ...tokens[semanticThemeCategory], gradientSecondary: e.target.value } as any)}
+              className="control-input"
+              placeholder="e.g., linear-gradient(...) or none"
+            />
+          </div>
+          <div className="control-group">
+            <label className="control-label">Gradient Tertiary</label>
+            <input
+              type="text"
+              value={currentSemanticTheme.gradientTertiary}
+              onChange={(e) => setCategory(semanticThemeCategory as any, { ...tokens[semanticThemeCategory], gradientTertiary: e.target.value } as any)}
+              className="control-input"
+              placeholder="e.g., linear-gradient(...) or none"
+            />
+          </div>
         </div>
       </PanelSection>
 
@@ -212,7 +354,7 @@ export function TokenPanel() {
               onChange={(e) =>
                 setCategory('patterns', {
                   ...tokens.patterns,
-                  background: { ...tokens.patterns.background, type: e.target.value as 'none' | 'dots' | 'grid' | 'plus' },
+                  background: { ...tokens.patterns.background, type: e.target.value as 'none' | 'dots' | 'grid' | 'plus' | 'noise' },
                 })
               }
               className="control-select"
@@ -221,6 +363,7 @@ export function TokenPanel() {
               <option value="dots">Dots</option>
               <option value="grid">Grid</option>
               <option value="plus">Plus</option>
+              <option value="noise">Noise</option>
             </select>
           </div>
           <SliderControl
@@ -260,7 +403,7 @@ export function TokenPanel() {
               onChange={(e) =>
                 setCategory('patterns', {
                   ...tokens.patterns,
-                  surface: { ...tokens.patterns.surface, type: e.target.value as 'none' | 'dots' | 'grid' | 'plus' },
+                  surface: { ...tokens.patterns.surface, type: e.target.value as 'none' | 'dots' | 'grid' | 'plus' | 'noise' },
                 })
               }
               className="control-select"
@@ -269,6 +412,7 @@ export function TokenPanel() {
               <option value="dots">Dots</option>
               <option value="grid">Grid</option>
               <option value="plus">Plus</option>
+              <option value="noise">Noise</option>
             </select>
           </div>
           <SliderControl
@@ -313,6 +457,16 @@ export function TokenPanel() {
             label="Monospace Font"
             value={tokens.typography.fontFamilyMono}
             onChange={(v) => setToken('typography', 'fontFamilyMono', v)}
+          />
+          <FontSelector
+            label="Serif Font"
+            value={tokens.typography.fontFamilySerif}
+            onChange={(v) => setToken('typography', 'fontFamilySerif', v)}
+          />
+          <FontSelector
+            label="Display Font"
+            value={tokens.typography.fontFamilyDisplay}
+            onChange={(v) => setToken('typography', 'fontFamilyDisplay', v)}
           />
         </div>
         <div className="panel-subsection">
@@ -522,6 +676,16 @@ export function TokenPanel() {
           value={tokens.shadows.float}
           onChange={(v) => setToken('shadows', 'float', v)}
         />
+        <ShadowEditor
+          label="Inner Shadow"
+          value={tokens.shadows.inner}
+          onChange={(v) => setToken('shadows', 'inner', v)}
+        />
+        <ShadowEditor
+          label="Glow Shadow"
+          value={tokens.shadows.glow}
+          onChange={(v) => setToken('shadows', 'glow', v)}
+        />
       </PanelSection>
 
       <PanelSection title="Transitions" icon={<Zap size={16} />}>
@@ -552,6 +716,84 @@ export function TokenPanel() {
           unit="ms"
           onChange={(v) => setToken('transitions', 'slow', `${v}ms ease`)}
         />
+      </PanelSection>
+
+      <PanelSection title="Advanced Effects" icon={<Zap size={16} />}>
+        <div className="panel-subsection">
+          <h4 className="panel-subsection-title">Glassmorphism</h4>
+          <SliderControl
+            label="Backdrop Blur"
+            value={parseValue(tokens.effects.backdropBlur)}
+            min={0}
+            max={30}
+            step={1}
+            unit="px"
+            onChange={(v) => setToken('effects', 'backdropBlur', formatValue(v, 'px'))}
+          />
+          <SliderControl
+            label="Backdrop Saturation"
+            value={parseValue(tokens.effects.backdropSaturation)}
+            min={0}
+            max={200}
+            step={10}
+            unit="%"
+            onChange={(v) => setToken('effects', 'backdropSaturation', formatValue(v, '%'))}
+          />
+          <SliderControl
+            label="Surface Opacity"
+            value={tokens.effects.surfaceOpacity}
+            min={0}
+            max={1}
+            step={0.05}
+            onChange={(v) => setToken('effects', 'surfaceOpacity', v)}
+          />
+        </div>
+        <div className="panel-subsection">
+          <h4 className="panel-subsection-title">Glow Effects</h4>
+          <div className="control-group">
+            <label className="control-label">Text Glow</label>
+            <input
+              type="text"
+              value={tokens.effects.textGlow}
+              onChange={(e) => setToken('effects', 'textGlow', e.target.value)}
+              className="control-input"
+              placeholder="e.g., 0 0 10px currentColor"
+            />
+          </div>
+        </div>
+      </PanelSection>
+
+      <PanelSection title="Gradients" icon={<Palette size={16} />}>
+        <div className="control-group">
+          <label className="control-label">Surface Gradient</label>
+          <input
+            type="text"
+            value={tokens.gradients.surface}
+            onChange={(e) => setToken('gradients', 'surface', e.target.value)}
+            className="control-input"
+            placeholder="e.g., linear-gradient(...) or none"
+          />
+        </div>
+        <div className="control-group">
+          <label className="control-label">Accent Gradient</label>
+          <input
+            type="text"
+            value={tokens.gradients.accent}
+            onChange={(e) => setToken('gradients', 'accent', e.target.value)}
+            className="control-input"
+            placeholder="e.g., linear-gradient(...) or none"
+          />
+        </div>
+        <div className="control-group">
+          <label className="control-label">Primary Gradient</label>
+          <input
+            type="text"
+            value={tokens.gradients.primary}
+            onChange={(e) => setToken('gradients', 'primary', e.target.value)}
+            className="control-input"
+            placeholder="e.g., linear-gradient(...) or none"
+          />
+        </div>
       </PanelSection>
 
       <PanelSection title="Focus Ring" icon={<Square size={16} />}>

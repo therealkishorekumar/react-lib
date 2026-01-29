@@ -4,5 +4,7 @@ export { FontSelector } from './FontSelector';
 export { ShadowEditor } from './ShadowEditor';
 export { TokenPanel } from './panels/TokenPanel';
 export { ComponentPanel } from './panels/ComponentPanel';
+export { ComponentColorsPanel } from './panels/ComponentColorsPanel';
 export { EditorSidebar } from './EditorSidebar';
 export { GradientPicker } from './GradientPicker';
+export { SemanticColorSelector } from './SemanticColorSelector';

@@ -5,7 +5,7 @@
   cursor: pointer;
   font-family: var(--font-family);
   font-size: var(--font-size-md);
-  color: var(--color-text);
+  color: var(--checkbox-label-color);
 }
 
 .checkbox-wrapper:has(.checkbox-input:disabled) {
@@ -26,9 +26,9 @@
   justify-content: center;
   width: var(--checkbox-size);
   height: var(--checkbox-size);
-  border: var(--checkbox-border-width) solid var(--color-border);
+  border: var(--checkbox-border-width) solid var(--checkbox-border-color);
   border-radius: var(--checkbox-border-radius);
-  background-color: var(--color-background);
+  background-color: var(--checkbox-background);
   box-shadow: var(--shadow-control);
   transition: all var(--transition-fast);
   flex-shrink: 0;
@@ -38,15 +38,15 @@
   width: 85%;
   height: 85%;
   display: block;
-  color: var(--color-text-on-accent);
+  color: var(--checkbox-check-color);
   opacity: 0;
   transform: scale(0.9);
   transition: transform var(--transition-fast), opacity var(--transition-fast);
 }
 
 .checkbox-input:checked + .checkbox-box {
-  background-color: var(--color-primary);
-  border-color: var(--color-primary);
+  background-color: var(--checkbox-background-checked);
+  border-color: var(--checkbox-border-color-checked);
 }
 
 .checkbox-input:checked + .checkbox-box .checkbox-check {
@@ -55,8 +55,8 @@
 }
 
 .checkbox-input:indeterminate + .checkbox-box {
-  background-color: var(--color-primary);
-  border-color: var(--color-primary);
+  background-color: var(--checkbox-background-checked);
+  border-color: var(--checkbox-border-color-checked);
 }
 
 .checkbox-input:indeterminate + .checkbox-box .checkbox-indeterminate {
@@ -70,7 +70,7 @@
 }
 
 .checkbox-wrapper:hover .checkbox-box {
-  border-color: var(--color-primary);
+  border-color: var(--checkbox-border-color-hover);
 }
 
 .checkbox-label {

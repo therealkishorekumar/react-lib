@@ -120,7 +120,7 @@
 
 .error-boundary-button-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 8px 16px color-mix(in srgb, var(--platform-primary) 30%, transparent);
 }
 
 .error-boundary-button-secondary {

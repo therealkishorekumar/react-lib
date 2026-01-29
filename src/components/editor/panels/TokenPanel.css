@@ -13,11 +13,11 @@
 .panel-section-header {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   width: 100%;
-  padding: 14px 20px;
+  padding: 10px 16px;
   font-family: 'Inter', sans-serif;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   letter-spacing: -0.01em;
   color: var(--platform-text);
@@ -55,11 +55,11 @@
 }
 
 .panel-section-content {
-  padding: 4px 20px 20px;
+  padding: 8px 16px 16px;
   display: flex;
   flex-direction: column;
-  gap: 18px;
-  animation: slideDown 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  gap: 12px;
+  animation: slideDown 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 @keyframes slideDown {
@@ -84,18 +84,18 @@
 .panel-subsection {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 10px;
 }
 
 .panel-subsection-title {
-  font-size: 11px;
-  font-weight: 600;
+  font-size: 10px;
+  font-weight: 700;
   color: var(--platform-text-muted);
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.5px;
   margin: 0;
-  padding-bottom: 8px;
-  border-bottom: 2px solid var(--platform-border-light);
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--platform-border-light);
 }
 
 .theme-mode-toggle {
@@ -130,5 +130,5 @@
 .theme-toggle-btn.active {
   background: var(--platform-primary);
   color: var(--platform-text-on-primary);
-  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+  box-shadow: var(--platform-shadow-sm);
 }

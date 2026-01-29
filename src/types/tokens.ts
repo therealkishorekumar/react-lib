@@ -1,3 +1,4 @@
+// Legacy interface - kept for backwards compatibility during migration
 export interface ThemeColors {
   primary: string;
   primaryHover: string;
@@ -15,12 +16,265 @@ export interface ThemeColors {
   border: string;
 }
 
+// New semantic color system (27 colors)
+export interface SemanticColors {
+  // Surface (4) - backgrounds and layers
+  surfacePrimary: string;
+  surfaceSecondary: string;
+  surfaceTertiary: string;
+  surfaceQuaternary: string;
+
+  // Content (3) - text hierarchy
+  contentPrimary: string;
+  contentSecondary: string;
+  contentTertiary: string;
+
+  // Accent (3) - primary brand/interactive
+  accentPrimary: string;
+  accentSecondary: string;
+  accentTertiary: string;
+
+  // On Accent (3) - text on colored backgrounds
+  onAccentPrimary: string;
+  onAccentSecondary: string;
+  onAccentTertiary: string;
+
+  // Status (4)
+  success: string;
+  fail: string;
+  warning: string;
+  info: string;
+
+  // Action (3) - secondary interactive
+  action: string;
+  actionSecondary: string;
+  actionTertiary: string;
+
+  // Utility (2)
+  shadow: string;
+  border: string;
+
+  // Brand (2)
+  brandPrimary: string;
+  brandSecondary: string;
+
+  // Gradients (3) - store CSS strings directly
+  gradientPrimary: string;
+  gradientSecondary: string;
+  gradientTertiary: string;
+}
+
+export type SemanticColorKey = keyof SemanticColors;
+
+// Component color configurations - stores semantic color references (keys, not values)
+export interface ComponentColorConfig {
+  button: {
+    primary: {
+      background: SemanticColorKey;
+      backgroundHover: SemanticColorKey;
+      text: SemanticColorKey;
+      border: SemanticColorKey;
+    };
+    secondary: {
+      background: SemanticColorKey;
+      backgroundHover: SemanticColorKey;
+      text: SemanticColorKey;
+      border: SemanticColorKey;
+    };
+    outline: {
+      background: SemanticColorKey;
+      backgroundHover: SemanticColorKey;
+      text: SemanticColorKey;
+      textHover: SemanticColorKey;
+      border: SemanticColorKey;
+      borderHover: SemanticColorKey;
+    };
+    ghost: {
+      background: SemanticColorKey;
+      backgroundHover: SemanticColorKey;
+      text: SemanticColorKey;
+      textHover: SemanticColorKey;
+    };
+    danger: {
+      background: SemanticColorKey;
+      backgroundHover: SemanticColorKey;
+      text: SemanticColorKey;
+      border: SemanticColorKey;
+    };
+  };
+  input: {
+    background: SemanticColorKey;
+    text: SemanticColorKey;
+    placeholder: SemanticColorKey;
+    border: SemanticColorKey;
+    borderHover: SemanticColorKey;
+    borderFocus: SemanticColorKey;
+    borderError: SemanticColorKey;
+  };
+  card: {
+    background: SemanticColorKey;
+    backgroundElevated: SemanticColorKey;
+    text: SemanticColorKey;
+    textMuted: SemanticColorKey;
+    border: SemanticColorKey;
+  };
+  alert: {
+    info: {
+      background: SemanticColorKey;
+      text: SemanticColorKey;
+      border: SemanticColorKey;
+    };
+    success: {
+      background: SemanticColorKey;
+      text: SemanticColorKey;
+      border: SemanticColorKey;
+    };
+    warning: {
+      background: SemanticColorKey;
+      text: SemanticColorKey;
+      border: SemanticColorKey;
+    };
+    error: {
+      background: SemanticColorKey;
+      text: SemanticColorKey;
+      border: SemanticColorKey;
+    };
+  };
+  badge: {
+    primary: {
+      background: SemanticColorKey;
+      text: SemanticColorKey;
+      border: SemanticColorKey;
+    };
+    secondary: {
+      background: SemanticColorKey;
+      text: SemanticColorKey;
+      border: SemanticColorKey;
+    };
+    success: {
+      background: SemanticColorKey;
+      text: SemanticColorKey;
+      border: SemanticColorKey;
+    };
+    warning: {
+      background: SemanticColorKey;
+      text: SemanticColorKey;
+      border: SemanticColorKey;
+    };
+    error: {
+      background: SemanticColorKey;
+      text: SemanticColorKey;
+      border: SemanticColorKey;
+    };
+  };
+  checkbox: {
+    background: SemanticColorKey;
+    backgroundChecked: SemanticColorKey;
+    border: SemanticColorKey;
+    borderChecked: SemanticColorKey;
+    checkmark: SemanticColorKey;
+  };
+  radio: {
+    background: SemanticColorKey;
+    backgroundChecked: SemanticColorKey;
+    border: SemanticColorKey;
+    borderChecked: SemanticColorKey;
+    dot: SemanticColorKey;
+  };
+  toggle: {
+    trackBackground: SemanticColorKey;
+    trackBackgroundActive: SemanticColorKey;
+    thumb: SemanticColorKey;
+    thumbBorder: SemanticColorKey;
+  };
+  select: {
+    background: SemanticColorKey;
+    text: SemanticColorKey;
+    border: SemanticColorKey;
+    borderHover: SemanticColorKey;
+    borderFocus: SemanticColorKey;
+  };
+  dropdown: {
+    background: SemanticColorKey;
+    itemHover: SemanticColorKey;
+    text: SemanticColorKey;
+    border: SemanticColorKey;
+  };
+  tabs: {
+    background: SemanticColorKey;
+    text: SemanticColorKey;
+    textActive: SemanticColorKey;
+    indicator: SemanticColorKey;
+    border: SemanticColorKey;
+  };
+  accordion: {
+    background: SemanticColorKey;
+    backgroundHover: SemanticColorKey;
+    text: SemanticColorKey;
+    border: SemanticColorKey;
+  };
+  modal: {
+    background: SemanticColorKey;
+    backdrop: SemanticColorKey;
+    text: SemanticColorKey;
+    border: SemanticColorKey;
+  };
+  tooltip: {
+    background: SemanticColorKey;
+    text: SemanticColorKey;
+    border: SemanticColorKey;
+  };
+  progress: {
+    track: SemanticColorKey;
+    fill: SemanticColorKey;
+    text: SemanticColorKey;
+  };
+  avatar: {
+    background: SemanticColorKey;
+    text: SemanticColorKey;
+    border: SemanticColorKey;
+  };
+  table: {
+    background: SemanticColorKey;
+    headerBackground: SemanticColorKey;
+    headerText: SemanticColorKey;
+    rowHover: SemanticColorKey;
+    text: SemanticColorKey;
+    border: SemanticColorKey;
+  };
+  navbar: {
+    background: SemanticColorKey;
+    text: SemanticColorKey;
+    textHover: SemanticColorKey;
+    border: SemanticColorKey;
+  };
+  sidebar: {
+    background: SemanticColorKey;
+    text: SemanticColorKey;
+    textActive: SemanticColorKey;
+    itemHover: SemanticColorKey;
+    border: SemanticColorKey;
+  };
+  breadcrumb: {
+    text: SemanticColorKey;
+    textActive: SemanticColorKey;
+    separator: SemanticColorKey;
+  };
+}
+
 export interface DesignTokens {
+  // Legacy color system (kept for backwards compatibility)
   lightTheme: ThemeColors;
   darkTheme: ThemeColors;
+  // New semantic color system
+  semanticLight: SemanticColors;
+  semanticDark: SemanticColors;
+  componentColors: ComponentColorConfig;
   typography: {
     fontFamily: string;
     fontFamilyMono: string;
+    fontFamilySerif: string;
+    fontFamilyDisplay: string;
     fontSizeXs: string;
     fontSizeSm: string;
     fontSizeMd: string;
@@ -55,6 +309,8 @@ export interface DesignTokens {
     surface: string;
     overlay: string;
     float: string;
+    inner: string;
+    glow: string;
   };
   transitions: {
     fast: string;
@@ -66,18 +322,27 @@ export interface DesignTokens {
     focusRingOffset: string;
     focusRingColor: string;
     shadowColor: string;
+    backdropBlur: string;
+    backdropSaturation: string;
+    textGlow: string;
+    surfaceOpacity: number;
   };
   patterns: {
     background: {
-      type: 'none' | 'dots' | 'grid' | 'plus';
+      type: 'none' | 'dots' | 'grid' | 'plus' | 'noise';
       opacity: number;
       size: number;
     };
     surface: {
-      type: 'none' | 'dots' | 'grid' | 'plus';
+      type: 'none' | 'dots' | 'grid' | 'plus' | 'noise';
       opacity: number;
       size: number;
     };
+  };
+  gradients: {
+    surface: string;
+    accent: string;
+    primary: string;
   };
   components: {
     button: {
@@ -85,11 +350,15 @@ export interface DesignTokens {
       innerShadow: string;
       textTransform: 'none' | 'uppercase' | 'lowercase' | 'capitalize';
       letterSpacing: string;
+      glowEffect: string;
+      gradient: string;
     };
     input: {
       borderWidth: string;
       focusRingWidth: string;
       focusRingAlpha: number;
+      innerShadow: string;
+      glowOnFocus: string;
     };
     avatar: {
       borderWidth: string;
@@ -123,6 +392,9 @@ export interface DesignTokens {
       elevatedBorderWidth: string;
       elevatedBorderEnabled: boolean;
       headerBorderWidth: string;
+      backdropBlur: string;
+      surfaceOpacity: number;
+      innerShadow: string;
     };
     alert: {
       iconSize: string;
@@ -131,6 +403,7 @@ export interface DesignTokens {
     tabs: {
       indicatorHeight: string;
       indicatorStyle: 'underline' | 'pill' | 'enclosed';
+      borderWidth: string;
     };
     progress: {
       trackHeight: string;
@@ -142,10 +415,305 @@ export interface DesignTokens {
       borderWidth: string;
       backdropColor: string;
     };
+    select: {
+      borderWidth: string;
+    };
+    dropdown: {
+      borderWidth: string;
+    };
+    accordion: {
+      borderWidth: string;
+    };
+    navbar: {
+      borderWidth: string;
+    };
+    sidebar: {
+      borderWidth: string;
+    };
+    table: {
+      borderWidth: string;
+      headerBorderWidth: string;
+    };
   };
 }
 
+// Default semantic color mappings
+const defaultSemanticLight: SemanticColors = {
+  // Surface (4)
+  surfacePrimary: '#ffffff',
+  surfaceSecondary: '#f9fafb',
+  surfaceTertiary: '#f3f4f6',
+  surfaceQuaternary: '#e5e7eb',
+  // Content (3)
+  contentPrimary: '#111827',
+  contentSecondary: '#4b5563',
+  contentTertiary: '#9ca3af',
+  // Accent (3)
+  accentPrimary: '#3b82f6',
+  accentSecondary: '#2563eb',
+  accentTertiary: '#1d4ed8',
+  // On Accent (3)
+  onAccentPrimary: '#ffffff',
+  onAccentSecondary: '#ffffff',
+  onAccentTertiary: '#ffffff',
+  // Status (4)
+  success: '#22c55e',
+  fail: '#ef4444',
+  warning: '#f59e0b',
+  info: '#06b6d4',
+  // Action (3)
+  action: '#6b7280',
+  actionSecondary: '#4b5563',
+  actionTertiary: '#374151',
+  // Utility (2)
+  shadow: 'rgb(0 0 0 / 0.2)',
+  border: '#e5e7eb',
+  // Brand (2)
+  brandPrimary: '#3b82f6',
+  brandSecondary: '#6366f1',
+  // Gradients (3)
+  gradientPrimary: 'none',
+  gradientSecondary: 'none',
+  gradientTertiary: 'none',
+};
+
+const defaultSemanticDark: SemanticColors = {
+  // Surface (4)
+  surfacePrimary: '#0f172a',
+  surfaceSecondary: '#1e293b',
+  surfaceTertiary: '#334155',
+  surfaceQuaternary: '#475569',
+  // Content (3)
+  contentPrimary: '#f1f5f9',
+  contentSecondary: '#cbd5e1',
+  contentTertiary: '#94a3b8',
+  // Accent (3)
+  accentPrimary: '#6366f1',
+  accentSecondary: '#4f46e5',
+  accentTertiary: '#4338ca',
+  // On Accent (3)
+  onAccentPrimary: '#0b0b0b',
+  onAccentSecondary: '#0b0b0b',
+  onAccentTertiary: '#ffffff',
+  // Status (4)
+  success: '#22c55e',
+  fail: '#ef4444',
+  warning: '#f59e0b',
+  info: '#22d3ee',
+  // Action (3)
+  action: '#94a3b8',
+  actionSecondary: '#64748b',
+  actionTertiary: '#475569',
+  // Utility (2)
+  shadow: 'rgb(0 0 0 / 0.4)',
+  border: '#334155',
+  // Brand (2)
+  brandPrimary: '#6366f1',
+  brandSecondary: '#8b5cf6',
+  // Gradients (3)
+  gradientPrimary: 'none',
+  gradientSecondary: 'none',
+  gradientTertiary: 'none',
+};
+
+// Default component color mappings - smart defaults
+const defaultComponentColors: ComponentColorConfig = {
+  button: {
+    primary: {
+      background: 'accentPrimary',
+      backgroundHover: 'accentSecondary',
+      text: 'onAccentPrimary',
+      border: 'accentPrimary',
+    },
+    secondary: {
+      background: 'action',
+      backgroundHover: 'actionSecondary',
+      text: 'onAccentPrimary',
+      border: 'action',
+    },
+    outline: {
+      background: 'surfacePrimary',
+      backgroundHover: 'surfaceSecondary',
+      text: 'contentPrimary',
+      textHover: 'accentPrimary',
+      border: 'border',
+      borderHover: 'accentPrimary',
+    },
+    ghost: {
+      background: 'surfacePrimary',
+      backgroundHover: 'surfaceSecondary',
+      text: 'contentPrimary',
+      textHover: 'accentPrimary',
+    },
+    danger: {
+      background: 'fail',
+      backgroundHover: 'fail',
+      text: 'onAccentPrimary',
+      border: 'fail',
+    },
+  },
+  input: {
+    background: 'surfacePrimary',
+    text: 'contentPrimary',
+    placeholder: 'contentTertiary',
+    border: 'border',
+    borderHover: 'action',
+    borderFocus: 'accentPrimary',
+    borderError: 'fail',
+  },
+  card: {
+    background: 'surfaceSecondary',
+    backgroundElevated: 'surfaceTertiary',
+    text: 'contentPrimary',
+    textMuted: 'contentSecondary',
+    border: 'border',
+  },
+  alert: {
+    info: {
+      background: 'accentTertiary',
+      text: 'onAccentPrimary',
+      border: 'accentPrimary',
+    },
+    success: {
+      background: 'success',
+      text: 'onAccentPrimary',
+      border: 'success',
+    },
+    warning: {
+      background: 'warning',
+      text: 'onAccentPrimary',
+      border: 'warning',
+    },
+    error: {
+      background: 'fail',
+      text: 'onAccentPrimary',
+      border: 'fail',
+    },
+  },
+  badge: {
+    primary: {
+      background: 'accentPrimary',
+      text: 'onAccentPrimary',
+      border: 'accentPrimary',
+    },
+    secondary: {
+      background: 'action',
+      text: 'onAccentPrimary',
+      border: 'action',
+    },
+    success: {
+      background: 'success',
+      text: 'onAccentPrimary',
+      border: 'success',
+    },
+    warning: {
+      background: 'warning',
+      text: 'onAccentPrimary',
+      border: 'warning',
+    },
+    error: {
+      background: 'fail',
+      text: 'onAccentPrimary',
+      border: 'fail',
+    },
+  },
+  checkbox: {
+    background: 'surfacePrimary',
+    backgroundChecked: 'accentPrimary',
+    border: 'border',
+    borderChecked: 'accentPrimary',
+    checkmark: 'onAccentPrimary',
+  },
+  radio: {
+    background: 'surfacePrimary',
+    backgroundChecked: 'accentPrimary',
+    border: 'border',
+    borderChecked: 'accentPrimary',
+    dot: 'onAccentPrimary',
+  },
+  toggle: {
+    trackBackground: 'surfaceTertiary',
+    trackBackgroundActive: 'accentPrimary',
+    thumb: 'surfacePrimary',
+    thumbBorder: 'border',
+  },
+  select: {
+    background: 'surfacePrimary',
+    text: 'contentPrimary',
+    border: 'border',
+    borderHover: 'action',
+    borderFocus: 'accentPrimary',
+  },
+  dropdown: {
+    background: 'surfacePrimary',
+    itemHover: 'surfaceSecondary',
+    text: 'contentPrimary',
+    border: 'border',
+  },
+  tabs: {
+    background: 'surfacePrimary',
+    text: 'contentSecondary',
+    textActive: 'contentPrimary',
+    indicator: 'accentPrimary',
+    border: 'border',
+  },
+  accordion: {
+    background: 'surfacePrimary',
+    backgroundHover: 'surfaceSecondary',
+    text: 'contentPrimary',
+    border: 'border',
+  },
+  modal: {
+    background: 'surfacePrimary',
+    backdrop: 'shadow',
+    text: 'contentPrimary',
+    border: 'border',
+  },
+  tooltip: {
+    background: 'contentPrimary',
+    text: 'surfacePrimary',
+    border: 'contentPrimary',
+  },
+  progress: {
+    track: 'surfaceSecondary',
+    fill: 'accentPrimary',
+    text: 'contentPrimary',
+  },
+  avatar: {
+    background: 'surfaceSecondary',
+    text: 'contentPrimary',
+    border: 'border',
+  },
+  table: {
+    background: 'surfacePrimary',
+    headerBackground: 'surfaceSecondary',
+    headerText: 'contentPrimary',
+    rowHover: 'surfaceSecondary',
+    text: 'contentPrimary',
+    border: 'border',
+  },
+  navbar: {
+    background: 'surfacePrimary',
+    text: 'contentPrimary',
+    textHover: 'accentPrimary',
+    border: 'border',
+  },
+  sidebar: {
+    background: 'surfacePrimary',
+    text: 'contentSecondary',
+    textActive: 'accentPrimary',
+    itemHover: 'surfaceSecondary',
+    border: 'border',
+  },
+  breadcrumb: {
+    text: 'contentSecondary',
+    textActive: 'contentPrimary',
+    separator: 'contentTertiary',
+  },
+};
+
 export const defaultTokens: DesignTokens = {
+  // Legacy color system
   lightTheme: {
     primary: '#3b82f6',
     primaryHover: '#2563eb',
@@ -178,9 +746,15 @@ export const defaultTokens: DesignTokens = {
     textOnAccent: '#0b0b0b',
     border: '#334155',
   },
+  // New semantic color system
+  semanticLight: defaultSemanticLight,
+  semanticDark: defaultSemanticDark,
+  componentColors: defaultComponentColors,
   typography: {
     fontFamily: 'Inter, system-ui, sans-serif',
     fontFamilyMono: 'JetBrains Mono, monospace',
+    fontFamilySerif: 'Merriweather, Georgia, serif',
+    fontFamilyDisplay: 'Playfair Display, serif',
     fontSizeXs: '0.75rem',
     fontSizeSm: '0.875rem',
     fontSizeMd: '1rem',
@@ -215,6 +789,8 @@ export const defaultTokens: DesignTokens = {
     surface: '0 4px 6px -1px color-mix(in srgb, var(--shadow-color) 45%, transparent), 0 2px 4px -2px color-mix(in srgb, var(--shadow-color) 40%, transparent)',
     overlay: '0 10px 15px -3px color-mix(in srgb, var(--shadow-color) 45%, transparent), 0 4px 6px -4px color-mix(in srgb, var(--shadow-color) 40%, transparent)',
     float: '0 20px 25px -5px color-mix(in srgb, var(--shadow-color) 45%, transparent), 0 8px 10px -6px color-mix(in srgb, var(--shadow-color) 40%, transparent)',
+    inner: 'inset 2px 2px 4px color-mix(in srgb, var(--shadow-color) 20%, transparent)',
+    glow: '0 0 10px 2px color-mix(in srgb, var(--color-primary) 50%, transparent)',
   },
   transitions: {
     fast: '150ms ease',
@@ -226,6 +802,10 @@ export const defaultTokens: DesignTokens = {
     focusRingOffset: '2px',
     focusRingColor: '#3b82f6',
     shadowColor: 'rgb(0 0 0 / 0.2)',
+    backdropBlur: '0px',
+    backdropSaturation: '100%',
+    textGlow: 'none',
+    surfaceOpacity: 1,
   },
   patterns: {
     background: {
@@ -239,17 +819,26 @@ export const defaultTokens: DesignTokens = {
       size: 14,
     },
   },
+  gradients: {
+    surface: 'none',
+    accent: 'none',
+    primary: 'none',
+  },
   components: {
     button: {
       borderWidth: '1px',
       innerShadow: 'none',
       textTransform: 'none',
       letterSpacing: 'normal',
+      glowEffect: 'none',
+      gradient: 'none',
     },
     input: {
       borderWidth: '1px',
       focusRingWidth: '3px',
       focusRingAlpha: 0.2,
+      innerShadow: 'none',
+      glowOnFocus: 'none',
     },
     avatar: {
       borderWidth: '0px',
@@ -269,9 +858,9 @@ export const defaultTokens: DesignTokens = {
       trackHeight: '22px',
       thumbSize: '18px',
       borderWidth: '0px',
-      trackShadow: 'var(--shadow-control)',
+      trackShadow: 'none',
       thumbBorderWidth: '0px',
-      thumbShadow: 'var(--shadow-control)',
+      thumbShadow: 'none',
     },
     badge: {
       textTransform: 'none',
@@ -283,6 +872,9 @@ export const defaultTokens: DesignTokens = {
       elevatedBorderWidth: '1px',
       elevatedBorderEnabled: false,
       headerBorderWidth: '1px',
+      backdropBlur: '0px',
+      surfaceOpacity: 1,
+      innerShadow: 'none',
     },
     alert: {
       iconSize: '20px',
@@ -291,6 +883,7 @@ export const defaultTokens: DesignTokens = {
     tabs: {
       indicatorHeight: '2px',
       indicatorStyle: 'underline',
+      borderWidth: '1px',
     },
     progress: {
       trackHeight: '8px',
@@ -301,6 +894,25 @@ export const defaultTokens: DesignTokens = {
       backdropBlur: '0px',
       borderWidth: '0px',
       backdropColor: 'var(--color-text)',
+    },
+    select: {
+      borderWidth: '1px',
+    },
+    dropdown: {
+      borderWidth: '1px',
+    },
+    accordion: {
+      borderWidth: '1px',
+    },
+    navbar: {
+      borderWidth: '1px',
+    },
+    sidebar: {
+      borderWidth: '1px',
+    },
+    table: {
+      borderWidth: '1px',
+      headerBorderWidth: '2px',
     },
   },
 };

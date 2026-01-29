@@ -53,14 +53,23 @@ export function Header({
       <div className="app-header-right">
         <div className="preset-selector">
           <Palette size={16} />
-          <select onChange={(e) => onPresetChange(e.target.value)} defaultValue="">
+          <select
+            onChange={(e) => {
+              onPresetChange(e.target.value);
+              e.target.value = "";
+            }}
+            value=""
+          >
             <option value="" disabled>Theme Presets</option>
             <option value="default">Default</option>
-            <option value="nature">Nature</option>
-            <option value="ocean">Ocean</option>
-            <option value="sunset">Sunset</option>
-            <option value="neon">Neon</option>
-            <option value="modernRetro">Modern Retro</option>
+            <option value="neobrutalism">Neobrutalism</option>
+            <option value="neoskeuomorphism">Neoskeuomorphism</option>
+            <option value="glassmorphism">Glassmorphism</option>
+            <option value="claymorphism">Claymorphism</option>
+            <option value="cyberRetro">Cyber Retro</option>
+            <option value="editorial">Editorial</option>
+            <option value="darkTechMinimal">Dark Tech Minimal</option>
+            <option value="monochromeMaximal">Monochrome Maximal</option>
           </select>
         </div>
         <button className="header-btn" onClick={resetTokens} title="Reset to defaults">
