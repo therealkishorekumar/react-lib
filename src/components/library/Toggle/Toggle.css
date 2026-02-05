@@ -30,8 +30,8 @@
 
 .toggle-thumb {
   position: absolute;
-  top: 2px;
-  left: 2px;
+  top: var(--toggle-thumb-offset);
+  left: var(--toggle-thumb-offset);
   width: var(--toggle-thumb-size);
   height: var(--toggle-thumb-size);
   background-color: var(--toggle-thumb-color);
@@ -48,8 +48,8 @@
 }
 
 .toggle-md {
-  --toggle-track-height: var(--toggle-track-height);
-  --toggle-thumb-size: var(--toggle-thumb-size);
+  --toggle-track-height: 22px;
+  --toggle-thumb-size: 18px;
 }
 
 .toggle-lg {
@@ -68,7 +68,7 @@
 }
 
 .toggle-sm .toggle-input:checked + .toggle-track .toggle-thumb {
-  transform: translateX(calc(var(--toggle-track-height) * 1.8 - var(--toggle-thumb-size) - 4px));
+  transform: translateX(calc(var(--toggle-track-height) * 1.8 - var(--toggle-thumb-size) - var(--toggle-thumb-offset) * 2));
 }
 
 .toggle-sm .toggle-label {
@@ -81,7 +81,7 @@
 }
 
 .toggle-md .toggle-input:checked + .toggle-track .toggle-thumb {
-  transform: translateX(calc(var(--toggle-track-height) * 1.8 - var(--toggle-thumb-size) - 4px));
+  transform: translateX(calc(var(--toggle-track-height) * 1.8 - var(--toggle-thumb-size) - var(--toggle-thumb-offset) * 2));
 }
 
 .toggle-md .toggle-label {
@@ -89,7 +89,7 @@
 }
 
 .toggle-lg .toggle-track {
-  width: calc(var(--toggle-track-height) * 2);
+  width: calc(var(--toggle-track-height) * 1.8);
   height: var(--toggle-track-height);
 }
 
@@ -99,7 +99,7 @@
 }
 
 .toggle-lg .toggle-input:checked + .toggle-track .toggle-thumb {
-  transform: translateX(calc(var(--toggle-track-height) * 2 - var(--toggle-thumb-size) - 4px));
+  transform: translateX(calc(var(--toggle-track-height) * 1.8 - var(--toggle-thumb-size) - var(--toggle-thumb-offset) * 2));
 }
 
 .toggle-lg .toggle-label {

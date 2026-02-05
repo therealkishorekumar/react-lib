@@ -25,7 +25,7 @@
   background-color: var(--select-background);
   border: var(--select-border-width) solid var(--select-border-color);
   border-radius: var(--radius-control);
-  box-shadow: var(--shadow-control);
+  box-shadow: var(--select-shadow);
   cursor: pointer;
   appearance: none;
   transition: all var(--transition-fast);

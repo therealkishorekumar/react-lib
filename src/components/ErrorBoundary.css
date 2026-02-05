@@ -20,8 +20,8 @@
   height: 64px;
   margin: 0 auto 24px;
   border-radius: 50%;
-  background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(220, 38, 38, 0.1) 100%);
-  color: #ef4444;
+  background: color-mix(in srgb, var(--semantic-fail) 10%, transparent);
+  color: var(--semantic-fail);
 }
 
 .error-boundary-icon svg {
@@ -75,7 +75,7 @@
 .error-boundary-stack strong {
   display: block;
   margin-bottom: 8px;
-  color: #ef4444;
+  color: var(--semantic-fail);
 }
 
 .error-boundary-stack pre {

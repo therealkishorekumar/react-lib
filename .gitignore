@@ -29,3 +29,8 @@ dist-ssr
 
 # GitHub Pages
 .gh-pages
+
+# Backup files
+*.backup
+*.bak
+*~

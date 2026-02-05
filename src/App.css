@@ -27,8 +27,8 @@
 .app-main {
   flex: 1;
   overflow-y: auto;
-  background: var(--color-background);
-  color: var(--color-text);
+  background: var(--semantic-surface-primary);
+  color: var(--semantic-content-primary);
   transition: none;
   background-image: var(--pattern-background-image);
   background-size: var(--pattern-background-size);

@@ -22,7 +22,7 @@
   height: 38px;
   padding: 0;
   border: 2px solid var(--platform-border);
-  border-radius: 10px;
+  border-radius: var(--radius-surface);
   cursor: pointer;
   background: none;
   box-shadow: var(--platform-shadow-sm);
@@ -41,7 +41,7 @@
 
 .color-picker-swatch::-webkit-color-swatch {
   border: none;
-  border-radius: 6px;
+  border-radius: var(--radius-control);
 }
 
 .color-picker-input {

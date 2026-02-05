@@ -2,7 +2,7 @@ import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 import { DesignTokens } from '../types/tokens';
 import { generateTokensCSS, generateResetCSS } from './generateCSS';
-import { generatePackageJson, generateReadme, generateIndexTs } from './componentTemplates';
+import { generatePackageJson, generateReadme, generateIndexTs, generateViteConfig, generateGitIgnore, generateExampleHtml } from './componentTemplates';
 
 const tsxFiles = import.meta.glob('../components/library/*/*.tsx', { eager: true, query: '?raw', import: 'default' }) as Record<string, string>;
 const cssFiles = import.meta.glob('../components/library/*/*.css', { eager: true, query: '?raw', import: 'default' }) as Record<string, string>;
@@ -55,8 +55,15 @@ export async function exportLibrary(tokens: DesignTokens): Promise<void> {
       const tokensCSS = generateTokensCSS(tokens);
       const resetCSS = generateResetCSS();
 
-      if (!tokensCSS) {
-        throw new Error('Failed to generate tokens CSS.');
+      if (!tokensCSS || tokensCSS.length < 100) {
+        throw new Error('Failed to generate tokens CSS or CSS is incomplete.');
+      }
+
+      // Validate CSS contains required variables
+      const requiredVars = ['--semantic-accent-primary', '--semantic-surface-primary', '--font-family'];
+      const missingVars = requiredVars.filter(v => !tokensCSS.includes(v));
+      if (missingVars.length > 0) {
+        console.warn('Missing CSS variables:', missingVars);
       }
 
       stylesFolder.file('tokens.css', tokensCSS);
@@ -97,6 +104,9 @@ export async function exportLibrary(tokens: DesignTokens): Promise<void> {
       rootFolder.file('index.ts', generateIndexTs(componentNames));
       rootFolder.file('package.json', generatePackageJson());
       rootFolder.file('README.md', generateReadme(componentNames));
+      rootFolder.file('vite.config.ts', generateViteConfig());
+      rootFolder.file('.gitignore', generateGitIgnore());
+      rootFolder.file('example.html', generateExampleHtml(componentNames));
     } catch (error) {
       throw new Error(`Failed to generate root files: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
@@ -117,16 +127,30 @@ export async function exportLibrary(tokens: DesignTokens): Promise<void> {
       },
       include: ['**/*.ts', '**/*.tsx'],
     }, null, 2));
+    
+    // Add tsconfig.node.json for Vite
+    rootFolder.file('tsconfig.node.json', JSON.stringify({
+      compilerOptions: {
+        composite: true,
+        skipLibCheck: true,
+        module: 'ESNext',
+        moduleResolution: 'bundler',
+        allowSyntheticDefaultImports: true,
+        strict: true,
+      },
+      include: ['vite.config.ts'],
+    }, null, 2));
 
     // Generate and download zip with timeout protection
+    const timestamp = new Date().toISOString().split('T')[0];
     const content = await Promise.race([
-      zip.generateAsync({ type: 'blob' }),
+      zip.generateAsync({ type: 'blob', compression: 'DEFLATE', compressionOptions: { level: 6 } }),
       new Promise<never>((_, reject) =>
         setTimeout(() => reject(new Error('Export timed out after 30 seconds')), 30000)
       )
     ]);
 
-    saveAs(content, 'component-library.zip');
+    saveAs(content, `component-library-${timestamp}.zip`);
   } catch (error) {
     // Enhanced error logging
     const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';

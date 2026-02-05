@@ -36,11 +36,11 @@
 
 .accordion-trigger:focus-visible {
   outline: var(--focus-ring-width) solid var(--focus-ring-color);
-  outline-offset: calc(var(--focus-ring-offset) * -1);
+  outline-offset: var(--focus-ring-offset);
 }
 
 .accordion-trigger:disabled {
-  opacity: 0.5;
+  opacity: 0.6;
   cursor: not-allowed;
 }
 

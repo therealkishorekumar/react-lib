@@ -18,6 +18,7 @@
   border-radius: var(--radius-surface);
   cursor: pointer;
   transition: all var(--transition-fast);
+  box-shadow: var(--dropdown-shadow);
 }
 
 .dropdown-trigger:hover {
@@ -45,7 +46,7 @@
   background-color: var(--dropdown-menu-background);
   border: var(--dropdown-border-width) solid var(--dropdown-menu-border);
   border-radius: var(--radius-surface);
-  box-shadow: var(--shadow-overlay);
+  box-shadow: var(--dropdown-shadow);
   z-index: 100;
   animation: dropdown-fade 0.15s ease;
 }
@@ -85,21 +86,13 @@
   transition: background-color var(--transition-fast);
 }
 
-.dropdown-item:first-child {
-  border-radius: var(--radius-surface) var(--radius-surface) 0 0;
-}
-
-.dropdown-item:last-child {
-  border-radius: 0 0 var(--radius-surface) var(--radius-surface);
-}
-
 .dropdown-item:hover:not(:disabled) {
   background-color: var(--dropdown-item-background-hover);
 }
 
 .dropdown-item:focus-visible {
   outline: var(--focus-ring-width) solid var(--focus-ring-color);
-  outline-offset: calc(var(--focus-ring-offset) * -1);
+  outline-offset: var(--focus-ring-offset);
 }
 
 .dropdown-item-disabled {

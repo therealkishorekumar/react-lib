@@ -9,13 +9,13 @@ import React, {
   useCallback,
   useRef,
 } from 'react';
-import { DesignTokens, defaultTokens, TokenCategory, TokenKey } from '../types/tokens';
+import { DesignTokens, defaultTokens, TokenCategory, TokenKey, SemanticColors } from '../types/tokens';
 import { buildGoogleFontsUrl } from '../utils/fonts';
 
 type TokenAction =
   | { type: 'SET_TOKEN'; category: TokenCategory; key: string; value: string | number }
   | { type: 'SET_CATEGORY'; category: TokenCategory; values: Partial<DesignTokens[TokenCategory]> }
-  | { type: 'SET_COMPONENT_COLOR'; path: string[]; value: any }
+  | { type: 'SET_COMPONENT_COLOR'; path: string[]; value: string | number | boolean }
   | { type: 'RESET_TOKENS' }
   | { type: 'LOAD_PRESET'; tokens: DesignTokens };
 
@@ -27,7 +27,7 @@ interface DesignTokenContextType {
   setThemeMode: (mode: ThemeMode) => void;
   setToken: <T extends TokenCategory>(category: T, key: TokenKey<T>, value: string | number) => void;
   setCategory: <T extends TokenCategory>(category: T, values: Partial<DesignTokens[T]>) => void;
-  setComponentColor: (path: string[], value: any) => void;
+  setComponentColor: (path: string[], value: string | number | boolean) => void;
   resetTokens: () => void;
   loadPreset: (tokens: DesignTokens) => void;
 }
@@ -93,14 +93,14 @@ function tokenReducer(state: DesignTokens, action: TokenAction): DesignTokens {
     case 'SET_COMPONENT_COLOR': {
       // Handle nested updates for componentColors
       const [component, ...rest] = action.path;
-      const updateNested = (obj: any, path: string[], value: any): any => {
+      const updateNested = (obj: Record<string, unknown>, path: string[], value: string | number | boolean): Record<string, unknown> => {
         if (path.length === 1) {
           return { ...obj, [path[0]]: value };
         }
         const [first, ...remaining] = path;
         return {
           ...obj,
-          [first]: updateNested(obj[first], remaining, value),
+          [first]: updateNested(obj[first] as Record<string, unknown>, remaining, value),
         };
       };
 
@@ -119,6 +119,44 @@ function tokenReducer(state: DesignTokens, action: TokenAction): DesignTokens {
     default:
       return state;
   }
+}
+
+function generateShadowCSS(config: {
+  type: 'none' | 'standard' | 'neumorphic' | 'elevated' | 'glow' | 'inset';
+  offsetX: number;
+  offsetY: number;
+  blur: number;
+  spread: number;
+}, shadowColor: string, highlightColor: string): string {
+  if (config.type === 'none') return 'none';
+
+  const isInset = config.type === 'inset';
+  const prefix = isInset ? 'inset ' : '';
+
+  if (config.type === 'standard' || config.type === 'inset') {
+    return `${prefix}${config.offsetX}px ${config.offsetY}px ${config.blur}px ${config.spread}px ${shadowColor}`;
+  }
+
+  if (config.type === 'neumorphic') {
+    // Dual shadows: dark shadow + light highlight
+    const darkShadow = `${prefix}${config.offsetX}px ${config.offsetY}px ${config.blur}px ${config.spread}px ${shadowColor}`;
+    const lightShadow = `${prefix}${-config.offsetX}px ${-config.offsetY}px ${config.blur}px ${config.spread}px ${highlightColor}`;
+    return `${darkShadow}, ${lightShadow}`;
+  }
+
+  if (config.type === 'elevated') {
+    // Multiple layered shadows for depth
+    const main = `${config.offsetX}px ${config.offsetY}px ${config.blur}px ${config.spread}px ${shadowColor}`;
+    const secondary = `${config.offsetX * 0.5}px ${config.offsetY * 0.5}px ${config.blur * 0.5}px ${config.spread * 0.5}px color-mix(in srgb, ${shadowColor} 50%, transparent)`;
+    return `${main}, ${secondary}`;
+  }
+
+  if (config.type === 'glow') {
+    // Glowing effect using blur without offset
+    return `0 0 ${config.blur}px ${config.spread}px ${shadowColor}`;
+  }
+
+  return 'none';
 }
 
 function tokensToCSS(tokens: DesignTokens, mode: 'light' | 'dark'): string {
@@ -142,7 +180,7 @@ function tokensToCSS(tokens: DesignTokens, mode: 'light' | 'dark'): string {
 
   // Helper function to resolve semantic color key to actual value
   const resolveSemanticColor = (key: string): string => {
-    return semanticColors[key as keyof typeof semanticColors] || key;
+    return semanticColors[key as keyof SemanticColors] || key;
   };
 
   // Helper to generate component color variables
@@ -374,16 +412,21 @@ function tokensToCSS(tokens: DesignTokens, mode: 'light' | 'dark'): string {
 
   // Avatar - expanded
   cssVars.push(`--avatar-background: ${resolveSemanticColor(tokens.componentColors.avatar.background)}`);
+  cssVars.push(`--avatar-border-color: ${tokens.components.avatar.borderColor}`);
   cssVars.push(`--avatar-initials-text: ${resolveSemanticColor(tokens.componentColors.avatar.text)}`);
   cssVars.push(`--avatar-initials-background: ${resolveSemanticColor(tokens.componentColors.avatar.background)}`);
+  cssVars.push(`--avatar-inner-shadow: ${tokens.components.avatar.innerShadow}`);
+  cssVars.push(`--avatar-backdrop-blur: ${tokens.components.avatar.backdropBlur}`);
+  cssVars.push(`--avatar-surface-opacity: ${tokens.components.avatar.surfaceOpacity}`);
+  cssVars.push(`--avatar-glow-effect: ${tokens.components.avatar.glowEffect}`);
   cssVars.push(`--avatar-status-border: ${resolveSemanticColor('surfacePrimary')}`);
-  cssVars.push(`--avatar-status-border-width: 2px`);
+  cssVars.push(`--avatar-status-border-width: ${tokens.components.avatar.statusBorderWidth}`);
   cssVars.push(`--avatar-status-online: ${resolveSemanticColor('success')}`);
   cssVars.push(`--avatar-status-offline: ${resolveSemanticColor('contentTertiary')}`);
   cssVars.push(`--avatar-status-away: ${resolveSemanticColor('warning')}`);
   cssVars.push(`--avatar-status-busy: ${resolveSemanticColor('fail')}`);
   cssVars.push(`--avatar-group-border: ${resolveSemanticColor('surfacePrimary')}`);
-  cssVars.push(`--avatar-group-border-width: 2px`);
+  cssVars.push(`--avatar-group-border-width: ${tokens.components.avatar.groupBorderWidth}`);
 
   // Table - expanded
   cssVars.push(`--table-text-color: ${resolveSemanticColor(tokens.componentColors.table.text)}`);
@@ -424,22 +467,30 @@ function tokensToCSS(tokens: DesignTokens, mode: 'light' | 'dark'): string {
   cssVars.push(`--breadcrumb-current-color: ${resolveSemanticColor(tokens.componentColors.breadcrumb.textActive)}`);
   cssVars.push(`--breadcrumb-separator-color: ${resolveSemanticColor(tokens.componentColors.breadcrumb.separator)}`);
 
-  // Platform UI inherits creator theme colors
-  cssVars.push(`--platform-background: var(--color-background)`);
-  cssVars.push(`--platform-surface: var(--color-surface)`);
-  cssVars.push(`--platform-surface-elevated: var(--color-surface)`);
-  cssVars.push(`--platform-surface-hover: color-mix(in srgb, var(--color-surface) 90%, var(--color-border))`);
-  cssVars.push(`--platform-text: ${platformText}`);
-  cssVars.push(`--platform-text-secondary: color-mix(in srgb, ${platformText} 75%, var(--color-background))`);
-  cssVars.push(`--platform-text-muted: color-mix(in srgb, ${platformText} 60%, var(--color-background))`);
-  cssVars.push(`--platform-text-on-primary: ${platformTextOnPrimary}`);
-  cssVars.push(`--platform-border: var(--color-border)`);
-  cssVars.push(`--platform-border-light: color-mix(in srgb, var(--color-border) 70%, transparent)`);
-  cssVars.push(`--platform-border-hover: color-mix(in srgb, var(--color-border) 85%, var(--color-text))`);
-  cssVars.push(`--platform-primary-solid: var(--color-primary)`);
-  cssVars.push(`--platform-primary: var(--color-primary)`);
-  cssVars.push(`--platform-primary-hover: var(--color-primary-hover)`);
-  cssVars.push(`--platform-accent: var(--color-secondary)`);
+  // Platform UI uses semantic colors directly for real-time updates
+  const platformBg = resolveSemanticColor('surfacePrimary');
+  const platformSurface = resolveSemanticColor('surfaceSecondary');
+  const platformBorder = resolveSemanticColor('border');
+  const platformPrimary = resolveSemanticColor('accentPrimary');
+  const platformAccent = resolveSemanticColor('action');
+  const platformTextColor = getReadableTextColor(platformBg, resolveSemanticColor('contentPrimary'));
+  const platformTextOnPrimaryColor = getReadableTextColor(platformPrimary, resolveSemanticColor('onAccentPrimary'));
+
+  cssVars.push(`--platform-background: ${platformBg}`);
+  cssVars.push(`--platform-surface: ${platformSurface}`);
+  cssVars.push(`--platform-surface-elevated: ${resolveSemanticColor('surfaceTertiary')}`);
+  cssVars.push(`--platform-surface-hover: color-mix(in srgb, ${platformSurface} 90%, ${platformBorder})`);
+  cssVars.push(`--platform-text: ${platformTextColor}`);
+  cssVars.push(`--platform-text-secondary: color-mix(in srgb, ${platformTextColor} 75%, ${platformBg})`);
+  cssVars.push(`--platform-text-muted: color-mix(in srgb, ${platformTextColor} 60%, ${platformBg})`);
+  cssVars.push(`--platform-text-on-primary: ${platformTextOnPrimaryColor}`);
+  cssVars.push(`--platform-border: ${platformBorder}`);
+  cssVars.push(`--platform-border-light: color-mix(in srgb, ${platformBorder} 70%, transparent)`);
+  cssVars.push(`--platform-border-hover: color-mix(in srgb, ${platformBorder} 85%, ${platformTextColor})`);
+  cssVars.push(`--platform-primary-solid: ${platformPrimary}`);
+  cssVars.push(`--platform-primary: ${platformPrimary}`);
+  cssVars.push(`--platform-primary-hover: color-mix(in srgb, ${platformPrimary} 90%, ${platformTextColor})`);
+  cssVars.push(`--platform-accent: ${platformAccent}`);
   cssVars.push(`--platform-shadow-sm: var(--shadow-control)`);
   cssVars.push(`--platform-shadow-md: var(--shadow-surface)`);
   cssVars.push(`--platform-shadow-lg: var(--shadow-overlay)`);
@@ -449,8 +500,6 @@ function tokensToCSS(tokens: DesignTokens, mode: 'light' | 'dark'): string {
   // Typography
   cssVars.push(`--font-family: ${tokens.typography.fontFamily}`);
   cssVars.push(`--font-family-mono: ${tokens.typography.fontFamilyMono}`);
-  cssVars.push(`--font-family-serif: ${tokens.typography.fontFamilySerif}`);
-  cssVars.push(`--font-family-display: ${tokens.typography.fontFamilyDisplay}`);
   cssVars.push(`--font-size-xs: ${tokens.typography.fontSizeXs}`);
   cssVars.push(`--font-size-sm: ${tokens.typography.fontSizeSm}`);
   cssVars.push(`--font-size-md: ${tokens.typography.fontSizeMd}`);
@@ -474,10 +523,17 @@ function tokensToCSS(tokens: DesignTokens, mode: 'light' | 'dark'): string {
     cssVars.push(`--radius-${key}: ${value}`);
   });
 
-  // Shadows
-  Object.entries(tokens.shadows).forEach(([key, value]) => {
-    cssVars.push(`--shadow-${key}: ${value}`);
-  });
+  // Shadows - dynamically generated from shadowConfig
+  const shadowColor = resolveSemanticColor('shadow');
+  const highlightColor = tokens.effects.shadowHighlightColor;
+
+  cssVars.push(`--shadow-none: none`);
+  cssVars.push(`--shadow-control: ${generateShadowCSS(tokens.shadowConfig.control, shadowColor, highlightColor)}`);
+  cssVars.push(`--shadow-surface: ${generateShadowCSS(tokens.shadowConfig.surface, shadowColor, highlightColor)}`);
+  cssVars.push(`--shadow-overlay: ${generateShadowCSS(tokens.shadowConfig.overlay, shadowColor, highlightColor)}`);
+  cssVars.push(`--shadow-float: ${generateShadowCSS(tokens.shadowConfig.float, shadowColor, highlightColor)}`);
+  cssVars.push(`--shadow-inner: ${generateShadowCSS(tokens.shadowConfig.inner, shadowColor, highlightColor)}`);
+  cssVars.push(`--shadow-glow: ${generateShadowCSS({ type: 'glow', offsetX: 0, offsetY: 0, blur: 10, spread: 2 }, resolveSemanticColor('accentPrimary'), highlightColor)}`);
 
   // Transitions
   Object.entries(tokens.transitions).forEach(([key, value]) => {
@@ -488,7 +544,7 @@ function tokensToCSS(tokens: DesignTokens, mode: 'light' | 'dark'): string {
   cssVars.push(`--focus-ring-width: ${tokens.effects.focusRingWidth}`);
   cssVars.push(`--focus-ring-offset: ${tokens.effects.focusRingOffset}`);
   cssVars.push(`--focus-ring-color: ${tokens.effects.focusRingColor}`);
-  cssVars.push(`--shadow-color: ${tokens.effects.shadowColor}`);
+  cssVars.push(`--shadow-highlight-color: ${tokens.effects.shadowHighlightColor}`);
   cssVars.push(`--backdrop-blur: ${tokens.effects.backdropBlur}`);
   cssVars.push(`--backdrop-saturation: ${tokens.effects.backdropSaturation}`);
   cssVars.push(`--text-glow: ${tokens.effects.textGlow}`);
@@ -530,13 +586,22 @@ function tokensToCSS(tokens: DesignTokens, mode: 'light' | 'dark'): string {
     Object.entries(props).forEach(([key, value]) => {
       const cssKey = key.replace(/([A-Z])/g, '-$1').toLowerCase();
 
+      // Special handling for shadowEnabled - generate component shadow variable
+      if (key === 'shadowEnabled') {
+        cssVars.push(`--${component}-shadow: ${value ? 'var(--shadow-control)' : 'none'}`);
+      }
       // Special handling for focus ring alpha - convert to color-mix
-      if (key === 'focusRingAlpha') {
+      else if (key === 'focusRingAlpha') {
         const percentage = Math.round((value as number) * 100);
         cssVars.push(`--${component}-focus-ring-color: color-mix(in srgb, var(--color-primary) ${percentage}%, transparent)`);
       } else if (key === 'elevatedBorderWidth') {
         const enabled = (tokens.components as DesignTokens['components']).card?.elevatedBorderEnabled;
         cssVars.push(`--card-elevated-border-width: ${enabled ? value : '0px'}`);
+      }
+      // Special handling for Toggle shadows - respect shadowEnabled
+      else if (component === 'toggle' && (key === 'trackShadow' || key === 'thumbShadow')) {
+        const shadowEnabled = (tokens.components as DesignTokens['components']).toggle?.shadowEnabled;
+        cssVars.push(`--${component}-${cssKey}: ${shadowEnabled ? value : 'none'}`);
       } else {
         cssVars.push(`--${component}-${cssKey}: ${value}`);
       }
@@ -559,11 +624,9 @@ export function DesignTokenProvider({ children }: { children: ReactNode }) {
   const fontUrl = useMemo(
     () => buildGoogleFontsUrl([
       tokens.typography.fontFamily,
-      tokens.typography.fontFamilyMono,
-      tokens.typography.fontFamilySerif,
-      tokens.typography.fontFamilyDisplay
+      tokens.typography.fontFamilyMono
     ]),
-    [tokens.typography.fontFamily, tokens.typography.fontFamilyMono, tokens.typography.fontFamilySerif, tokens.typography.fontFamilyDisplay]
+    [tokens.typography.fontFamily, tokens.typography.fontFamilyMono]
   );
 
   useLayoutEffect(() => {
@@ -603,6 +666,13 @@ export function DesignTokenProvider({ children }: { children: ReactNode }) {
     fontRef.current.href = fontUrl;
   }, [fontUrl]);
 
+  // Apply data-theme attribute for dark mode
+  useLayoutEffect(() => {
+    const appRoot = document.querySelector('.app') as HTMLElement | null;
+    const target = appRoot || document.documentElement;
+    target.setAttribute('data-theme', themeMode);
+  }, [themeMode]);
+
   const setToken = useCallback(<T extends TokenCategory>(
     category: T,
     key: TokenKey<T>,
@@ -618,7 +688,7 @@ export function DesignTokenProvider({ children }: { children: ReactNode }) {
     dispatch({ type: 'SET_CATEGORY', category, values });
   }, []);
 
-  const setComponentColor = useCallback((path: string[], value: any) => {
+  const setComponentColor = useCallback((path: string[], value: string | number | boolean) => {
     dispatch({ type: 'SET_COMPONENT_COLOR', path, value });
   }, []);
 

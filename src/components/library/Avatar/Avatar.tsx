@@ -23,15 +23,27 @@ function getInitials(name: string): string {
     .slice(0, 2);
 }
 
-function getColorFromName(name: string): string {
-  const colors = [
-    'var(--color-primary)',
-    'var(--color-secondary)',
-    'var(--color-success)',
-    'var(--color-warning)',
-    'var(--color-error)',
-    'var(--color-info)',
-    'var(--color-text)',
+interface AvatarColorScheme {
+  bg: string;
+  text: string;
+}
+
+function getColorFromName(name: string): AvatarColorScheme {
+  // Use semantic color palette for variety
+  // Each color has a paired text color for guaranteed contrast
+  const colors: AvatarColorScheme[] = [
+    { bg: 'var(--semantic-accent-primary)', text: 'var(--semantic-on-accent-primary)' },
+    { bg: 'var(--semantic-accent-secondary)', text: 'var(--semantic-on-accent-secondary)' },
+    { bg: 'var(--semantic-accent-tertiary)', text: 'var(--semantic-on-accent-tertiary)' },
+    { bg: 'var(--semantic-action)', text: 'var(--semantic-on-accent-primary)' },
+    { bg: 'var(--semantic-action-secondary)', text: 'var(--semantic-on-accent-secondary)' },
+    { bg: 'var(--semantic-success)', text: 'var(--semantic-on-accent-primary)' },
+    { bg: 'var(--semantic-warning)', text: 'var(--semantic-on-accent-primary)' },
+    { bg: 'var(--semantic-info)', text: 'var(--semantic-on-accent-primary)' },
+    { bg: 'var(--semantic-brand-primary)', text: 'var(--semantic-on-accent-primary)' },
+    { bg: 'var(--semantic-brand-secondary)', text: 'var(--semantic-on-accent-secondary)' },
+    { bg: 'var(--semantic-surface-tertiary)', text: 'var(--semantic-content-primary)' },
+    { bg: 'var(--semantic-surface-quaternary)', text: 'var(--semantic-content-primary)' },
   ];
   let hash = 0;
   for (let i = 0; i < name.length; i++) {
@@ -53,12 +65,16 @@ export function Avatar({
   const [imgError, setImgError] = useState(false);
   const showImage = src && !imgError;
   const initials = name ? getInitials(name) : '?';
-  const bgColor = name ? getColorFromName(name) : 'var(--color-secondary)';
+  const colorScheme = name ? getColorFromName(name) : { bg: 'var(--semantic-action)', text: 'var(--semantic-on-accent-primary)' };
 
   return (
     <div
-      className={`avatar avatar-${size} avatar-${shape} ${className}`}
+      className={`avatar avatar-${size} avatar-${shape} ${status ? 'avatar-has-status' : ''} ${className}`}
       {...props}
+      style={{ 
+        '--avatar-dynamic-bg': colorScheme.bg,
+        '--avatar-dynamic-text': colorScheme.text,
+      } as React.CSSProperties}
     >
       {showImage ? (
         <img
@@ -68,7 +84,7 @@ export function Avatar({
           onError={() => setImgError(true)}
         />
       ) : (
-        <span className="avatar-initials" style={{ backgroundColor: bgColor }}>
+        <span className="avatar-initials">
           {initials}
         </span>
       )}

@@ -38,27 +38,34 @@ export function Header({
             className={`mode-btn ${themeMode === 'light' ? 'mode-btn-active' : ''}`}
             onClick={() => setThemeMode('light')}
             title="Light theme"
+            aria-label="Switch to light theme"
+            aria-pressed={themeMode === 'light'}
           >
-            <Sun size={16} />
+            <Sun size={16} aria-hidden="true" />
           </button>
           <button
             className={`mode-btn ${themeMode === 'dark' ? 'mode-btn-active' : ''}`}
             onClick={() => setThemeMode('dark')}
             title="Dark theme"
+            aria-label="Switch to dark theme"
+            aria-pressed={themeMode === 'dark'}
           >
-            <Moon size={16} />
+            <Moon size={16} aria-hidden="true" />
           </button>
         </div>
       </div>
       <div className="app-header-right">
         <div className="preset-selector">
-          <Palette size={16} />
+          <Palette size={16} aria-hidden="true" />
+          <label htmlFor="theme-preset" className="visually-hidden">Theme Presets</label>
           <select
+            id="theme-preset"
             onChange={(e) => {
               onPresetChange(e.target.value);
               e.target.value = "";
             }}
             value=""
+            aria-label="Select theme preset"
           >
             <option value="" disabled>Theme Presets</option>
             <option value="default">Default</option>
@@ -72,16 +79,18 @@ export function Header({
             <option value="monochromeMaximal">Monochrome Maximal</option>
           </select>
         </div>
-        <button className="header-btn" onClick={resetTokens} title="Reset to defaults">
-          <RotateCcw size={16} />
+        <button className="header-btn" onClick={resetTokens} title="Reset to defaults" aria-label="Reset to default theme">
+          <RotateCcw size={16} aria-hidden="true" />
           <span>Reset</span>
         </button>
         <button
           className="header-btn header-btn-primary"
           onClick={onExport}
           disabled={exporting}
+          aria-label={exporting ? 'Exporting library' : 'Export component library'}
+          aria-busy={exporting}
         >
-          <Download size={16} />
+          <Download size={16} aria-hidden="true" />
           <span>{exporting ? 'Exporting...' : 'Export'}</span>
         </button>
       </div>

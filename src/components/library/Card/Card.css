@@ -3,7 +3,7 @@
   background-color: var(--card-background);
   border-radius: var(--radius-surface);
   overflow: hidden;
-  box-shadow: var(--shadow-control), var(--card-inner-shadow);
+  box-shadow: var(--card-shadow), var(--card-inner-shadow);
   backdrop-filter: blur(var(--card-backdrop-blur)) saturate(var(--backdrop-saturation));
   -webkit-backdrop-filter: blur(var(--card-backdrop-blur)) saturate(var(--backdrop-saturation));
 }
@@ -18,7 +18,7 @@
 }
 
 .card-elevated {
-  box-shadow: var(--shadow-surface), var(--card-inner-shadow);
+  box-shadow: var(--card-shadow), var(--card-inner-shadow);
   border: var(--card-elevated-border-width, 0px) solid var(--card-border-color);
   background-color: var(--card-background-elevated);
 }

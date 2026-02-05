@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react';
+import { useState, useCallback, memo, type ReactNode } from 'react';
 import { ChevronDown, Palette, Type, Move, Square, Layers, Zap } from 'lucide-react';
 import { ColorPicker } from '../ColorPicker';
 import { GradientPicker } from '../GradientPicker';
@@ -6,7 +6,8 @@ import { SliderControl } from '../SliderControl';
 import { FontSelector } from '../FontSelector';
 import { ShadowEditor } from '../ShadowEditor';
 import { useDesignTokens } from '../../../hooks/useDesignTokens';
-import type { ThemeColors, SemanticColors } from '../../../types/tokens';
+import { sanitizeCSSValue } from '../../../utils/cssValidation';
+import type { ThemeColors, SemanticColors, SemanticThemeKey } from '../../../types/tokens';
 import './TokenPanel.css';
 
 interface PanelSectionProps {
@@ -16,62 +17,58 @@ interface PanelSectionProps {
   defaultOpen?: boolean;
 }
 
-function PanelSection({ title, icon, children, defaultOpen = false }: PanelSectionProps) {
+const PanelSection = memo(function PanelSection({ title, icon, children, defaultOpen = false }: PanelSectionProps) {
   const [isOpen, setIsOpen] = useState(defaultOpen);
+
+  const handleToggle = useCallback(() => setIsOpen(prev => !prev), []);
 
   return (
     <div className={`panel-section ${isOpen ? 'panel-section-open' : ''}`}>
       <button
         className="panel-section-header"
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={handleToggle}
+        aria-expanded={isOpen}
+        aria-controls={`panel-content-${title.toLowerCase().replace(/\s+/g, '-')}`}
       >
         <span className="panel-section-icon">{icon}</span>
         <span className="panel-section-title">{title}</span>
-        <ChevronDown className="panel-section-chevron" size={16} />
+        <ChevronDown className="panel-section-chevron" size={16} aria-hidden="true" />
       </button>
-      {isOpen && <div className="panel-section-content">{children}</div>}
+      {isOpen && <div className="panel-section-content" id={`panel-content-${title.toLowerCase().replace(/\s+/g, '-')}`}>{children}</div>}
     </div>
   );
-}
+});
 
 type ThemeCategory = 'lightTheme' | 'darkTheme';
 type ThemeKey = keyof ThemeColors;
 
-export function TokenPanel() {
+export const TokenPanel = memo(function TokenPanel() {
   const { tokens, setToken, setCategory } = useDesignTokens();
-  const [colorTheme, setColorTheme] = useState<'light' | 'dark'>('light');
   const [semanticTheme, setSemanticTheme] = useState<'light' | 'dark'>('light');
 
-  const parseValue = (value: string): number => {
+  const parseValue = useCallback((value: string): number => {
     return parseFloat(value.replace(/[^0-9.]/g, '')) || 0;
-  };
+  }, []);
 
-  const formatValue = (value: number, unit: string): string => {
+  const formatValue = useCallback((value: number, unit: string): string => {
     return `${value}${unit}`;
-  };
-
-  const currentTheme: ThemeColors = colorTheme === 'light' ? tokens.lightTheme : tokens.darkTheme;
-  const themeCategory: ThemeCategory = colorTheme === 'light' ? 'lightTheme' : 'darkTheme';
-  const otherThemeCategory: ThemeCategory = themeCategory === 'lightTheme' ? 'darkTheme' : 'lightTheme';
-  const otherTheme: ThemeColors = tokens[otherThemeCategory];
-
-  const shouldShowSync = (key: ThemeKey) => currentTheme[key] !== otherTheme[key];
-  const syncThemeToken = (key: ThemeKey) => {
-    setCategory(otherThemeCategory, { [key]: currentTheme[key] } as Partial<ThemeColors>);
-  };
-  const syncTitle = colorTheme === 'light'
-    ? 'Sync this token to dark theme'
-    : 'Sync this token to light theme';
+  }, []);
 
   const currentSemanticTheme: SemanticColors = semanticTheme === 'light' ? tokens.semanticLight : tokens.semanticDark;
-  const semanticThemeCategory = semanticTheme === 'light' ? 'semanticLight' : 'semanticDark';
-  const otherSemanticThemeCategory = semanticThemeCategory === 'semanticLight' ? 'semanticDark' : 'semanticLight';
+  const semanticThemeCategory: SemanticThemeKey = semanticTheme === 'light' ? 'semanticLight' : 'semanticDark';
+  const otherSemanticThemeCategory: SemanticThemeKey = semanticThemeCategory === 'semanticLight' ? 'semanticDark' : 'semanticLight';
   const otherSemanticTheme: SemanticColors = tokens[otherSemanticThemeCategory];
 
   const shouldShowSemanticSync = (key: keyof SemanticColors) => currentSemanticTheme[key] !== otherSemanticTheme[key];
   const syncSemanticToken = (key: keyof SemanticColors) => {
-    setCategory(otherSemanticThemeCategory as any, { [key]: currentSemanticTheme[key] } as any);
+    setCategory(otherSemanticThemeCategory, { [key]: currentSemanticTheme[key] } as Partial<SemanticColors>);
   };
+
+  // Helper to update semantic color
+  const updateSemanticColor = (key: keyof SemanticColors, value: string) => {
+    setCategory(semanticThemeCategory, { ...tokens[semanticThemeCategory], [key]: value } as Partial<SemanticColors>);
+  };
+
   const semanticSyncTitle = semanticTheme === 'light'
     ? 'Sync this token to dark theme'
     : 'Sync this token to light theme';
@@ -98,33 +95,37 @@ export function TokenPanel() {
           <ColorPicker
             label="Surface Primary"
             value={currentSemanticTheme.surfacePrimary}
-            onChange={(v) => setCategory(semanticThemeCategory as any, { ...tokens[semanticThemeCategory], surfacePrimary: v } as any)}
+            onChange={(v) => updateSemanticColor('surfacePrimary', v)}
             showSync={shouldShowSemanticSync('surfacePrimary')}
             syncTitle={semanticSyncTitle}
+            syncAriaLabel={`Sync Surface Primary to ${semanticTheme === 'light' ? 'dark' : 'light'} theme`}
             onSync={() => syncSemanticToken('surfacePrimary')}
           />
           <ColorPicker
             label="Surface Secondary"
             value={currentSemanticTheme.surfaceSecondary}
-            onChange={(v) => setCategory(semanticThemeCategory as any, { ...tokens[semanticThemeCategory], surfaceSecondary: v } as any)}
+            onChange={(v) => updateSemanticColor('surfaceSecondary', v)}
             showSync={shouldShowSemanticSync('surfaceSecondary')}
             syncTitle={semanticSyncTitle}
+            syncAriaLabel={`Sync Surface Secondary to ${semanticTheme === 'light' ? 'dark' : 'light'} theme`}
             onSync={() => syncSemanticToken('surfaceSecondary')}
           />
           <ColorPicker
             label="Surface Tertiary"
             value={currentSemanticTheme.surfaceTertiary}
-            onChange={(v) => setCategory(semanticThemeCategory as any, { ...tokens[semanticThemeCategory], surfaceTertiary: v } as any)}
+            onChange={(v) => updateSemanticColor('surfaceTertiary', v)}
             showSync={shouldShowSemanticSync('surfaceTertiary')}
             syncTitle={semanticSyncTitle}
+            syncAriaLabel={`Sync Surface Tertiary to ${semanticTheme === 'light' ? 'dark' : 'light'} theme`}
             onSync={() => syncSemanticToken('surfaceTertiary')}
           />
           <ColorPicker
             label="Surface Quaternary"
             value={currentSemanticTheme.surfaceQuaternary}
-            onChange={(v) => setCategory(semanticThemeCategory as any, { ...tokens[semanticThemeCategory], surfaceQuaternary: v } as any)}
+            onChange={(v) => updateSemanticColor('surfaceQuaternary', v)}
             showSync={shouldShowSemanticSync('surfaceQuaternary')}
             syncTitle={semanticSyncTitle}
+            syncAriaLabel={`Sync Surface Quaternary to ${semanticTheme === 'light' ? 'dark' : 'light'} theme`}
             onSync={() => syncSemanticToken('surfaceQuaternary')}
           />
         </div>
@@ -133,25 +134,28 @@ export function TokenPanel() {
           <ColorPicker
             label="Content Primary"
             value={currentSemanticTheme.contentPrimary}
-            onChange={(v) => setCategory(semanticThemeCategory as any, { ...tokens[semanticThemeCategory], contentPrimary: v } as any)}
+            onChange={(v) => updateSemanticColor('contentPrimary', v)}
             showSync={shouldShowSemanticSync('contentPrimary')}
             syncTitle={semanticSyncTitle}
+            syncAriaLabel={`Sync Content Primary to ${semanticTheme === 'light' ? 'dark' : 'light'} theme`}
             onSync={() => syncSemanticToken('contentPrimary')}
           />
           <ColorPicker
             label="Content Secondary"
             value={currentSemanticTheme.contentSecondary}
-            onChange={(v) => setCategory(semanticThemeCategory as any, { ...tokens[semanticThemeCategory], contentSecondary: v } as any)}
+            onChange={(v) => updateSemanticColor('contentSecondary', v)}
             showSync={shouldShowSemanticSync('contentSecondary')}
             syncTitle={semanticSyncTitle}
+            syncAriaLabel={`Sync Content Secondary to ${semanticTheme === 'light' ? 'dark' : 'light'} theme`}
             onSync={() => syncSemanticToken('contentSecondary')}
           />
           <ColorPicker
             label="Content Tertiary"
             value={currentSemanticTheme.contentTertiary}
-            onChange={(v) => setCategory(semanticThemeCategory as any, { ...tokens[semanticThemeCategory], contentTertiary: v } as any)}
+            onChange={(v) => updateSemanticColor('contentTertiary', v)}
             showSync={shouldShowSemanticSync('contentTertiary')}
             syncTitle={semanticSyncTitle}
+            syncAriaLabel={`Sync Content Tertiary to ${semanticTheme === 'light' ? 'dark' : 'light'} theme`}
             onSync={() => syncSemanticToken('contentTertiary')}
           />
         </div>
@@ -160,25 +164,28 @@ export function TokenPanel() {
           <ColorPicker
             label="Accent Primary"
             value={currentSemanticTheme.accentPrimary}
-            onChange={(v) => setCategory(semanticThemeCategory as any, { ...tokens[semanticThemeCategory], accentPrimary: v } as any)}
+            onChange={(v) => updateSemanticColor('accentPrimary', v)}
             showSync={shouldShowSemanticSync('accentPrimary')}
             syncTitle={semanticSyncTitle}
+            syncAriaLabel={`Sync Accent Primary to ${semanticTheme === 'light' ? 'dark' : 'light'} theme`}
             onSync={() => syncSemanticToken('accentPrimary')}
           />
           <ColorPicker
             label="Accent Secondary"
             value={currentSemanticTheme.accentSecondary}
-            onChange={(v) => setCategory(semanticThemeCategory as any, { ...tokens[semanticThemeCategory], accentSecondary: v } as any)}
+            onChange={(v) => updateSemanticColor('accentSecondary', v)}
             showSync={shouldShowSemanticSync('accentSecondary')}
             syncTitle={semanticSyncTitle}
+            syncAriaLabel={`Sync Accent Secondary to ${semanticTheme === 'light' ? 'dark' : 'light'} theme`}
             onSync={() => syncSemanticToken('accentSecondary')}
           />
           <ColorPicker
             label="Accent Tertiary"
             value={currentSemanticTheme.accentTertiary}
-            onChange={(v) => setCategory(semanticThemeCategory as any, { ...tokens[semanticThemeCategory], accentTertiary: v } as any)}
+            onChange={(v) => updateSemanticColor('accentTertiary', v)}
             showSync={shouldShowSemanticSync('accentTertiary')}
             syncTitle={semanticSyncTitle}
+            syncAriaLabel={`Sync Accent Tertiary to ${semanticTheme === 'light' ? 'dark' : 'light'} theme`}
             onSync={() => syncSemanticToken('accentTertiary')}
           />
         </div>
@@ -187,25 +194,28 @@ export function TokenPanel() {
           <ColorPicker
             label="On Accent Primary"
             value={currentSemanticTheme.onAccentPrimary}
-            onChange={(v) => setCategory(semanticThemeCategory as any, { ...tokens[semanticThemeCategory], onAccentPrimary: v } as any)}
+            onChange={(v) => updateSemanticColor('onAccentPrimary', v)}
             showSync={shouldShowSemanticSync('onAccentPrimary')}
             syncTitle={semanticSyncTitle}
+            syncAriaLabel={`Sync On Accent Primary to ${semanticTheme === 'light' ? 'dark' : 'light'} theme`}
             onSync={() => syncSemanticToken('onAccentPrimary')}
           />
           <ColorPicker
             label="On Accent Secondary"
             value={currentSemanticTheme.onAccentSecondary}
-            onChange={(v) => setCategory(semanticThemeCategory as any, { ...tokens[semanticThemeCategory], onAccentSecondary: v } as any)}
+            onChange={(v) => updateSemanticColor('onAccentSecondary', v)}
             showSync={shouldShowSemanticSync('onAccentSecondary')}
             syncTitle={semanticSyncTitle}
+            syncAriaLabel={`Sync On Accent Secondary to ${semanticTheme === 'light' ? 'dark' : 'light'} theme`}
             onSync={() => syncSemanticToken('onAccentSecondary')}
           />
           <ColorPicker
             label="On Accent Tertiary"
             value={currentSemanticTheme.onAccentTertiary}
-            onChange={(v) => setCategory(semanticThemeCategory as any, { ...tokens[semanticThemeCategory], onAccentTertiary: v } as any)}
+            onChange={(v) => updateSemanticColor('onAccentTertiary', v)}
             showSync={shouldShowSemanticSync('onAccentTertiary')}
             syncTitle={semanticSyncTitle}
+            syncAriaLabel={`Sync On Accent Tertiary to ${semanticTheme === 'light' ? 'dark' : 'light'} theme`}
             onSync={() => syncSemanticToken('onAccentTertiary')}
           />
         </div>
@@ -214,33 +224,37 @@ export function TokenPanel() {
           <ColorPicker
             label="Success"
             value={currentSemanticTheme.success}
-            onChange={(v) => setCategory(semanticThemeCategory as any, { ...tokens[semanticThemeCategory], success: v } as any)}
+            onChange={(v) => updateSemanticColor('success', v)}
             showSync={shouldShowSemanticSync('success')}
             syncTitle={semanticSyncTitle}
+            syncAriaLabel={`Sync Success color to ${semanticTheme === 'light' ? 'dark' : 'light'} theme`}
             onSync={() => syncSemanticToken('success')}
           />
           <ColorPicker
             label="Fail"
             value={currentSemanticTheme.fail}
-            onChange={(v) => setCategory(semanticThemeCategory as any, { ...tokens[semanticThemeCategory], fail: v } as any)}
+            onChange={(v) => updateSemanticColor('fail', v)}
             showSync={shouldShowSemanticSync('fail')}
             syncTitle={semanticSyncTitle}
+            syncAriaLabel={`Sync Fail color to ${semanticTheme === 'light' ? 'dark' : 'light'} theme`}
             onSync={() => syncSemanticToken('fail')}
           />
           <ColorPicker
             label="Warning"
             value={currentSemanticTheme.warning}
-            onChange={(v) => setCategory(semanticThemeCategory as any, { ...tokens[semanticThemeCategory], warning: v } as any)}
+            onChange={(v) => updateSemanticColor('warning', v)}
             showSync={shouldShowSemanticSync('warning')}
             syncTitle={semanticSyncTitle}
+            syncAriaLabel={`Sync Warning color to ${semanticTheme === 'light' ? 'dark' : 'light'} theme`}
             onSync={() => syncSemanticToken('warning')}
           />
           <ColorPicker
             label="Info"
             value={currentSemanticTheme.info}
-            onChange={(v) => setCategory(semanticThemeCategory as any, { ...tokens[semanticThemeCategory], info: v } as any)}
+            onChange={(v) => updateSemanticColor('info', v)}
             showSync={shouldShowSemanticSync('info')}
             syncTitle={semanticSyncTitle}
+            syncAriaLabel={`Sync Info color to ${semanticTheme === 'light' ? 'dark' : 'light'} theme`}
             onSync={() => syncSemanticToken('info')}
           />
         </div>
@@ -249,25 +263,28 @@ export function TokenPanel() {
           <ColorPicker
             label="Action"
             value={currentSemanticTheme.action}
-            onChange={(v) => setCategory(semanticThemeCategory as any, { ...tokens[semanticThemeCategory], action: v } as any)}
+            onChange={(v) => updateSemanticColor('action', v)}
             showSync={shouldShowSemanticSync('action')}
             syncTitle={semanticSyncTitle}
+            syncAriaLabel={`Sync Action color to ${semanticTheme === 'light' ? 'dark' : 'light'} theme`}
             onSync={() => syncSemanticToken('action')}
           />
           <ColorPicker
             label="Action Secondary"
             value={currentSemanticTheme.actionSecondary}
-            onChange={(v) => setCategory(semanticThemeCategory as any, { ...tokens[semanticThemeCategory], actionSecondary: v } as any)}
+            onChange={(v) => updateSemanticColor('actionSecondary', v)}
             showSync={shouldShowSemanticSync('actionSecondary')}
             syncTitle={semanticSyncTitle}
+            syncAriaLabel={`Sync Action Secondary to ${semanticTheme === 'light' ? 'dark' : 'light'} theme`}
             onSync={() => syncSemanticToken('actionSecondary')}
           />
           <ColorPicker
             label="Action Tertiary"
             value={currentSemanticTheme.actionTertiary}
-            onChange={(v) => setCategory(semanticThemeCategory as any, { ...tokens[semanticThemeCategory], actionTertiary: v } as any)}
+            onChange={(v) => updateSemanticColor('actionTertiary', v)}
             showSync={shouldShowSemanticSync('actionTertiary')}
             syncTitle={semanticSyncTitle}
+            syncAriaLabel={`Sync Action Tertiary to ${semanticTheme === 'light' ? 'dark' : 'light'} theme`}
             onSync={() => syncSemanticToken('actionTertiary')}
           />
         </div>
@@ -276,17 +293,19 @@ export function TokenPanel() {
           <ColorPicker
             label="Shadow"
             value={currentSemanticTheme.shadow}
-            onChange={(v) => setCategory(semanticThemeCategory as any, { ...tokens[semanticThemeCategory], shadow: v } as any)}
+            onChange={(v) => updateSemanticColor('shadow', v)}
             showSync={shouldShowSemanticSync('shadow')}
             syncTitle={semanticSyncTitle}
+            syncAriaLabel={`Sync Shadow color to ${semanticTheme === 'light' ? 'dark' : 'light'} theme`}
             onSync={() => syncSemanticToken('shadow')}
           />
           <ColorPicker
             label="Border"
             value={currentSemanticTheme.border}
-            onChange={(v) => setCategory(semanticThemeCategory as any, { ...tokens[semanticThemeCategory], border: v } as any)}
+            onChange={(v) => updateSemanticColor('border', v)}
             showSync={shouldShowSemanticSync('border')}
             syncTitle={semanticSyncTitle}
+            syncAriaLabel={`Sync Border color to ${semanticTheme === 'light' ? 'dark' : 'light'} theme`}
             onSync={() => syncSemanticToken('border')}
           />
         </div>
@@ -295,17 +314,19 @@ export function TokenPanel() {
           <ColorPicker
             label="Brand Primary"
             value={currentSemanticTheme.brandPrimary}
-            onChange={(v) => setCategory(semanticThemeCategory as any, { ...tokens[semanticThemeCategory], brandPrimary: v } as any)}
+            onChange={(v) => updateSemanticColor('brandPrimary', v)}
             showSync={shouldShowSemanticSync('brandPrimary')}
             syncTitle={semanticSyncTitle}
+            syncAriaLabel={`Sync Brand Primary to ${semanticTheme === 'light' ? 'dark' : 'light'} theme`}
             onSync={() => syncSemanticToken('brandPrimary')}
           />
           <ColorPicker
             label="Brand Secondary"
             value={currentSemanticTheme.brandSecondary}
-            onChange={(v) => setCategory(semanticThemeCategory as any, { ...tokens[semanticThemeCategory], brandSecondary: v } as any)}
+            onChange={(v) => updateSemanticColor('brandSecondary', v)}
             showSync={shouldShowSemanticSync('brandSecondary')}
             syncTitle={semanticSyncTitle}
+            syncAriaLabel={`Sync Brand Secondary to ${semanticTheme === 'light' ? 'dark' : 'light'} theme`}
             onSync={() => syncSemanticToken('brandSecondary')}
           />
         </div>
@@ -316,7 +337,7 @@ export function TokenPanel() {
             <input
               type="text"
               value={currentSemanticTheme.gradientPrimary}
-              onChange={(e) => setCategory(semanticThemeCategory as any, { ...tokens[semanticThemeCategory], gradientPrimary: e.target.value } as any)}
+              onChange={(e) => updateSemanticColor('gradientPrimary', sanitizeCSSValue(e.target.value))}
               className="control-input"
               placeholder="e.g., linear-gradient(...) or none"
             />
@@ -326,7 +347,7 @@ export function TokenPanel() {
             <input
               type="text"
               value={currentSemanticTheme.gradientSecondary}
-              onChange={(e) => setCategory(semanticThemeCategory as any, { ...tokens[semanticThemeCategory], gradientSecondary: e.target.value } as any)}
+              onChange={(e) => updateSemanticColor('gradientSecondary', sanitizeCSSValue(e.target.value))}
               className="control-input"
               placeholder="e.g., linear-gradient(...) or none"
             />
@@ -336,7 +357,7 @@ export function TokenPanel() {
             <input
               type="text"
               value={currentSemanticTheme.gradientTertiary}
-              onChange={(e) => setCategory(semanticThemeCategory as any, { ...tokens[semanticThemeCategory], gradientTertiary: e.target.value } as any)}
+              onChange={(e) => updateSemanticColor('gradientTertiary', sanitizeCSSValue(e.target.value))}
               className="control-input"
               placeholder="e.g., linear-gradient(...) or none"
             />
@@ -457,16 +478,6 @@ export function TokenPanel() {
             label="Monospace Font"
             value={tokens.typography.fontFamilyMono}
             onChange={(v) => setToken('typography', 'fontFamilyMono', v)}
-          />
-          <FontSelector
-            label="Serif Font"
-            value={tokens.typography.fontFamilySerif}
-            onChange={(v) => setToken('typography', 'fontFamilySerif', v)}
-          />
-          <FontSelector
-            label="Display Font"
-            value={tokens.typography.fontFamilyDisplay}
-            onChange={(v) => setToken('typography', 'fontFamilyDisplay', v)}
           />
         </div>
         <div className="panel-subsection">
@@ -652,40 +663,353 @@ export function TokenPanel() {
 
       <PanelSection title="Shadows" icon={<Layers size={16} />}>
         <ColorPicker
-          label="Shadow Color"
-          value={tokens.effects.shadowColor}
-          onChange={(v) => setToken('effects', 'shadowColor', v)}
+          label="Highlight Color"
+          value={tokens.effects.shadowHighlightColor}
+          onChange={(v) => setToken('effects', 'shadowHighlightColor', v)}
         />
-        <ShadowEditor
-          label="Control Shadow"
-          value={tokens.shadows.control}
-          onChange={(v) => setToken('shadows', 'control', v)}
-        />
-        <ShadowEditor
-          label="Surface Shadow"
-          value={tokens.shadows.surface}
-          onChange={(v) => setToken('shadows', 'surface', v)}
-        />
-        <ShadowEditor
-          label="Overlay Shadow"
-          value={tokens.shadows.overlay}
-          onChange={(v) => setToken('shadows', 'overlay', v)}
-        />
-        <ShadowEditor
-          label="Float Shadow"
-          value={tokens.shadows.float}
-          onChange={(v) => setToken('shadows', 'float', v)}
-        />
-        <ShadowEditor
-          label="Inner Shadow"
-          value={tokens.shadows.inner}
-          onChange={(v) => setToken('shadows', 'inner', v)}
-        />
-        <ShadowEditor
-          label="Glow Shadow"
-          value={tokens.shadows.glow}
-          onChange={(v) => setToken('shadows', 'glow', v)}
-        />
+
+        {/* Control Shadow */}
+        <div className="shadow-config-group">
+          <label className="control-label">Control Shadow</label>
+          <div className="control-group">
+            <label className="control-label-sm">Type</label>
+            <select
+              value={tokens.shadowConfig.control.type}
+              onChange={(e) => setCategory('shadowConfig', {
+                control: { ...tokens.shadowConfig.control, type: e.target.value as 'none' | 'standard' | 'neumorphic' | 'elevated' | 'glow' }
+              })}
+              className="control-select"
+            >
+              <option value="none">None</option>
+              <option value="standard">Standard</option>
+              <option value="neumorphic">Neumorphic</option>
+              <option value="elevated">Elevated</option>
+              <option value="glow">Glow</option>
+            </select>
+          </div>
+          {tokens.shadowConfig.control.type !== 'none' && (
+            <>
+              <SliderControl
+                label="Offset X"
+                value={tokens.shadowConfig.control.offsetX}
+                onChange={(v) => setCategory('shadowConfig', {
+                  control: { ...tokens.shadowConfig.control, offsetX: v }
+                })}
+                min={-50}
+                max={50}
+                step={1}
+                unit="px"
+              />
+              <SliderControl
+                label="Offset Y"
+                value={tokens.shadowConfig.control.offsetY}
+                onChange={(v) => setCategory('shadowConfig', {
+                  control: { ...tokens.shadowConfig.control, offsetY: v }
+                })}
+                min={-50}
+                max={50}
+                step={1}
+                unit="px"
+              />
+              <SliderControl
+                label="Blur"
+                value={tokens.shadowConfig.control.blur}
+                onChange={(v) => setCategory('shadowConfig', {
+                  control: { ...tokens.shadowConfig.control, blur: v }
+                })}
+                min={0}
+                max={100}
+                step={1}
+                unit="px"
+              />
+              <SliderControl
+                label="Spread"
+                value={tokens.shadowConfig.control.spread}
+                onChange={(v) => setCategory('shadowConfig', {
+                  control: { ...tokens.shadowConfig.control, spread: v }
+                })}
+                min={-50}
+                max={50}
+                step={1}
+                unit="px"
+              />
+            </>
+          )}
+        </div>
+
+        {/* Surface Shadow */}
+        <div className="shadow-config-group">
+          <label className="control-label">Surface Shadow</label>
+          <div className="control-group">
+            <label className="control-label-sm">Type</label>
+            <select
+              value={tokens.shadowConfig.surface.type}
+              onChange={(e) => setCategory('shadowConfig', {
+                surface: { ...tokens.shadowConfig.surface, type: e.target.value as 'none' | 'standard' | 'neumorphic' | 'elevated' | 'glow' }
+              })}
+              className="control-select"
+            >
+              <option value="none">None</option>
+              <option value="standard">Standard</option>
+              <option value="neumorphic">Neumorphic</option>
+              <option value="elevated">Elevated</option>
+              <option value="glow">Glow</option>
+            </select>
+          </div>
+          {tokens.shadowConfig.surface.type !== 'none' && (
+            <>
+              <SliderControl
+                label="Offset X"
+                value={tokens.shadowConfig.surface.offsetX}
+                onChange={(v) => setCategory('shadowConfig', {
+                  surface: { ...tokens.shadowConfig.surface, offsetX: v }
+                })}
+                min={-50}
+                max={50}
+                step={1}
+                unit="px"
+              />
+              <SliderControl
+                label="Offset Y"
+                value={tokens.shadowConfig.surface.offsetY}
+                onChange={(v) => setCategory('shadowConfig', {
+                  surface: { ...tokens.shadowConfig.surface, offsetY: v }
+                })}
+                min={-50}
+                max={50}
+                step={1}
+                unit="px"
+              />
+              <SliderControl
+                label="Blur"
+                value={tokens.shadowConfig.surface.blur}
+                onChange={(v) => setCategory('shadowConfig', {
+                  surface: { ...tokens.shadowConfig.surface, blur: v }
+                })}
+                min={0}
+                max={100}
+                step={1}
+                unit="px"
+              />
+              <SliderControl
+                label="Spread"
+                value={tokens.shadowConfig.surface.spread}
+                onChange={(v) => setCategory('shadowConfig', {
+                  surface: { ...tokens.shadowConfig.surface, spread: v }
+                })}
+                min={-50}
+                max={50}
+                step={1}
+                unit="px"
+              />
+            </>
+          )}
+        </div>
+
+        {/* Overlay Shadow */}
+        <div className="shadow-config-group">
+          <label className="control-label">Overlay Shadow</label>
+          <div className="control-group">
+            <label className="control-label-sm">Type</label>
+            <select
+              value={tokens.shadowConfig.overlay.type}
+              onChange={(e) => setCategory('shadowConfig', {
+                overlay: { ...tokens.shadowConfig.overlay, type: e.target.value as 'none' | 'standard' | 'neumorphic' | 'elevated' | 'glow' }
+              })}
+              className="control-select"
+            >
+              <option value="none">None</option>
+              <option value="standard">Standard</option>
+              <option value="neumorphic">Neumorphic</option>
+              <option value="elevated">Elevated</option>
+              <option value="glow">Glow</option>
+            </select>
+          </div>
+          {tokens.shadowConfig.overlay.type !== 'none' && (
+            <>
+              <SliderControl
+                label="Offset X"
+                value={tokens.shadowConfig.overlay.offsetX}
+                onChange={(v) => setCategory('shadowConfig', {
+                  overlay: { ...tokens.shadowConfig.overlay, offsetX: v }
+                })}
+                min={-50}
+                max={50}
+                step={1}
+                unit="px"
+              />
+              <SliderControl
+                label="Offset Y"
+                value={tokens.shadowConfig.overlay.offsetY}
+                onChange={(v) => setCategory('shadowConfig', {
+                  overlay: { ...tokens.shadowConfig.overlay, offsetY: v }
+                })}
+                min={-50}
+                max={50}
+                step={1}
+                unit="px"
+              />
+              <SliderControl
+                label="Blur"
+                value={tokens.shadowConfig.overlay.blur}
+                onChange={(v) => setCategory('shadowConfig', {
+                  overlay: { ...tokens.shadowConfig.overlay, blur: v }
+                })}
+                min={0}
+                max={100}
+                step={1}
+                unit="px"
+              />
+              <SliderControl
+                label="Spread"
+                value={tokens.shadowConfig.overlay.spread}
+                onChange={(v) => setCategory('shadowConfig', {
+                  overlay: { ...tokens.shadowConfig.overlay, spread: v }
+                })}
+                min={-50}
+                max={50}
+                step={1}
+                unit="px"
+              />
+            </>
+          )}
+        </div>
+
+        {/* Float Shadow */}
+        <div className="shadow-config-group">
+          <label className="control-label">Float Shadow</label>
+          <div className="control-group">
+            <label className="control-label-sm">Type</label>
+            <select
+              value={tokens.shadowConfig.float.type}
+              onChange={(e) => setCategory('shadowConfig', {
+                float: { ...tokens.shadowConfig.float, type: e.target.value as 'none' | 'standard' | 'neumorphic' | 'elevated' | 'glow' }
+              })}
+              className="control-select"
+            >
+              <option value="none">None</option>
+              <option value="standard">Standard</option>
+              <option value="neumorphic">Neumorphic</option>
+              <option value="elevated">Elevated</option>
+              <option value="glow">Glow</option>
+            </select>
+          </div>
+          {tokens.shadowConfig.float.type !== 'none' && (
+            <>
+              <SliderControl
+                label="Offset X"
+                value={tokens.shadowConfig.float.offsetX}
+                onChange={(v) => setCategory('shadowConfig', {
+                  float: { ...tokens.shadowConfig.float, offsetX: v }
+                })}
+                min={-50}
+                max={50}
+                step={1}
+                unit="px"
+              />
+              <SliderControl
+                label="Offset Y"
+                value={tokens.shadowConfig.float.offsetY}
+                onChange={(v) => setCategory('shadowConfig', {
+                  float: { ...tokens.shadowConfig.float, offsetY: v }
+                })}
+                min={-50}
+                max={50}
+                step={1}
+                unit="px"
+              />
+              <SliderControl
+                label="Blur"
+                value={tokens.shadowConfig.float.blur}
+                onChange={(v) => setCategory('shadowConfig', {
+                  float: { ...tokens.shadowConfig.float, blur: v }
+                })}
+                min={0}
+                max={100}
+                step={1}
+                unit="px"
+              />
+              <SliderControl
+                label="Spread"
+                value={tokens.shadowConfig.float.spread}
+                onChange={(v) => setCategory('shadowConfig', {
+                  float: { ...tokens.shadowConfig.float, spread: v }
+                })}
+                min={-50}
+                max={50}
+                step={1}
+                unit="px"
+              />
+            </>
+          )}
+        </div>
+
+        {/* Inner Shadow */}
+        <div className="shadow-config-group">
+          <label className="control-label">Inner Shadow</label>
+          <div className="control-group">
+            <label className="control-label-sm">Type</label>
+            <select
+              value={tokens.shadowConfig.inner.type}
+              onChange={(e) => setCategory('shadowConfig', {
+                inner: { ...tokens.shadowConfig.inner, type: e.target.value as 'none' | 'inset' | 'neumorphic' }
+              })}
+              className="control-select"
+            >
+              <option value="none">None</option>
+              <option value="inset">Inset</option>
+              <option value="neumorphic">Neumorphic Inset</option>
+            </select>
+          </div>
+          {tokens.shadowConfig.inner.type !== 'none' && (
+            <>
+              <SliderControl
+                label="Offset X"
+                value={tokens.shadowConfig.inner.offsetX}
+                onChange={(v) => setCategory('shadowConfig', {
+                  inner: { ...tokens.shadowConfig.inner, offsetX: v }
+                })}
+                min={-50}
+                max={50}
+                step={1}
+                unit="px"
+              />
+              <SliderControl
+                label="Offset Y"
+                value={tokens.shadowConfig.inner.offsetY}
+                onChange={(v) => setCategory('shadowConfig', {
+                  inner: { ...tokens.shadowConfig.inner, offsetY: v }
+                })}
+                min={-50}
+                max={50}
+                step={1}
+                unit="px"
+              />
+              <SliderControl
+                label="Blur"
+                value={tokens.shadowConfig.inner.blur}
+                onChange={(v) => setCategory('shadowConfig', {
+                  inner: { ...tokens.shadowConfig.inner, blur: v }
+                })}
+                min={0}
+                max={100}
+                step={1}
+                unit="px"
+              />
+              <SliderControl
+                label="Spread"
+                value={tokens.shadowConfig.inner.spread}
+                onChange={(v) => setCategory('shadowConfig', {
+                  inner: { ...tokens.shadowConfig.inner, spread: v }
+                })}
+                min={-50}
+                max={50}
+                step={1}
+                unit="px"
+              />
+            </>
+          )}
+        </div>
       </PanelSection>
 
       <PanelSection title="Transitions" icon={<Zap size={16} />}>
@@ -824,4 +1148,4 @@ export function TokenPanel() {
 
     </div>
   );
-}
+});

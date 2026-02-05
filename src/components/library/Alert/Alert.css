@@ -6,7 +6,7 @@
   font-family: var(--font-family);
   border-radius: var(--radius-surface);
   border: var(--alert-border-width) solid transparent;
-  box-shadow: var(--shadow-control);
+  box-shadow: var(--alert-shadow);
 }
 
 .alert-icon {

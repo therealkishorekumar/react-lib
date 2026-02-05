@@ -43,7 +43,7 @@
   border: var(--radio-border-width) solid var(--radio-border-color);
   border-radius: var(--radius-full);
   background-color: var(--radio-background);
-  box-shadow: var(--shadow-control);
+  box-shadow: var(--radio-shadow);
   transition: all var(--transition-fast);
   flex-shrink: 0;
 }

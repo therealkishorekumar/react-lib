@@ -1,9 +1,10 @@
 import { useState, type ReactNode } from 'react';
-import { ChevronDown, Box, CheckSquare, Circle, ToggleLeft, CreditCard, Bell, Activity, Image, Layout, List, Menu, Navigation } from 'lucide-react';
+import { ChevronDown, Box, CheckSquare, Circle, ToggleLeft, CreditCard, Bell, Activity, Image, Layout, List, Menu, Navigation, Palette } from 'lucide-react';
 import { SliderControl } from '../SliderControl';
 import { ColorPicker } from '../ColorPicker';
 import { GradientPicker } from '../GradientPicker';
 import { SemanticColorSelector } from '../SemanticColorSelector';
+import { Checkbox } from '../../library/Checkbox/Checkbox';
 import { useDesignTokens } from '../../../hooks/useDesignTokens';
 import { parseCSSLength, formatCSSLength, isValidTextTransform, sanitizeCSSValue } from '../../../utils/cssValidation';
 import type { SemanticColorKey } from '../../../types/tokens';
@@ -53,7 +54,84 @@ export function ComponentPanel() {
 
   return (
     <div className="component-panel">
-      <PanelSection title="Button" icon={<Box size={16} />} defaultOpen>
+      <PanelSection title="Background" icon={<Palette size={16} />} defaultOpen>
+        <div className="panel-subsection">
+          <h4 className="panel-subsection-title">App Background Pattern</h4>
+          <div className="control-group">
+            <label className="control-label">Pattern Type</label>
+            <select
+              value={tokens.patterns.background.type}
+              onChange={(e) => {
+                const value = e.target.value as 'none' | 'dots' | 'grid' | 'plus' | 'noise';
+                setCategory('patterns', { background: { ...tokens.patterns.background, type: value } });
+              }}
+              className="control-select"
+            >
+              <option value="none">None</option>
+              <option value="dots">Dots</option>
+              <option value="grid">Grid</option>
+              <option value="plus">Plus</option>
+              <option value="noise">Noise</option>
+            </select>
+          </div>
+          <SliderControl
+            label="Opacity"
+            value={tokens.patterns.background.opacity}
+            min={0}
+            max={1}
+            step={0.01}
+            onChange={(v) => setCategory('patterns', { background: { ...tokens.patterns.background, opacity: v } })}
+          />
+          <SliderControl
+            label="Size"
+            value={tokens.patterns.background.size}
+            min={8}
+            max={48}
+            step={2}
+            unit="px"
+            onChange={(v) => setCategory('patterns', { background: { ...tokens.patterns.background, size: v } })}
+          />
+        </div>
+        <div className="panel-subsection">
+          <h4 className="panel-subsection-title">Surface Pattern</h4>
+          <div className="control-group">
+            <label className="control-label">Pattern Type</label>
+            <select
+              value={tokens.patterns.surface.type}
+              onChange={(e) => {
+                const value = e.target.value as 'none' | 'dots' | 'grid' | 'plus' | 'noise';
+                setCategory('patterns', { surface: { ...tokens.patterns.surface, type: value } });
+              }}
+              className="control-select"
+            >
+              <option value="none">None</option>
+              <option value="dots">Dots</option>
+              <option value="grid">Grid</option>
+              <option value="plus">Plus</option>
+              <option value="noise">Noise</option>
+            </select>
+          </div>
+          <SliderControl
+            label="Opacity"
+            value={tokens.patterns.surface.opacity}
+            min={0}
+            max={1}
+            step={0.01}
+            onChange={(v) => setCategory('patterns', { surface: { ...tokens.patterns.surface, opacity: v } })}
+          />
+          <SliderControl
+            label="Size"
+            value={tokens.patterns.surface.size}
+            min={8}
+            max={48}
+            step={2}
+            unit="px"
+            onChange={(v) => setCategory('patterns', { surface: { ...tokens.patterns.surface, size: v } })}
+          />
+        </div>
+      </PanelSection>
+
+      <PanelSection title="Button" icon={<Box size={16} />}>
         <div className="panel-subsection">
           <h4 className="panel-subsection-title">Colors</h4>
           <div className="color-variants-grid">
@@ -124,6 +202,11 @@ export function ComponentPanel() {
         </div>
         <div className="panel-subsection">
           <h4 className="panel-subsection-title">Styles</h4>
+        <Checkbox
+          label="Shadow"
+          checked={tokens.components.button.shadowEnabled}
+          onChange={(e) => setCategory('components', { button: { ...tokens.components.button, shadowEnabled: e.target.checked } })}
+        />
         <SliderControl
           label="Border Width"
           value={parseValue(tokens.components.button.borderWidth)}
@@ -248,6 +331,11 @@ export function ComponentPanel() {
         </div>
         <div className="panel-subsection">
           <h4 className="panel-subsection-title">Styles</h4>
+        <Checkbox
+          label="Shadow"
+          checked={tokens.components.input.shadowEnabled}
+          onChange={(e) => setCategory('components', { input: { ...tokens.components.input, shadowEnabled: e.target.checked } })}
+        />
         <SliderControl
           label="Border Width"
           value={parseValue(tokens.components.input.borderWidth)}
@@ -327,6 +415,11 @@ export function ComponentPanel() {
         </div>
         <div className="panel-subsection">
           <h4 className="panel-subsection-title">Styles</h4>
+        <Checkbox
+          label="Shadow"
+          checked={tokens.components.avatar.shadowEnabled}
+          onChange={(e) => setCategory('components', { avatar: { ...tokens.components.avatar, shadowEnabled: e.target.checked } })}
+        />
         <SliderControl
           label="Border Width"
           value={parseValue(tokens.components.avatar.borderWidth)}
@@ -336,11 +429,80 @@ export function ComponentPanel() {
           unit="px"
           onChange={(v) => setCategory('components', { avatar: { ...tokens.components.avatar, borderWidth: formatValue(v, 'px') } })}
         />
-        <GradientPicker
-          label="Border Color"
-          value={tokens.components.avatar.borderColor.includes('var(') ? '#e5e7eb' : tokens.components.avatar.borderColor}
-          onChange={(v) => setCategory('components', { avatar: { ...tokens.components.avatar, borderColor: v } })}
+        <div className="control-group">
+          <label className="control-label">Border Color</label>
+          <input
+            type="text"
+            value={tokens.components.avatar.borderColor}
+            onChange={(e) => {
+              const sanitized = sanitizeCSSValue(e.target.value);
+              setCategory('components', { avatar: { ...tokens.components.avatar, borderColor: sanitized } });
+            }}
+            className="control-input"
+            placeholder="transparent or #000000"
+          />
+        </div>
+        <SliderControl
+          label="Status Border Width"
+          value={parseValue(tokens.components.avatar.statusBorderWidth)}
+          min={0}
+          max={6}
+          step={0.5}
+          unit="px"
+          onChange={(v) => setCategory('components', { avatar: { ...tokens.components.avatar, statusBorderWidth: formatValue(v, 'px') } })}
         />
+        <SliderControl
+          label="Group Border Width"
+          value={parseValue(tokens.components.avatar.groupBorderWidth)}
+          min={0}
+          max={6}
+          step={0.5}
+          unit="px"
+          onChange={(v) => setCategory('components', { avatar: { ...tokens.components.avatar, groupBorderWidth: formatValue(v, 'px') } })}
+        />
+        <div className="control-group">
+          <label className="control-label">Inner Shadow</label>
+          <input
+            type="text"
+            value={tokens.components.avatar.innerShadow}
+            onChange={(e) => {
+              const sanitized = sanitizeCSSValue(e.target.value);
+              setCategory('components', { avatar: { ...tokens.components.avatar, innerShadow: sanitized } });
+            }}
+            className="control-input"
+            placeholder="none or inset 0 2px 4px rgba(0,0,0,0.1)"
+          />
+        </div>
+        <SliderControl
+          label="Backdrop Blur"
+          value={parseValue(tokens.components.avatar.backdropBlur)}
+          min={0}
+          max={24}
+          step={2}
+          unit="px"
+          onChange={(v) => setCategory('components', { avatar: { ...tokens.components.avatar, backdropBlur: formatValue(v, 'px') } })}
+        />
+        <SliderControl
+          label="Surface Opacity"
+          value={tokens.components.avatar.surfaceOpacity}
+          min={0}
+          max={1}
+          step={0.05}
+          onChange={(v) => setCategory('components', { avatar: { ...tokens.components.avatar, surfaceOpacity: v } })}
+        />
+        <div className="control-group">
+          <label className="control-label">Glow Effect</label>
+          <input
+            type="text"
+            value={tokens.components.avatar.glowEffect}
+            onChange={(e) => {
+              const sanitized = sanitizeCSSValue(e.target.value);
+              setCategory('components', { avatar: { ...tokens.components.avatar, glowEffect: sanitized } });
+            }}
+            className="control-input"
+            placeholder="none or 0 0 15px rgba(0,255,255,0.6)"
+          />
+        </div>
         </div>
       </PanelSection>
 
@@ -380,6 +542,11 @@ export function ComponentPanel() {
         </div>
         <div className="panel-subsection">
           <h4 className="panel-subsection-title">Styles</h4>
+        <Checkbox
+          label="Shadow"
+          checked={tokens.components.checkbox.shadowEnabled}
+          onChange={(e) => setCategory('components', { checkbox: { ...tokens.components.checkbox, shadowEnabled: e.target.checked } })}
+        />
         <SliderControl
           label="Size"
           value={parseValue(tokens.components.checkbox.size)}
@@ -446,6 +613,11 @@ export function ComponentPanel() {
         </div>
         <div className="panel-subsection">
           <h4 className="panel-subsection-title">Styles</h4>
+        <Checkbox
+          label="Shadow"
+          checked={tokens.components.radio.shadowEnabled}
+          onChange={(e) => setCategory('components', { radio: { ...tokens.components.radio, shadowEnabled: e.target.checked } })}
+        />
         <SliderControl
           label="Size"
           value={parseValue(tokens.components.radio.size)}
@@ -506,6 +678,11 @@ export function ComponentPanel() {
         </div>
         <div className="panel-subsection">
           <h4 className="panel-subsection-title">Styles</h4>
+        <Checkbox
+          label="Shadow"
+          checked={tokens.components.toggle.shadowEnabled}
+          onChange={(e) => setCategory('components', { toggle: { ...tokens.components.toggle, shadowEnabled: e.target.checked } })}
+        />
         <SliderControl
           label="Track Height"
           value={parseValue(tokens.components.toggle.trackHeight)}
@@ -684,6 +861,11 @@ export function ComponentPanel() {
         </div>
         <div className="panel-subsection">
           <h4 className="panel-subsection-title">Styles</h4>
+        <Checkbox
+          label="Shadow"
+          checked={tokens.components.badge.shadowEnabled}
+          onChange={(e) => setCategory('components', { badge: { ...tokens.components.badge, shadowEnabled: e.target.checked } })}
+        />
         <div className="control-group">
           <label className="control-label">Text Transform</label>
           <select
@@ -763,6 +945,35 @@ export function ComponentPanel() {
         </div>
         <div className="panel-subsection">
           <h4 className="panel-subsection-title">Styles</h4>
+        <Checkbox
+          label="Shadow"
+          checked={tokens.components.card.shadowEnabled}
+          onChange={(e) => setCategory('components', { card: { ...tokens.components.card, shadowEnabled: e.target.checked } })}
+        />
+        <Checkbox
+          label="Pattern"
+          checked={tokens.components.card.patternEnabled}
+          onChange={(e) => setCategory('components', { card: { ...tokens.components.card, patternEnabled: e.target.checked } })}
+        />
+        {tokens.components.card.patternEnabled && (
+          <div className="control-group">
+            <label className="control-label">Pattern Type</label>
+            <select
+              value={tokens.patterns.surface.type}
+              onChange={(e) => {
+                const value = e.target.value as 'none' | 'dots' | 'grid' | 'plus' | 'noise';
+                setCategory('patterns', { surface: { ...tokens.patterns.surface, type: value } });
+              }}
+              className="control-select"
+            >
+              <option value="none">None</option>
+              <option value="dots">Dots</option>
+              <option value="grid">Grid</option>
+              <option value="plus">Plus</option>
+              <option value="noise">Noise</option>
+            </select>
+          </div>
+        )}
         <SliderControl
           label="Border Width"
           value={parseValue(tokens.components.card.borderWidth)}
@@ -926,6 +1137,11 @@ export function ComponentPanel() {
         </div>
         <div className="panel-subsection">
           <h4 className="panel-subsection-title">Styles</h4>
+        <Checkbox
+          label="Shadow"
+          checked={tokens.components.alert.shadowEnabled}
+          onChange={(e) => setCategory('components', { alert: { ...tokens.components.alert, shadowEnabled: e.target.checked } })}
+        />
         <SliderControl
           label="Icon Size"
           value={parseValue(tokens.components.alert.iconSize)}
@@ -983,6 +1199,11 @@ export function ComponentPanel() {
         </div>
         <div className="panel-subsection">
           <h4 className="panel-subsection-title">Styles</h4>
+        <Checkbox
+          label="Shadow"
+          checked={tokens.components.tabs.shadowEnabled}
+          onChange={(e) => setCategory('components', { tabs: { ...tokens.components.tabs, shadowEnabled: e.target.checked } })}
+        />
         <SliderControl
           label="Indicator Height"
           value={parseValue(tokens.components.tabs.indicatorHeight)}
@@ -1045,6 +1266,11 @@ export function ComponentPanel() {
         </div>
         <div className="panel-subsection">
           <h4 className="panel-subsection-title">Styles</h4>
+        <Checkbox
+          label="Shadow"
+          checked={tokens.components.progress.shadowEnabled}
+          onChange={(e) => setCategory('components', { progress: { ...tokens.components.progress, shadowEnabled: e.target.checked } })}
+        />
         <SliderControl
           label="Track Height"
           value={parseValue(tokens.components.progress.trackHeight)}
@@ -1096,6 +1322,35 @@ export function ComponentPanel() {
         </div>
         <div className="panel-subsection">
           <h4 className="panel-subsection-title">Styles</h4>
+        <Checkbox
+          label="Shadow"
+          checked={tokens.components.modal.shadowEnabled}
+          onChange={(e) => setCategory('components', { modal: { ...tokens.components.modal, shadowEnabled: e.target.checked } })}
+        />
+        <Checkbox
+          label="Pattern"
+          checked={tokens.components.modal.patternEnabled}
+          onChange={(e) => setCategory('components', { modal: { ...tokens.components.modal, patternEnabled: e.target.checked } })}
+        />
+        {tokens.components.modal.patternEnabled && (
+          <div className="control-group">
+            <label className="control-label">Pattern Type</label>
+            <select
+              value={tokens.patterns.surface.type}
+              onChange={(e) => {
+                const value = e.target.value as 'none' | 'dots' | 'grid' | 'plus' | 'noise';
+                setCategory('patterns', { surface: { ...tokens.patterns.surface, type: value } });
+              }}
+              className="control-select"
+            >
+              <option value="none">None</option>
+              <option value="dots">Dots</option>
+              <option value="grid">Grid</option>
+              <option value="plus">Plus</option>
+              <option value="noise">Noise</option>
+            </select>
+          </div>
+        )}
         <ColorPicker
           label="Backdrop Color"
           value={tokens.components.modal.backdropColor}
@@ -1166,6 +1421,11 @@ export function ComponentPanel() {
         </div>
         <div className="panel-subsection">
           <h4 className="panel-subsection-title">Styles</h4>
+        <Checkbox
+          label="Shadow"
+          checked={tokens.components.select.shadowEnabled}
+          onChange={(e) => setCategory('components', { select: { ...tokens.components.select, shadowEnabled: e.target.checked } })}
+        />
         <SliderControl
           label="Border Width"
           value={parseValue(tokens.components.select.borderWidth)}
@@ -1208,6 +1468,11 @@ export function ComponentPanel() {
         </div>
         <div className="panel-subsection">
           <h4 className="panel-subsection-title">Styles</h4>
+        <Checkbox
+          label="Shadow"
+          checked={tokens.components.dropdown.shadowEnabled}
+          onChange={(e) => setCategory('components', { dropdown: { ...tokens.components.dropdown, shadowEnabled: e.target.checked } })}
+        />
         <SliderControl
           label="Border Width"
           value={parseValue(tokens.components.dropdown.borderWidth)}
@@ -1250,6 +1515,11 @@ export function ComponentPanel() {
         </div>
         <div className="panel-subsection">
           <h4 className="panel-subsection-title">Styles</h4>
+        <Checkbox
+          label="Shadow"
+          checked={tokens.components.accordion.shadowEnabled}
+          onChange={(e) => setCategory('components', { accordion: { ...tokens.components.accordion, shadowEnabled: e.target.checked } })}
+        />
         <SliderControl
           label="Border Width"
           value={parseValue(tokens.components.accordion.borderWidth)}
@@ -1283,6 +1553,14 @@ export function ComponentPanel() {
             onChange={(val) => updateComponentColor('tooltip', ['border'], val)}
             currentTheme={currentTheme}
           />
+        </div>
+        <div className="panel-subsection">
+          <h4 className="panel-subsection-title">Styles</h4>
+        <Checkbox
+          label="Shadow"
+          checked={tokens.components.tooltip.shadowEnabled}
+          onChange={(e) => setCategory('components', { tooltip: { ...tokens.components.tooltip, shadowEnabled: e.target.checked } })}
+        />
         </div>
       </PanelSection>
 
@@ -1328,6 +1606,11 @@ export function ComponentPanel() {
         </div>
         <div className="panel-subsection">
           <h4 className="panel-subsection-title">Styles</h4>
+        <Checkbox
+          label="Shadow"
+          checked={tokens.components.table.shadowEnabled}
+          onChange={(e) => setCategory('components', { table: { ...tokens.components.table, shadowEnabled: e.target.checked } })}
+        />
         <SliderControl
           label="Border Width"
           value={parseValue(tokens.components.table.borderWidth)}
@@ -1379,6 +1662,35 @@ export function ComponentPanel() {
         </div>
         <div className="panel-subsection">
           <h4 className="panel-subsection-title">Styles</h4>
+        <Checkbox
+          label="Shadow"
+          checked={tokens.components.navbar.shadowEnabled}
+          onChange={(e) => setCategory('components', { navbar: { ...tokens.components.navbar, shadowEnabled: e.target.checked } })}
+        />
+        <Checkbox
+          label="Pattern"
+          checked={tokens.components.navbar.patternEnabled}
+          onChange={(e) => setCategory('components', { navbar: { ...tokens.components.navbar, patternEnabled: e.target.checked } })}
+        />
+        {tokens.components.navbar.patternEnabled && (
+          <div className="control-group">
+            <label className="control-label">Pattern Type</label>
+            <select
+              value={tokens.patterns.surface.type}
+              onChange={(e) => {
+                const value = e.target.value as 'none' | 'dots' | 'grid' | 'plus' | 'noise';
+                setCategory('patterns', { surface: { ...tokens.patterns.surface, type: value } });
+              }}
+              className="control-select"
+            >
+              <option value="none">None</option>
+              <option value="dots">Dots</option>
+              <option value="grid">Grid</option>
+              <option value="plus">Plus</option>
+              <option value="noise">Noise</option>
+            </select>
+          </div>
+        )}
         <SliderControl
           label="Border Width"
           value={parseValue(tokens.components.navbar.borderWidth)}
@@ -1427,6 +1739,35 @@ export function ComponentPanel() {
         </div>
         <div className="panel-subsection">
           <h4 className="panel-subsection-title">Styles</h4>
+        <Checkbox
+          label="Shadow"
+          checked={tokens.components.sidebar.shadowEnabled}
+          onChange={(e) => setCategory('components', { sidebar: { ...tokens.components.sidebar, shadowEnabled: e.target.checked } })}
+        />
+        <Checkbox
+          label="Pattern"
+          checked={tokens.components.sidebar.patternEnabled}
+          onChange={(e) => setCategory('components', { sidebar: { ...tokens.components.sidebar, patternEnabled: e.target.checked } })}
+        />
+        {tokens.components.sidebar.patternEnabled && (
+          <div className="control-group">
+            <label className="control-label">Pattern Type</label>
+            <select
+              value={tokens.patterns.surface.type}
+              onChange={(e) => {
+                const value = e.target.value as 'none' | 'dots' | 'grid' | 'plus' | 'noise';
+                setCategory('patterns', { surface: { ...tokens.patterns.surface, type: value } });
+              }}
+              className="control-select"
+            >
+              <option value="none">None</option>
+              <option value="dots">Dots</option>
+              <option value="grid">Grid</option>
+              <option value="plus">Plus</option>
+              <option value="noise">Noise</option>
+            </select>
+          </div>
+        )}
         <SliderControl
           label="Border Width"
           value={parseValue(tokens.components.sidebar.borderWidth)}
@@ -1460,6 +1801,14 @@ export function ComponentPanel() {
             onChange={(val) => updateComponentColor('breadcrumb', ['separator'], val)}
             currentTheme={currentTheme}
           />
+        </div>
+        <div className="panel-subsection">
+          <h4 className="panel-subsection-title">Styles</h4>
+        <Checkbox
+          label="Shadow"
+          checked={tokens.components.breadcrumb.shadowEnabled}
+          onChange={(e) => setCategory('components', { breadcrumb: { ...tokens.components.breadcrumb, shadowEnabled: e.target.checked } })}
+        />
         </div>
       </PanelSection>
 

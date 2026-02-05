@@ -11,8 +11,7 @@
   line-height: var(--line-height-normal);
   text-transform: var(--button-text-transform);
   letter-spacing: var(--button-letter-spacing);
-  box-shadow: var(--shadow-control), var(--button-inner-shadow), var(--button-glow-effect);
-  background-image: var(--button-gradient);
+  box-shadow: var(--button-shadow);
 }
 
 .btn:focus-visible {
@@ -21,7 +20,7 @@
 }
 
 .btn:disabled {
-  opacity: 0.5;
+  opacity: 0.6;
   cursor: not-allowed;
 }
 

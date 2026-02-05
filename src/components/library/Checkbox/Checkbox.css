@@ -29,7 +29,7 @@
   border: var(--checkbox-border-width) solid var(--checkbox-border-color);
   border-radius: var(--checkbox-border-radius);
   background-color: var(--checkbox-background);
-  box-shadow: var(--shadow-control);
+  box-shadow: var(--checkbox-shadow);
   transition: all var(--transition-fast);
   flex-shrink: 0;
 }

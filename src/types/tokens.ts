@@ -273,8 +273,6 @@ export interface DesignTokens {
   typography: {
     fontFamily: string;
     fontFamilyMono: string;
-    fontFamilySerif: string;
-    fontFamilyDisplay: string;
     fontSizeXs: string;
     fontSizeSm: string;
     fontSizeMd: string;
@@ -303,14 +301,42 @@ export interface DesignTokens {
     overlay: string;
     full: string;
   };
-  shadows: {
-    none: string;
-    control: string;
-    surface: string;
-    overlay: string;
-    float: string;
-    inner: string;
-    glow: string;
+  shadowConfig: {
+    control: {
+      type: 'none' | 'standard' | 'neumorphic' | 'elevated' | 'glow';
+      offsetX: number;
+      offsetY: number;
+      blur: number;
+      spread: number;
+    };
+    surface: {
+      type: 'none' | 'standard' | 'neumorphic' | 'elevated' | 'glow';
+      offsetX: number;
+      offsetY: number;
+      blur: number;
+      spread: number;
+    };
+    overlay: {
+      type: 'none' | 'standard' | 'neumorphic' | 'elevated' | 'glow';
+      offsetX: number;
+      offsetY: number;
+      blur: number;
+      spread: number;
+    };
+    float: {
+      type: 'none' | 'standard' | 'neumorphic' | 'elevated' | 'glow';
+      offsetX: number;
+      offsetY: number;
+      blur: number;
+      spread: number;
+    };
+    inner: {
+      type: 'none' | 'standard' | 'neumorphic' | 'elevated' | 'inset';
+      offsetX: number;
+      offsetY: number;
+      blur: number;
+      spread: number;
+    };
   };
   transitions: {
     fast: string;
@@ -321,7 +347,7 @@ export interface DesignTokens {
     focusRingWidth: string;
     focusRingOffset: string;
     focusRingColor: string;
-    shadowColor: string;
+    shadowHighlightColor: string;
     backdropBlur: string;
     backdropSaturation: string;
     textGlow: string;
@@ -346,6 +372,7 @@ export interface DesignTokens {
   };
   components: {
     button: {
+      shadowEnabled: boolean;
       borderWidth: string;
       innerShadow: string;
       textTransform: 'none' | 'uppercase' | 'lowercase' | 'capitalize';
@@ -354,6 +381,7 @@ export interface DesignTokens {
       gradient: string;
     };
     input: {
+      shadowEnabled: boolean;
       borderWidth: string;
       focusRingWidth: string;
       focusRingAlpha: number;
@@ -361,33 +389,47 @@ export interface DesignTokens {
       glowOnFocus: string;
     };
     avatar: {
+      shadowEnabled: boolean;
       borderWidth: string;
       borderColor: string;
+      statusBorderWidth: string;
+      groupBorderWidth: string;
+      innerShadow: string;
+      backdropBlur: string;
+      surfaceOpacity: number;
+      glowEffect: string;
     };
     checkbox: {
+      shadowEnabled: boolean;
       borderRadius: string;
       borderWidth: string;
       size: string;
     };
     radio: {
+      shadowEnabled: boolean;
       borderWidth: string;
       size: string;
       dotSize: string;
     };
     toggle: {
+      shadowEnabled: boolean;
       trackHeight: string;
       thumbSize: string;
+      thumbOffset: string;
       borderWidth: string;
       trackShadow: string;
       thumbBorderWidth: string;
       thumbShadow: string;
     };
     badge: {
+      shadowEnabled: boolean;
       textTransform: 'none' | 'uppercase' | 'lowercase' | 'capitalize';
       letterSpacing: string;
       borderWidth: string;
     };
     card: {
+      shadowEnabled: boolean;
+      patternEnabled: boolean;
       borderWidth: string;
       elevatedBorderWidth: string;
       elevatedBorderEnabled: boolean;
@@ -397,42 +439,62 @@ export interface DesignTokens {
       innerShadow: string;
     };
     alert: {
+      shadowEnabled: boolean;
       iconSize: string;
       borderWidth: string;
     };
     tabs: {
+      shadowEnabled: boolean;
       indicatorHeight: string;
       indicatorStyle: 'underline' | 'pill' | 'enclosed';
       borderWidth: string;
     };
     progress: {
+      shadowEnabled: boolean;
       trackHeight: string;
       borderRadius: string;
     };
     modal: {
+      shadowEnabled: boolean;
+      patternEnabled: boolean;
       backdropOpacity: string;
       backdropBlur: string;
       borderWidth: string;
       backdropColor: string;
     };
     select: {
+      shadowEnabled: boolean;
       borderWidth: string;
     };
     dropdown: {
+      shadowEnabled: boolean;
       borderWidth: string;
     };
     accordion: {
+      shadowEnabled: boolean;
       borderWidth: string;
     };
     navbar: {
+      shadowEnabled: boolean;
+      patternEnabled: boolean;
       borderWidth: string;
     };
     sidebar: {
+      shadowEnabled: boolean;
+      patternEnabled: boolean;
       borderWidth: string;
     };
     table: {
+      shadowEnabled: boolean;
       borderWidth: string;
       headerBorderWidth: string;
+    };
+    tooltip: {
+      shadowEnabled: boolean;
+      borderWidth: string;
+    };
+    breadcrumb: {
+      shadowEnabled: boolean;
     };
   };
 }
@@ -753,8 +815,6 @@ export const defaultTokens: DesignTokens = {
   typography: {
     fontFamily: 'Inter, system-ui, sans-serif',
     fontFamilyMono: 'JetBrains Mono, monospace',
-    fontFamilySerif: 'Merriweather, Georgia, serif',
-    fontFamilyDisplay: 'Playfair Display, serif',
     fontSizeXs: '0.75rem',
     fontSizeSm: '0.875rem',
     fontSizeMd: '1rem',
@@ -783,14 +843,42 @@ export const defaultTokens: DesignTokens = {
     overlay: '14px',
     full: '999px',
   },
-  shadows: {
-    none: 'none',
-    control: '0 1px 2px 0 color-mix(in srgb, var(--shadow-color) 30%, transparent)',
-    surface: '0 4px 6px -1px color-mix(in srgb, var(--shadow-color) 45%, transparent), 0 2px 4px -2px color-mix(in srgb, var(--shadow-color) 40%, transparent)',
-    overlay: '0 10px 15px -3px color-mix(in srgb, var(--shadow-color) 45%, transparent), 0 4px 6px -4px color-mix(in srgb, var(--shadow-color) 40%, transparent)',
-    float: '0 20px 25px -5px color-mix(in srgb, var(--shadow-color) 45%, transparent), 0 8px 10px -6px color-mix(in srgb, var(--shadow-color) 40%, transparent)',
-    inner: 'inset 2px 2px 4px color-mix(in srgb, var(--shadow-color) 20%, transparent)',
-    glow: '0 0 10px 2px color-mix(in srgb, var(--color-primary) 50%, transparent)',
+  shadowConfig: {
+    control: {
+      type: 'standard',
+      offsetX: 0,
+      offsetY: 1,
+      blur: 2,
+      spread: 0,
+    },
+    surface: {
+      type: 'standard',
+      offsetX: 0,
+      offsetY: 4,
+      blur: 6,
+      spread: -1,
+    },
+    overlay: {
+      type: 'standard',
+      offsetX: 0,
+      offsetY: 10,
+      blur: 15,
+      spread: -3,
+    },
+    float: {
+      type: 'standard',
+      offsetX: 0,
+      offsetY: 20,
+      blur: 25,
+      spread: -5,
+    },
+    inner: {
+      type: 'inset',
+      offsetX: 2,
+      offsetY: 2,
+      blur: 4,
+      spread: 0,
+    },
   },
   transitions: {
     fast: '150ms ease',
@@ -801,7 +889,7 @@ export const defaultTokens: DesignTokens = {
     focusRingWidth: '2px',
     focusRingOffset: '2px',
     focusRingColor: '#3b82f6',
-    shadowColor: 'rgb(0 0 0 / 0.2)',
+    shadowHighlightColor: 'rgba(255, 255, 255, 0.5)',
     backdropBlur: '0px',
     backdropSaturation: '100%',
     textGlow: 'none',
@@ -826,6 +914,7 @@ export const defaultTokens: DesignTokens = {
   },
   components: {
     button: {
+      shadowEnabled: true,
       borderWidth: '1px',
       innerShadow: 'none',
       textTransform: 'none',
@@ -834,6 +923,7 @@ export const defaultTokens: DesignTokens = {
       gradient: 'none',
     },
     input: {
+      shadowEnabled: true,
       borderWidth: '1px',
       focusRingWidth: '3px',
       focusRingAlpha: 0.2,
@@ -841,33 +931,47 @@ export const defaultTokens: DesignTokens = {
       glowOnFocus: 'none',
     },
     avatar: {
+      shadowEnabled: true,
       borderWidth: '0px',
-      borderColor: 'var(--color-border)',
+      borderColor: 'transparent',
+      statusBorderWidth: '2px',
+      groupBorderWidth: '2px',
+      innerShadow: 'none',
+      backdropBlur: '0px',
+      surfaceOpacity: 1,
+      glowEffect: 'none',
     },
     checkbox: {
+      shadowEnabled: false,
       borderRadius: 'var(--radius-control)',
       borderWidth: '2px',
       size: '18px',
     },
     radio: {
+      shadowEnabled: false,
       borderWidth: '2px',
       size: '18px',
       dotSize: '8px',
     },
     toggle: {
+      shadowEnabled: false,
       trackHeight: '22px',
       thumbSize: '18px',
+      thumbOffset: '2px',
       borderWidth: '0px',
       trackShadow: 'none',
       thumbBorderWidth: '0px',
       thumbShadow: 'none',
     },
     badge: {
+      shadowEnabled: true,
       textTransform: 'none',
       letterSpacing: 'normal',
       borderWidth: '0px',
     },
     card: {
+      shadowEnabled: true,
+      patternEnabled: false,
       borderWidth: '1px',
       elevatedBorderWidth: '1px',
       elevatedBorderEnabled: false,
@@ -877,45 +981,69 @@ export const defaultTokens: DesignTokens = {
       innerShadow: 'none',
     },
     alert: {
+      shadowEnabled: true,
       iconSize: '20px',
       borderWidth: '1px',
     },
     tabs: {
+      shadowEnabled: false,
       indicatorHeight: '2px',
       indicatorStyle: 'underline',
       borderWidth: '1px',
     },
     progress: {
+      shadowEnabled: false,
       trackHeight: '8px',
       borderRadius: 'var(--radius-full)',
     },
     modal: {
+      shadowEnabled: true,
+      patternEnabled: false,
       backdropOpacity: '0.5',
       backdropBlur: '0px',
       borderWidth: '0px',
       backdropColor: 'var(--color-text)',
     },
     select: {
+      shadowEnabled: true,
       borderWidth: '1px',
     },
     dropdown: {
+      shadowEnabled: true,
       borderWidth: '1px',
     },
     accordion: {
+      shadowEnabled: false,
       borderWidth: '1px',
     },
     navbar: {
+      shadowEnabled: false,
+      patternEnabled: false,
       borderWidth: '1px',
     },
     sidebar: {
+      shadowEnabled: false,
+      patternEnabled: false,
       borderWidth: '1px',
     },
     table: {
+      shadowEnabled: false,
       borderWidth: '1px',
       headerBorderWidth: '2px',
+    },
+    tooltip: {
+      shadowEnabled: true,
+      borderWidth: '0px',
+    },
+    breadcrumb: {
+      shadowEnabled: false,
     },
   },
 };
 
 export type TokenCategory = keyof DesignTokens;
 export type TokenKey<T extends TokenCategory> = keyof DesignTokens[T];
+
+// Type helpers for semantic themes
+export type SemanticThemeKey = 'semanticLight' | 'semanticDark';
+export type ThemeMode = 'light' | 'dark';

@@ -4,6 +4,8 @@ import { Input, Select, Checkbox, RadioGroup, Toggle } from '../library';
 export function FormControls() {
   const [checkboxChecked, setCheckboxChecked] = useState(false);
   const [toggleChecked, setToggleChecked] = useState(false);
+  const [toggleSmallChecked, setToggleSmallChecked] = useState(false);
+  const [toggleLargeChecked, setToggleLargeChecked] = useState(true);
   const [radioValue, setRadioValue] = useState('option1');
 
   return (
@@ -52,8 +54,18 @@ export function FormControls() {
           checked={toggleChecked}
           onChange={(e) => setToggleChecked(e.target.checked)}
         />
-        <Toggle label="Small" size="sm" />
-        <Toggle label="Large" size="lg" checked readOnly />
+        <Toggle
+          label="Small"
+          size="sm"
+          checked={toggleSmallChecked}
+          onChange={(e) => setToggleSmallChecked(e.target.checked)}
+        />
+        <Toggle
+          label="Large"
+          size="lg"
+          checked={toggleLargeChecked}
+          onChange={(e) => setToggleLargeChecked(e.target.checked)}
+        />
       </div>
     </section>
   );

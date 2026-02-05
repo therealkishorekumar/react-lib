@@ -16,10 +16,10 @@
 .showcase-title {
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-semibold);
-  color: var(--color-text);
+  color: var(--semantic-content-primary);
   margin: 0;
   padding-bottom: 8px;
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--semantic-border);
 }
 
 .showcase-row {

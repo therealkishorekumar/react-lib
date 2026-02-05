@@ -8,8 +8,20 @@
   font-weight: var(--font-weight-semibold);
   overflow: hidden;
   background-color: var(--avatar-background);
-  border: var(--avatar-border-width) solid transparent;
-  box-shadow: var(--shadow-control);
+  border: var(--avatar-border-width) solid var(--avatar-border-color);
+  box-shadow: var(--avatar-shadow), var(--avatar-inner-shadow), var(--avatar-glow-effect);
+  backdrop-filter: blur(var(--avatar-backdrop-blur));
+  opacity: var(--avatar-surface-opacity);
+}
+
+/* Allow status indicator to overflow when present */
+.avatar-has-status {
+  overflow: visible;
+}
+
+/* Ensure avatar image respects overflow */
+.avatar-has-status .avatar-image {
+  border-radius: inherit;
 }
 
 /* Sizes */
@@ -64,8 +76,10 @@
   justify-content: center;
   width: 100%;
   height: 100%;
-  color: var(--avatar-initials-text);
-  background-color: var(--avatar-initials-background);
+  /* Use dynamic text color when available, fallback to theme text color */
+  color: var(--avatar-dynamic-text, var(--avatar-initials-text));
+  background-color: var(--avatar-dynamic-bg, var(--avatar-initials-background));
+  overflow: hidden;
 }
 
 /* Status indicator */
@@ -115,5 +129,6 @@
 
 .avatar-overflow .avatar-initials {
   background-color: var(--avatar-initials-background);
+  color: var(--avatar-initials-text);
   font-size: 0.8em;
 }

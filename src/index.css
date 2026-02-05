@@ -1,41 +1,8 @@
 /* Import Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
-/* Platform UI Colors - Modern, Elegant Design System */
-:root {
-  /* Brand Colors with Gradients */
-  --platform-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  --platform-primary-solid: #667eea;
-  --platform-primary-hover: linear-gradient(135deg, #5568d3 0%, #5f3d8a 100%);
-  --platform-accent: #f093fb;
-
-  /* Neutral Palette */
-  --platform-background: #fafbfc;
-  --platform-surface: #ffffff;
-  --platform-surface-elevated: #ffffff;
-  --platform-surface-hover: #f8f9fa;
-
-  /* Text Colors */
-  --platform-text: #1a1d29;
-  --platform-text-secondary: #525866;
-  --platform-text-muted: #878d9d;
-  --platform-text-on-primary: #ffffff;
-
-  /* Border Colors */
-  --platform-border: #e4e7eb;
-  --platform-border-light: #f0f2f5;
-  --platform-border-hover: #d1d5db;
-
-  /* Shadows */
-  --platform-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 3px 0 rgba(0, 0, 0, 0.02);
-  --platform-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
-  --platform-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.03);
-  --platform-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
-
-  /* Transitions */
-  --platform-transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  --platform-transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-}
+/* Platform variables are generated dynamically by DesignTokenContext.tsx */
+/* DO NOT add hardcoded :root variables here - they override the dynamic system */
 
 /* Base Reset */
 *, *::before, *::after {
