@@ -1,8 +1,8 @@
-# react-lib
+# react-studio
 
 > a visual design tool for react component libraries. customize 20+ components, preview in real-time, export a production-ready npm package.
 
-**[try it live](https://therealkishorekumar.github.io/react-lib/)**
+**[try it live](https://therealkishorekumar.github.io/react-studio/)**
 
 ---
 
@@ -22,8 +22,8 @@ this tool lets you:
 ## quick start
 
 ```bash
-git clone https://github.com/therealkishorekumar/react-lib.git
-cd react-lib
+git clone https://github.com/therealkishorekumar/react-studio.git
+cd react-studio
 npm install
 npm run dev
 ```
