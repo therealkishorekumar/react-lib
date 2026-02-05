@@ -2,6 +2,26 @@
   "name": "react-studio",
   "private": true,
   "version": "0.0.0",
+  "description": "A visual design tool for customizing React component libraries. Design, preview, and export production-ready React components with custom design tokens.",
+  "keywords": [
+    "react",
+    "component-library",
+    "design-system",
+    "ui-components",
+    "design-tokens",
+    "theme-generator",
+    "visual-editor",
+    "css-custom-properties",
+    "typescript",
+    "react-components"
+  ],
+  "homepage": "https://therealkishorekumar.github.io/react-lib/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/therealkishorekumar/react-lib.git"
+  },
+  "author": "Kishore Kumar",
+  "license": "MIT",
   "type": "module",
   "scripts": {
     "dev": "vite",
